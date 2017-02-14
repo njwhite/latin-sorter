@@ -146,13 +146,12 @@ input2()
 function getww(element) {
   	document.getElementById("ww").setAttribute('selectedbox',element.getAttribute('parentid'))
     word = document.getElementById(document.getElementById("ww").getAttribute('selectedbox')).getElementsByTagName('a')[0].innerText
-    var url = 'https://www.sapiensoptio.com/engine/?q=amare&lateng';
     var word2 =word
     if (word2=='a'){word2 = 'ab'}
     if (word2=='e'){word2 = 'ex'}
   if (word2=='o'){word2 = 'oh'}
   url = url.replace('amare',word2)
-  var xhr = createCORSRequest('GET', url);
+  var xhr = createCORSRequest('GET', '/words/' + word2);
   if (!xhr) {
     alert('CORS not supported');
     return;
