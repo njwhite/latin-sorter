@@ -150,7 +150,6 @@ function getww(element) {
     if (word2=='a'){word2 = 'ab'}
     if (word2=='e'){word2 = 'ex'}
   if (word2=='o'){word2 = 'oh'}
-  url = url.replace('amare',word2)
   var xhr = createCORSRequest('GET', '/words/' + word2);
   if (!xhr) {
     alert('CORS not supported');

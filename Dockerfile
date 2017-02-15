@@ -11,7 +11,7 @@ RUN curl -k https://github.com/mk270/whitakers-words/archive/master.zip -o /home
     rm /home/whitakers-words.zip &&\
     cd /home/whitakers-words-master &&\
     make
-ADD sorter.* /usr/local/openresty/nginx/html/
+ADD *.js *.css *.htm *.html /usr/local/openresty/nginx/html/
 ADD nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
 
 EXPOSE 80
