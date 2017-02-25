@@ -18,8 +18,12 @@ RUN apt-get -y update &&\
     curl \
     zip \
     make
-ADD *.js *.css *.htm *.html /usr/local/openresty/nginx/html/
 ADD nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
+ADD *.js *.css *.htm *.html /usr/local/openresty/nginx/html/
+
+# as gzip_static is on, we should pre-gzip the files.
+RUN gzip -rk9 /usr/local/openresty/nginx/html &&\
+    find /usr/local/openresty/nginx/html -not -name '*.gz' -type f -exec touch -r {} {}.gz \;
 
 EXPOSE 80
 WORKDIR /home/whitakers-words-master
