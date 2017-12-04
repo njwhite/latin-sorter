@@ -2054,6 +2054,7 @@ catch(err2){}
     ['tooth', 'teeth'],
     ['quiz', 'quizzes'],
     ['human', 'humans'],
+    ['Roman', 'Romans'],
     ['proof', 'proofs'],
     ['carve', 'carves'],
     ['valve', 'valves'],
