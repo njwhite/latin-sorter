@@ -1,13 +1,13 @@
 $(function() {
-    $( "#sortable" ).sortable();
-    $( "#sortable" ).disableSelection();
-  });
+  $( "#sortable" ).sortable();
+  $( "#sortable" ).disableSelection();
+});
 
 function updatetext(){
 try{
 var newtext = getParameterByName('text');
 if (newtext.length>0){
-  document.getElementById("inputtextbox").value = newtext
+document.getElementById("inputtextbox").value = newtext
 } 
 
 }
@@ -15,36 +15,36 @@ catch(err3){}
 
 }
 function getParameterByName(name, url) {
-    if (!url) {
-      url = window.location.href;
-    }
-    name = name.replace(/[\[\]]/g, "\\$&");
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
+  if (!url) {
+    url = window.location.href;
+  }
+  name = name.replace(/[\[\]]/g, "\\$&");
+  var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+      results = regex.exec(url);
+  if (!results) return null;
+  if (!results[2]) return '';
+  return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
 function createCORSRequest(method, url) {
-  var xhr = new XMLHttpRequest();
-  if ("withCredentials" in xhr) {
-    // XHR for Chrome/Firefox/Opera/Safari.
-    xhr.open(method, url, false);
-  } else if (typeof XDomainRequest != "undefined") {
-    // XDomainRequest for IE.
-    xhr = new XDomainRequest();
-    xhr.open(method, url, false);
-  } else {
-    // CORS not supported.
-    xhr = null;
-  }
-  return xhr;
+var xhr = new XMLHttpRequest();
+if ("withCredentials" in xhr) {
+  // XHR for Chrome/Firefox/Opera/Safari.
+  xhr.open(method, url, false);
+} else if (typeof XDomainRequest != "undefined") {
+  // XDomainRequest for IE.
+  xhr = new XDomainRequest();
+  xhr.open(method, url, false);
+} else {
+  // CORS not supported.
+  xhr = null;
+}
+return xhr;
 }
 
 // Helper method to parse the title tag from the response.
 function getTitle(text) {
-  return text.match('<title>(.*)?</title>')[1];
+return text.match('<title>(.*)?</title>')[1];
 }
 
 // Make the actual CORS request.
@@ -52,133 +52,133 @@ function getTitle(text) {
 
 
 function endsWith(str, suffix) {
-    return str.indexOf(suffix, str.length - suffix.length) !== -1;
+  return str.indexOf(suffix, str.length - suffix.length) !== -1;
 }
-		
-		function clearContents(element) {
-      if(document.getElementById("inputtextbox").getAttribute("clicked")=="no"){
-        
-  		element.value = '';
-      document.getElementById("inputtextbox").setAttribute("clicked", "yes")
-		}
-    }
-		function input1() {
-      document.getElementById('linkedtext').setAttribute('selectedsentence','none')
+  
+  function clearContents(element) {
+    if(document.getElementById("inputtextbox").getAttribute("clicked")=="no"){
+      
+    element.value = '';
+    document.getElementById("inputtextbox").setAttribute("clicked", "yes")
+  }
+  }
+  function input1() {
+    document.getElementById('linkedtext').setAttribute('selectedsentence','none')
 document.getElementById("inputtextbox").value = document.getElementById("inputtextbox").value.replace(/[0-9]/g,'')
 document.getElementById("inputtextbox").value = document.getElementById("inputtextbox").value.replace(/\s[\n\r]?[^a-zA-Z][\n\r]?\s/g,'$&'.replace(/[\s\n\r]/g,'')+ ' ')
 
 
-						var original_string = document.getElementById("inputtextbox").value;
-						original_string = original_string.replace(/([\.?!;:]['"]|[\.?!;:])/g,'$&' + '$');
-						original_string = original_string.replace(/\n/g,' ')
-						original_string = original_string.replace(/[0-9]/g,'');
-						original_string = original_string.replace(/\s\s+/g,' ');
+          var original_string = document.getElementById("inputtextbox").value;
+          original_string = original_string.replace(/([\.?!;:]['"]|[\.?!;:])/g,'$&' + '$');
+          original_string = original_string.replace(/\n/g,' ')
+          original_string = original_string.replace(/[0-9]/g,'');
+          original_string = original_string.replace(/\s\s+/g,' ');
 
-						
+          
 
-     						 var original_textArr = original_string.split("$");
+                var original_textArr = original_string.split("$");
 
-     						 // Create a sanitized version that removes all punctuation, allowing for each word to be included in an HTML tag
-						var sanitized_string = original_string.replace(/[\’\‘,\/#!%\^&\*;:{}=\-_`~()"?']/g,"");
-						sanitized_string = sanitized_string.toLowerCase();
-						var sanitized_textArr = sanitized_string.split("$");
+                // Create a sanitized version that removes all punctuation, allowing for each word to be included in an HTML tag
+          var sanitized_string = original_string.replace(/[\’\‘,\/#!%\^&\*;:{}=\-_`~()"?']/g,"");
+          sanitized_string = sanitized_string.toLowerCase();
+          var sanitized_textArr = sanitized_string.split("$");
 
-  						var textofinal = '';
-  						var size = sanitized_textArr.length;
+            var textofinal = '';
+            var size = sanitized_textArr.length;
 
-    						  // Print every word of the original text with a link around it that points to the glossary page for that word
-    						  // The original text is printed to preserve capitalization and punctuation, and the sanitized version is used to build the link
-						for (var m = 0; m < size; m++) 
- 						     {
-						  textofinal = textofinal + '<a formerhtml="" id="sentences' + m + '"onclick="picker(this)" style="cursor:pointer;" class="lsentence">' + original_textArr[m] + '</a> ';
- 				         
- 						}
+                // Print every word of the original text with a link around it that points to the glossary page for that word
+                // The original text is printed to preserve capitalization and punctuation, and the sanitized version is used to build the link
+          for (var m = 0; m < size; m++) 
+                {
+            textofinal = textofinal + '<a formerhtml="" id="sentences' + m + '"onclick="picker(this)" style="cursor:pointer;" class="lsentence">' + original_textArr[m] + '</a> ';
+                
+           }
 
-						document.getElementById("linkedtext").innerHTML = textofinal
+          document.getElementById("linkedtext").innerHTML = textofinal
 
-						};
-						function picker(element) {
-              if(element.parentElement.getAttribute('selectedsentence')!='none'){
-                document.getElementById(document.getElementById('linkedtext').getAttribute('selectedsentence')).setAttribute('formerhtml',document.getElementById('sortable').innerHTML)
-              }
-                  element.parentElement.setAttribute('selectedsentence',element.id)
-      						document.getElementById("sentence").innerHTML = element.innerHTML
+          };
+          function picker(element) {
+            if(element.parentElement.getAttribute('selectedsentence')!='none'){
+              document.getElementById(document.getElementById('linkedtext').getAttribute('selectedsentence')).setAttribute('formerhtml',document.getElementById('sortable').innerHTML)
+            }
+                element.parentElement.setAttribute('selectedsentence',element.id)
+                document.getElementById("sentence").innerHTML = element.innerHTML
 lines=document.getElementsByClassName("lsentence");
 for (var i = 0 ; i < lines.length; i ++)
 lines.item(i).style.color='black';
 element.style.color='orange';	
 input2()
-			};
+    };
 
-		function input2() {
-                  var original_string = document.getElementById("sentence").innerHTML.replace(/^\s/g,'').replace(/\s\s/g,' ').replace(/[\u0101]/g,'a').replace(/[\u0113]/g,'e').replace(/[\u012B]/g,'i').replace(/[\u014D]/g,'o').replace(/[\u016B]/g,'u');
+  function input2() {
+                var original_string = document.getElementById("sentence").innerHTML.replace(/^\s/g,'').replace(/\s\s/g,' ').replace(/[\u0101]/g,'a').replace(/[\u0113]/g,'e').replace(/[\u012B]/g,'i').replace(/[\u014D]/g,'o').replace(/[\u016B]/g,'u');
+                
+                var original_textArr = original_string.split(" ");
+
+                // Create a sanitized version that removes all punctuation, allowing for each word to be included in an HTML tag
+            var sanitized_string = original_string.replace(/[\u2018\u2019\.,\/#!$%\^&\*;:{}=\-_`~()"'\?]/g,"").replace(/^\s/g,'').replace(/^\s/g,'').replace(/\s\s/g,' ')
+            //sanitized_string = sanitized_string.toLowerCase();
+            var sanitized_textArr = sanitized_string.split(" ");
+  
+            var textofinal = '';
+            var size = sanitized_textArr.length;
+
+                // Print every word of the original text with a link around it that points to the glossary page for that word
+                // The original text is printed to preserve capitalization and punctuation, and the sanitized version is used to build the link
+          for (var m = 0; m < size; m++) 
+                {
+              if (original_textArr[m] == "") {
                   
-   						   var original_textArr = original_string.split(" ");
-
-     						 // Create a sanitized version that removes all punctuation, allowing for each word to be included in an HTML tag
-              var sanitized_string = original_string.replace(/[\u2018\u2019\.,\/#!$%\^&\*;:{}=\-_`~()"'\?]/g,"").replace(/^\s/g,'').replace(/^\s/g,'').replace(/\s\s/g,' ')
-							//sanitized_string = sanitized_string.toLowerCase();
-							var sanitized_textArr = sanitized_string.split(" ");
-		
-  						var textofinal = '';
-  						var size = sanitized_textArr.length;
-
-     						 // Print every word of the original text with a link around it that points to the glossary page for that word
-     						 // The original text is printed to preserve capitalization and punctuation, and the sanitized version is used to build the link
-						for (var m = 0; m < size; m++) 
-      						{
-				  			if (original_textArr[m] == "") {
-    								
-							} else {
-						   textofinal = textofinal + '<li onmouseup="updatetranslation()" id="word' + m + '" class="ui-state-default"><a style="cursor:pointer;" onclick="getww(this)" parentid="word' + m + '">' + sanitized_textArr[m] + '</a></li> ';
-          					
-						}
-     						}
-  				document.getElementById("sortable").innerHTML = textofinal;
-     						
-          document.getElementById("menus").innerHTML = ""
-
-          if(document.getElementById(document.getElementById('linkedtext').getAttribute('selectedsentence')).getAttribute('formerhtml')!=''){
-            document.getElementById('sortable').innerHTML = document.getElementById(document.getElementById('linkedtext').getAttribute('selectedsentence')).getAttribute('formerhtml')
+            } else {
+             textofinal = textofinal + '<li onmouseup="updatetranslation()" id="word' + m + '" class="ui-state-default ui-sortable-handle"><a style="cursor:pointer;" onclick="getww(this)" parentid="word' + m + '">' + sanitized_textArr[m] + '</a></li> ';
+                  
           }
-			};
-		
+               }
+        document.getElementById("sortable").innerHTML = textofinal;
+               
+        document.getElementById("menus").innerHTML = ""
+
+        if(document.getElementById(document.getElementById('linkedtext').getAttribute('selectedsentence')).getAttribute('formerhtml')!=''){
+          document.getElementById('sortable').innerHTML = document.getElementById(document.getElementById('linkedtext').getAttribute('selectedsentence')).getAttribute('formerhtml')
+        }
+    };
+  
 function getww(element) {
-  	document.getElementById("ww").setAttribute('selectedbox',element.getAttribute('parentid'))
-    word = document.getElementById(document.getElementById("ww").getAttribute('selectedbox')).getElementsByTagName('a')[0].innerText
-    var word2 =word
-    if (word2=='a'){word2 = 'ab'}
-    if (word2=='e'){word2 = 'ex'}
-  if (word2=='o'){word2 = 'oh'}
-  var xhr = createCORSRequest('GET', '/words/' + word2);
-  if (!xhr) {
-    alert('CORS not supported');
-    return;
+  document.getElementById("ww").setAttribute('selectedbox',element.getAttribute('parentid'))
+  word = document.getElementById(document.getElementById("ww").getAttribute('selectedbox')).getElementsByTagName('a')[0].innerText
+  var word2 =word
+  if (word2=='a'){word2 = 'ab'}
+  if (word2=='e'){word2 = 'ex'}
+if (word2=='o'){word2 = 'oh'}
+var xhr = createCORSRequest('GET', '/words/' + word2);
+if (!xhr) {
+  alert('CORS not supported');
+  return;
+}
+
+// Response handlers.
+xhr.onreadystatechange = function() {
+   if(xhr.readyState === 4)
+      {
+          if(xhr.status === 200 || xhr.status == 0)
+          {
+  var text = xhr.responseText;
+  //var title = getTitle(text);
+  //alert('Response from CORS request to ' + url + ': ' + title);
+  document.getElementById("ww").setAttribute('returnedtext',text)
+      }}
+};
+
+xhr.send(null);
+  
+  allText = document.getElementById("ww").getAttribute('returnedtext')
+  var wlines = allText.split('\n');
+  document.getElementById("ww").innerHTML = ""
+  document.getElementById("ww").setAttribute('selectedbox',element.getAttribute('parentid'))
+  var index;
+  for (index = 2; index < wlines.length; ++index) {
+     document.getElementById("ww").innerHTML = document.getElementById("ww").innerHTML + wlines[index] + "<br>";
   }
-
-  // Response handlers.
-  xhr.onreadystatechange = function() {
-     if(xhr.readyState === 4)
-        {
-            if(xhr.status === 200 || xhr.status == 0)
-            {
-    var text = xhr.responseText;
-    //var title = getTitle(text);
-    //alert('Response from CORS request to ' + url + ': ' + title);
-    document.getElementById("ww").setAttribute('returnedtext',text)
-        }}
-  };
-
-  xhr.send(null);
-    
-		allText = document.getElementById("ww").getAttribute('returnedtext')
-    var wlines = allText.split('\n');
-		document.getElementById("ww").innerHTML = ""
-		document.getElementById("ww").setAttribute('selectedbox',element.getAttribute('parentid'))
-		var index;
-		for (index = 2; index < wlines.length; ++index) {
-		   document.getElementById("ww").innerHTML = document.getElementById("ww").innerHTML + wlines[index] + "<br>";
-		}
 document.getElementById("ww").innerText = sanitise(word)
 document.getElementById("ww").innerHTML = document.getElementById("ww").innerHTML.replace(/\<br\>.?\<br\>/g,'<br>')
 interpretww()
@@ -186,7 +186,7 @@ interpretww()
 
 
 function interpretww() {
-  try{
+try{
 var xx = document.getElementById("ww").innerText
 document.getElementById("ww").setAttribute("tackon","no")
 var wlines = xx.split(/\r?\n/);
@@ -228,8 +228,8 @@ wlines[i] = "3"
 
 
 for (var i = 0; i < arrayLength; i++) {
-  wlines[i] = wlines[i].trim()
-  wlinetext[i] = wlinetext[i].trim()
+wlines[i] = wlines[i].trim()
+wlinetext[i] = wlinetext[i].trim()
 if (typeof wlines[i] === 'string'){
 if (endsWith(wlines[i],"X]")|| endsWith(wlines[i],"A]")|| endsWith(wlines[i],"B]")|| endsWith(wlines[i],"C]")|| endsWith(wlines[i],"D]")|| endsWith(wlines[i],"E]")|| endsWith(wlines[i],"F]")|| endsWith(wlines[i],"G]")|| endsWith(wlines[i],"H]")|| endsWith(wlines[i],"I]")|| endsWith(wlines[i],"J]")|| endsWith(wlines[i],"K]")|| endsWith(wlines[i],"L]")|| endsWith(wlines[i],"M]")|| endsWith(wlines[i],"N]")|| endsWith(wlines[i],"O]")|| endsWith(wlines[i],"P]")|| endsWith(wlines[i],"Q]")|| endsWith(wlines[i],"R]")|| endsWith(wlines[i],"S]")|| endsWith(wlines[i],"T]")|| endsWith(wlines[i],"U]")|| endsWith(wlines[i],"V]")|| endsWith(wlines[i],"W]")|| endsWith(wlines[i],"Y]")|| endsWith(wlines[i],"Z]"))
 {
@@ -256,24 +256,24 @@ if (wlines[i]!="0" && wlines[i]!="2" && wlines[i]!="3"){
 wlines[i] = "1"	
 }
 if(endsWith(wlinetext[i],"TACKON")){
-  document.getElementById("ww").setAttribute("tackon","yes")
+document.getElementById("ww").setAttribute("tackon","yes")
 wlines[i]="0"
 wlines[i+1]="0"
 //Syncop
 }
 if(wlinetext[i].replace("SUFFIX",'') !== wlinetext[i]){
-  wlines[i]="0"
+wlines[i]="0"
 }
 if(wlinetext[i].replace("Two words",'') !== wlinetext[i]){
-  wlines[i]="0"
+wlines[i]="0"
 }
 if(wlinetext[i].replace("makes SUPER",'') !== wlinetext[i]){
-  wlines[i]="0"
+wlines[i]="0"
 }
 if(wlinetext[i].replace("Converting ADJ to ADV",'') !== wlinetext[i]){
-  wlines[i]="0"
-  wlines[i+1] = "1"
-  wlinetext[i + 1] = wlinetext[i + 1] + ' (from adj)'
+wlines[i]="0"
+wlines[i+1] = "1"
+wlinetext[i + 1] = wlinetext[i + 1] + ' (from adj)'
 }
 
 
@@ -295,10 +295,10 @@ document.getElementById("menus").innerHTML=document.getElementById("menus").inne
 for (var i = 0; i < arrayLength; i++) {
 if (wlines[i] == "2"){
 if (endsWith(wlinetext[i],']')){
-	wlinetext[i] = wlinetext[i].substr(0,wlinetext[i].length-7)
-	if(wlinetext[i]==" "){
+wlinetext[i] = wlinetext[i].substr(0,wlinetext[i].length-7)
+if(wlinetext[i]==" "){
 
-	wlinetext[i]="RELAT"
+wlinetext[i]="RELAT"
 }
 }
 document.getElementById("menutable").innerHTML = document.getElementById("menutable").innerHTML +'<tr><td>' + 'Entry</td><td><wline wtype="entry">' + wlinetext[i] + '</wline></td></tr>'
@@ -311,7 +311,7 @@ var wlss = wlinetext[i].split(";");
 var a = wlss.length
 for(var j = 0;j<a;j++){
 if (wlss[j].search('/')>-1){
-	wlss[j] = wlss[j].substr(0,wlss[j].search('/'))
+wlss[j] = wlss[j].substr(0,wlss[j].search('/'))
 }
 }
 wlinetext[i] = wlss.join(', ')
@@ -325,7 +325,7 @@ document.getElementById("menutable").innerHTML = document.getElementById("menuta
 } 
 if (wlines[i] == "1"){
 if (endsWith(wlinetext[i],']')){
-	wlinetext[i] = wlinetext[i].substr(0,wlinetext[i].length-7)
+wlinetext[i] = wlinetext[i].substr(0,wlinetext[i].length-7)
 }
 
 document.getElementById("menutable").innerHTML = document.getElementById("menutable").innerHTML +'<tr><td>' + '</td><td style="color:blue"><button onclick="selectform(this)" style="background-color:#ffd000; -moz-border-radius:28px; -webkit-border-radius:28px; border-radius:28px; border:1px solid #faaf00; display:inline-block; cursor:pointer; color:#008800; font-family:Arial; font-size:17px; padding:10px 10px; width:160px;	text-decoration:none; text-shadow:0px 1px 0px #00FF00"><wline wtype = "form">' + wlinetext[i] + '</wline></button></td></tr>'
@@ -338,22 +338,22 @@ document.getElementById("ww").innerHTML = ""
 var formnumber = 0
 for (var k = 0; k<document.getElementsByTagName("wline").length;k++) {
 var ddd = k.toString
-	document.getElementsByTagName("wline").item(k).setAttribute("linenumber", k)
-	document.getElementsByTagName("wline").item(k).setAttribute("linenumber", k)
-	if(document.getElementsByTagName("wline")[k].getAttribute("wtype")=="form") {
-		document.getElementsByTagName("wline")[k].setAttribute("formnumber",formnumber)
+document.getElementsByTagName("wline").item(k).setAttribute("linenumber", k)
+document.getElementsByTagName("wline").item(k).setAttribute("linenumber", k)
+if(document.getElementsByTagName("wline")[k].getAttribute("wtype")=="form") {
+  document.getElementsByTagName("wline")[k].setAttribute("formnumber",formnumber)
 
-	}
-		if(document.getElementsByTagName("wline")[k].getAttribute("wtype")=="form") {
-		document.getElementsByTagName("wline")[k].setAttribute("formnumber",formnumber)
-		}
-		if(document.getElementsByTagName("wline")[k].getAttribute("wtype")=="entry") {
-		document.getElementsByTagName("wline")[k].id = "e" + formnumber
-		}
-		if(document.getElementsByTagName("wline")[k].getAttribute("wtype")=="definition") {
-		document.getElementsByTagName("wline")[k].id = "d" + formnumber
-		formnumber = formnumber +1
-		}
+}
+  if(document.getElementsByTagName("wline")[k].getAttribute("wtype")=="form") {
+  document.getElementsByTagName("wline")[k].setAttribute("formnumber",formnumber)
+  }
+  if(document.getElementsByTagName("wline")[k].getAttribute("wtype")=="entry") {
+  document.getElementsByTagName("wline")[k].id = "e" + formnumber
+  }
+  if(document.getElementsByTagName("wline")[k].getAttribute("wtype")=="definition") {
+  document.getElementsByTagName("wline")[k].id = "d" + formnumber
+  formnumber = formnumber +1
+  }
 
 }
 
@@ -364,7 +364,7 @@ try{
 document.getElementsByTagName("wline")[k].setAttribute("entry", document.getElementById('e' + document.getElementsByTagName('wline')[k].getAttribute('formnumber')).innerText)
 }
 catch(err) {
-  document.getElementsByTagName("wline")[k].setAttribute("entry",'')
+document.getElementsByTagName("wline")[k].setAttribute("entry",'')
 }
 //simplify forms and add grammar attributes
 var formwords = document.getElementsByTagName("wline")[k].innerText.split(" ")
@@ -376,17 +376,17 @@ formwords[m] = ''
 if (m==1){
 document.getElementsByTagName("wline")[k].setAttribute('pos',formwords[m])
 if(formwords[m] == 'SUPINE'){
-	document.getElementsByTagName("wline")[k].setAttribute('mood',formwords[m])
-	formwords[m] = 'supine'
-	}
+document.getElementsByTagName("wline")[k].setAttribute('mood',formwords[m])
+formwords[m] = 'supine'
+}
 if(formwords[m] == 'GERUNDIVE'){
-	document.getElementsByTagName("wline")[k].setAttribute('mood',formwords[m])
-	formwords[m] = 'gerundive'
-	}
+document.getElementsByTagName("wline")[k].setAttribute('mood',formwords[m])
+formwords[m] = 'gerundive'
+}
 if(formwords[m] == 'GERUND'){
-	document.getElementsByTagName("wline")[k].setAttribute('mood',formwords[m])
-	formwords[m] = 'gerund'
-	}
+document.getElementsByTagName("wline")[k].setAttribute('mood',formwords[m])
+formwords[m] = 'gerund'
+}
 if(formwords[m] == 'V'){formwords[m] = 'verb'}
 if(formwords[m] == 'N'){formwords[m] = 'noun'}
 if(formwords[m] == 'ADJ'){formwords[m] = 'adj'}
@@ -398,12 +398,12 @@ if(formwords[m] == 'PREP'){formwords[m] = 'preposition'}
 if(formwords[m] == 'VPAR'){formwords[m] = 'participle'}
 }
 if (m==2||m==3){
-	if(formwords[1] == 'preposition'){
-		if(formwords[m] == 'ACC'){formwords[m] = '+acc'}
-		if(formwords[m] == 'GEN'){formwords[m] = '+gen'}
-		if(formwords[m] == 'DAT'){formwords[m] = '+dat'}
-		if(formwords[m] == 'ABL'){formwords[m] = '+abl'}
-	}
+if(formwords[1] == 'preposition'){
+  if(formwords[m] == 'ACC'){formwords[m] = '+acc'}
+  if(formwords[m] == 'GEN'){formwords[m] = '+gen'}
+  if(formwords[m] == 'DAT'){formwords[m] = '+dat'}
+  if(formwords[m] == 'ABL'){formwords[m] = '+abl'}
+}
 if(formwords[m] == '0'){formwords[m] = ''}
 if(formwords[m] == '1'){formwords[m] = ''}
 if(formwords[m] == '2'){formwords[m] = ''}
@@ -415,192 +415,192 @@ if(formwords[m] == '7'){formwords[m] = ''}
 if(formwords[m] == '8'){formwords[m] = ''}
 if(formwords[m] == '9'){formwords[m] = ''}
 if(formwords[m] == 'POS'){
-	document.getElementsByTagName("wline")[k].setAttribute('gradation',formwords[m])
-	formwords[m] = ''
-	}
+document.getElementsByTagName("wline")[k].setAttribute('gradation',formwords[m])
+formwords[m] = ''
+}
 if(formwords[m] == 'COMP'){
-	document.getElementsByTagName("wline")[k].setAttribute('gradation',formwords[m])
-	formwords[m] = 'comparative'
-	}
+document.getElementsByTagName("wline")[k].setAttribute('gradation',formwords[m])
+formwords[m] = 'comparative'
+}
 if(formwords[m] == 'SUPER'){
-	document.getElementsByTagName("wline")[k].setAttribute('gradation',formwords[m])
-	formwords[m] = 'superlative'
-	}
+document.getElementsByTagName("wline")[k].setAttribute('gradation',formwords[m])
+formwords[m] = 'superlative'
+}
 
 }
 if (m>3){
 if(formwords[m] == '0'){
-	formwords[m] = ''
-	document.getElementsByTagName("wline")[k].setAttribute('case',formwords[m])
-	}
+formwords[m] = ''
+document.getElementsByTagName("wline")[k].setAttribute('case',formwords[m])
+}
 if(formwords[m] == 'NOM'){
-	formwords[m] = 'nom'
-	document.getElementsByTagName("wline")[k].setAttribute('case',formwords[m])
-	}
+formwords[m] = 'nom'
+document.getElementsByTagName("wline")[k].setAttribute('case',formwords[m])
+}
 if(formwords[m] == 'VOC'){
-	formwords[m] = 'voc'
-	document.getElementsByTagName("wline")[k].setAttribute('case',formwords[m])
-	}
+formwords[m] = 'voc'
+document.getElementsByTagName("wline")[k].setAttribute('case',formwords[m])
+}
 if(formwords[m] == 'LOC'){
-	formwords[m] = 'loc'
-	document.getElementsByTagName("wline")[k].setAttribute('case',formwords[m])
-	}
+formwords[m] = 'loc'
+document.getElementsByTagName("wline")[k].setAttribute('case',formwords[m])
+}
 if(formwords[m] == 'NOM'){
-	formwords[m] = 'nom'
-	document.getElementsByTagName("wline")[k].setAttribute('case',formwords[m])
-	}
+formwords[m] = 'nom'
+document.getElementsByTagName("wline")[k].setAttribute('case',formwords[m])
+}
 if(formwords[m] == 'ACC'){
-	document.getElementsByTagName("wline")[k].setAttribute('case',formwords[m])
-	formwords[m] = 'acc'
-	}
+document.getElementsByTagName("wline")[k].setAttribute('case',formwords[m])
+formwords[m] = 'acc'
+}
 if(formwords[m] == 'GEN'){
-	document.getElementsByTagName("wline")[k].setAttribute('case',formwords[m])
-	formwords[m] = 'gen'
-		}
+document.getElementsByTagName("wline")[k].setAttribute('case',formwords[m])
+formwords[m] = 'gen'
+  }
 if(formwords[m] == 'DAT'){
-	formwords[m] = 'dat'
-	document.getElementsByTagName("wline")[k].setAttribute('case',formwords[m])
-	}
+formwords[m] = 'dat'
+document.getElementsByTagName("wline")[k].setAttribute('case',formwords[m])
+}
 if(formwords[m] == 'ABL'){
-	document.getElementsByTagName("wline")[k].setAttribute('case',formwords[m])
-	formwords[m] = 'abl'
-	}	
-  if(formwords[m] == 'SUPINE'){
-	document.getElementsByTagName("wline")[k].setAttribute('case',formwords[m])
-	formwords[m] = 'supine'
-	}	
+document.getElementsByTagName("wline")[k].setAttribute('case',formwords[m])
+formwords[m] = 'abl'
+}	
+if(formwords[m] == 'SUPINE'){
+document.getElementsByTagName("wline")[k].setAttribute('case',formwords[m])
+formwords[m] = 'supine'
+}	
 if(formwords[m] == 'S'){
-	document.getElementsByTagName("wline")[k].setAttribute('number',formwords[m])
-	formwords[m] = 'sing'
-	}
+document.getElementsByTagName("wline")[k].setAttribute('number',formwords[m])
+formwords[m] = 'sing'
+}
 if(formwords[m] == 'P'){
-	document.getElementsByTagName("wline")[k].setAttribute('number',formwords[m])
-	formwords[m] = 'plur'
-	}
+document.getElementsByTagName("wline")[k].setAttribute('number',formwords[m])
+formwords[m] = 'plur'
+}
 if(formwords[m] == 'PRES'){
-	document.getElementsByTagName("wline")[k].setAttribute('tense',formwords[m])
-	formwords[m] = 'pres'
-	}
+document.getElementsByTagName("wline")[k].setAttribute('tense',formwords[m])
+formwords[m] = 'pres'
+}
 if(formwords[m] == 'IMP'){
-	document.getElementsByTagName("wline")[k].setAttribute('mood',formwords[m])
-	formwords[m] = 'impv'
-	}
+document.getElementsByTagName("wline")[k].setAttribute('mood',formwords[m])
+formwords[m] = 'impv'
+}
 if(formwords[m] == 'IMPF'){
-	document.getElementsByTagName("wline")[k].setAttribute('tense',formwords[m])
-	formwords[m] = 'impf'
-	}
+document.getElementsByTagName("wline")[k].setAttribute('tense',formwords[m])
+formwords[m] = 'impf'
+}
 if(formwords[m] == 'INTERJ'){
-	document.getElementsByTagName("wline")[k].setAttribute('tense',formwords[m])
-	formwords[m] = 'interj'
-	}
+document.getElementsByTagName("wline")[k].setAttribute('tense',formwords[m])
+formwords[m] = 'interj'
+}
 if(formwords[m] == 'FUT'){
-	document.getElementsByTagName("wline")[k].setAttribute('tense',formwords[m])
-	formwords[m] = 'fut'
-	}
+document.getElementsByTagName("wline")[k].setAttribute('tense',formwords[m])
+formwords[m] = 'fut'
+}
 if(formwords[m] == 'PERF'){
-	document.getElementsByTagName("wline")[k].setAttribute('tense',formwords[m])
-	formwords[m] = 'perf'
-	}
+document.getElementsByTagName("wline")[k].setAttribute('tense',formwords[m])
+formwords[m] = 'perf'
+}
 if(formwords[m] == 'PLUP'){
-	document.getElementsByTagName("wline")[k].setAttribute('tense',formwords[m])
-	formwords[m] = 'plup'
-	}
+document.getElementsByTagName("wline")[k].setAttribute('tense',formwords[m])
+formwords[m] = 'plup'
+}
 if(formwords[m] == 'FUTP'){
-	document.getElementsByTagName("wline")[k].setAttribute('tense',formwords[m])
-	formwords[m] = 'futp'
-	}
+document.getElementsByTagName("wline")[k].setAttribute('tense',formwords[m])
+formwords[m] = 'futp'
+}
 if(formwords[m] == 'ACTIVE'){
-	document.getElementsByTagName("wline")[k].setAttribute('voice',formwords[m])
-	formwords[m] = ''
-	}
+document.getElementsByTagName("wline")[k].setAttribute('voice',formwords[m])
+formwords[m] = ''
+}
 if(formwords[m] == 'PASSIVE'&& endsWith(document.getElementsByTagName("wline")[k].getAttribute('entry').trim(),'DEP')==false){
-	document.getElementsByTagName("wline")[k].setAttribute('voice',formwords[m])
-	formwords[m] = 'passive'
-	}
+document.getElementsByTagName("wline")[k].setAttribute('voice',formwords[m])
+formwords[m] = 'passive'
+}
 if(formwords[m] == 'PASSIVE'&& endsWith(document.getElementsByTagName("wline")[k].getAttribute('entry').trim(),'DEP')==true){
 formwords[m] = ''
 }
 if(formwords[m] == 'IND'){
-	document.getElementsByTagName("wline")[k].setAttribute('mood',formwords[m])
-	formwords[m] = ''
-	}
+document.getElementsByTagName("wline")[k].setAttribute('mood',formwords[m])
+formwords[m] = ''
+}
 if(formwords[m] == 'SUBJ'){
-	document.getElementsByTagName("wline")[k].setAttribute('mood',formwords[m])
-	formwords[m] = 'subj'
-	}
+document.getElementsByTagName("wline")[k].setAttribute('mood',formwords[m])
+formwords[m] = 'subj'
+}
 if(formwords[m] == 'SUB'){
-	document.getElementsByTagName("wline")[k].setAttribute('mood',formwords[m])
-	formwords[m] = 'subj'
-	}
+document.getElementsByTagName("wline")[k].setAttribute('mood',formwords[m])
+formwords[m] = 'subj'
+}
 if(formwords[m] == 'IMPV'){
-	document.getElementsByTagName("wline")[k].setAttribute('mood',formwords[m])
-	formwords[m] = 'imperative'
-	}
+document.getElementsByTagName("wline")[k].setAttribute('mood',formwords[m])
+formwords[m] = 'imperative'
+}
 if(formwords[m] == 'INF'){
-	document.getElementsByTagName("wline")[k].setAttribute('mood',formwords[m])
-	formwords[m] = 'infinitive'
-	}
+document.getElementsByTagName("wline")[k].setAttribute('mood',formwords[m])
+formwords[m] = 'infinitive'
+}
 if(formwords[m] == 'VPAR'){
-	document.getElementsByTagName("wline")[k].setAttribute('mood',PPL)
-	formwords[m] = 'ppl'
-	}
+document.getElementsByTagName("wline")[k].setAttribute('mood',PPL)
+formwords[m] = 'ppl'
+}
 if(formwords[m] == 'SUPINE'){
-	document.getElementsByTagName("wline")[k].setAttribute('mood',formwords[m])
-	formwords[m] = 'supine'
-	}
+document.getElementsByTagName("wline")[k].setAttribute('mood',formwords[m])
+formwords[m] = 'supine'
+}
 if(formwords[m] == '1'){
-	document.getElementsByTagName("wline")[k].setAttribute('person',formwords[m])
-	formwords[m] = '1st'
-	}
+document.getElementsByTagName("wline")[k].setAttribute('person',formwords[m])
+formwords[m] = '1st'
+}
 if(formwords[m] == '2'){
-	document.getElementsByTagName("wline")[k].setAttribute('person',formwords[m])
-	formwords[m] = '2nd'
-	}
+document.getElementsByTagName("wline")[k].setAttribute('person',formwords[m])
+formwords[m] = '2nd'
+}
 if(formwords[m] == '3'){
-	document.getElementsByTagName("wline")[k].setAttribute('person',formwords[m])
-	formwords[m] = '3rd'
-	}
+document.getElementsByTagName("wline")[k].setAttribute('person',formwords[m])
+formwords[m] = '3rd'
+}
 if(formwords[m] == 'POS'){
-	document.getElementsByTagName("wline")[k].setAttribute('gradation',formwords[m])
-	formwords[m] = ''
-	}
+document.getElementsByTagName("wline")[k].setAttribute('gradation',formwords[m])
+formwords[m] = ''
+}
 if(formwords[m] == 'SUPER'){
-	document.getElementsByTagName("wline")[k].setAttribute('gradation',formwords[m])
-	formwords[m] = 'superlative'
-	}
+document.getElementsByTagName("wline")[k].setAttribute('gradation',formwords[m])
+formwords[m] = 'superlative'
+}
 if(formwords[m] == 'COMP'){
-	document.getElementsByTagName("wline")[k].setAttribute('gradation',formwords[m])
-	formwords[m] = 'comparative'
-	}
+document.getElementsByTagName("wline")[k].setAttribute('gradation',formwords[m])
+formwords[m] = 'comparative'
+}
 if(formwords[m] == 'M'){
-	document.getElementsByTagName("wline")[k].setAttribute('gender',formwords[m])
-	formwords[m] = 'masc'
-	}
+document.getElementsByTagName("wline")[k].setAttribute('gender',formwords[m])
+formwords[m] = 'masc'
+}
 if(formwords[m] == 'F'){
-	document.getElementsByTagName("wline")[k].setAttribute('gender',formwords[m])
-	formwords[m] = 'fem'
-	}
+document.getElementsByTagName("wline")[k].setAttribute('gender',formwords[m])
+formwords[m] = 'fem'
+}
 if(formwords[m] == 'N'){
-	document.getElementsByTagName("wline")[k].setAttribute('gender',formwords[m])
-	formwords[m] = 'neut'
-	}
+document.getElementsByTagName("wline")[k].setAttribute('gender',formwords[m])
+formwords[m] = 'neut'
+}
 if(formwords[m] == 'C'){
-	document.getElementsByTagName("wline")[k].setAttribute('gender',formwords[m])
-	formwords[m] = 'masc/fem'
-	}
+document.getElementsByTagName("wline")[k].setAttribute('gender',formwords[m])
+formwords[m] = 'masc/fem'
+}
 if(formwords[m] == 'X'){
-	document.getElementsByTagName("wline")[k].setAttribute('gender',formwords[m])
-	formwords[m] = ''
-	}
+document.getElementsByTagName("wline")[k].setAttribute('gender',formwords[m])
+formwords[m] = ''
+}
 if(formwords[m] == 'Early'){
-	formwords[m] = ''
-	}
+formwords[m] = ''
+}
 if(formwords[m] == 'PP'){
-	formwords[m] = ''
-	}
-  if(formwords[m] == 'PPL'){
-	formwords[m] = ''
-	}
+formwords[m] = ''
+}
+if(formwords[m] == 'PPL'){
+formwords[m] = ''
+}
 }
 }
 
@@ -618,192 +618,192 @@ document.getElementsByTagName("wline")[k].innerText = document.getElementsByTagN
 document.getElementsByTagName("wline")[k].innerText = document.getElementsByTagName("wline")[k].innerText.replace('participle','pres participle')
 }
 if(document.getElementsByTagName("wline")[k].getAttribute('tense')=='PERF'){
-	if(endsWith(document.getElementsByTagName("wline")[k].getAttribute('entry'),"V DEP")||endsWith(document.getElementsByTagName("wline")[k].getAttribute('entry'),"V DEP ")){
+if(endsWith(document.getElementsByTagName("wline")[k].getAttribute('entry'),"V DEP")||endsWith(document.getElementsByTagName("wline")[k].getAttribute('entry'),"V DEP ")){
 document.getElementsByTagName("wline")[k].setAttribute('pos','PAP')
 document.getElementsByTagName("wline")[k].innerText = document.getElementsByTagName("wline")[k].innerText.replace(' perf',' ')
 document.getElementsByTagName("wline")[k].innerText = document.getElementsByTagName("wline")[k].innerText.replace('participle','PAP')
-	} else {
+} else {
 document.getElementsByTagName("wline")[k].setAttribute('pos','PPP')
 document.getElementsByTagName("wline")[k].innerText = document.getElementsByTagName("wline")[k].innerText.replace(' perf',' ')
 document.getElementsByTagName("wline")[k].innerText = document.getElementsByTagName("wline")[k].innerText.replace(' passive',' ')
 document.getElementsByTagName("wline")[k].innerText = document.getElementsByTagName("wline")[k].innerText.replace('participle','PPP')
 
-	}
+}
 }
 }
 if(document.getElementsByTagName("wline")[k].getAttribute('pos')=='PRON'){
-	if(document.getElementsByTagName("wline")[k].getAttribute('word')=='is'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='ea'||
-		document.getElementsByTagName("wline")[k].getAttribute('word')=='id'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='eum'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='eam'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='eius'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='ei'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='eo'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='eae'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='eos'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='eas'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='eorum'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='earum'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='ille'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='illa'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='illud'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='illum'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='illam'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='illius'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='illi'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='illo'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='illae'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='illos'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='illas'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='illorum'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='illarum'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='illis'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='olle'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='olla'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='ollud'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='ollum'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='ollam'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='ollius'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='olli'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='ollo'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='ollae'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='ollos'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='ollas'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='ollorum'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='ollarum'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='ollis'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='iste'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='ista'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='istud'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='istum'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='istam'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='istius'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='isti'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='isto'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='istae'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='istos'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='istas'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='istorum'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='istarum'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='istis'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='eis'
-	){
-		document.getElementsByTagName("wline")[k].setAttribute('pos','FDEM')
-		document.getElementsByTagName("wline")[k].innerText = document.getElementsByTagName("wline")[k].innerText.replace('pron ','demons ')
-	}
+if(document.getElementsByTagName("wline")[k].getAttribute('word')=='is'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='ea'||
+  document.getElementsByTagName("wline")[k].getAttribute('word')=='id'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='eum'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='eam'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='eius'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='ei'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='eo'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='eae'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='eos'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='eas'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='eorum'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='earum'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='ille'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='illa'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='illud'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='illum'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='illam'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='illius'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='illi'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='illo'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='illae'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='illos'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='illas'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='illorum'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='illarum'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='illis'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='olle'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='olla'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='ollud'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='ollum'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='ollam'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='ollius'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='olli'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='ollo'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='ollae'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='ollos'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='ollas'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='ollorum'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='ollarum'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='ollis'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='iste'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='ista'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='istud'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='istum'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='istam'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='istius'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='isti'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='isto'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='istae'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='istos'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='istas'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='istorum'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='istarum'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='istis'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='eis'
+){
+  document.getElementsByTagName("wline")[k].setAttribute('pos','FDEM')
+  document.getElementsByTagName("wline")[k].innerText = document.getElementsByTagName("wline")[k].innerText.replace('pron ','demons ')
+}
 if(document.getElementsByTagName("wline")[k].getAttribute('word')=='hic'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='haec'||
-		document.getElementsByTagName("wline")[k].getAttribute('word')=='hoc'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='hunc'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='hanc'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='huius'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='huic'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='hac'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='hi'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='hae'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='hos'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='has'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='horum'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='harum'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='his'
-	){
-		document.getElementsByTagName("wline")[k].setAttribute('pos','NDEM')
-		document.getElementsByTagName("wline")[k].innerText = document.getElementsByTagName("wline")[k].innerText.replace('pron ','demons (this) ')
-	}
-  
-  if(document.getElementsByTagName("wline")[k].getAttribute('word')=='quis'||document.getElementsByTagName("wline")[k].getAttribute('word')=='quid'){
-    		document.getElementsByTagName("wline")[k].setAttribute('pos','INTERROG')
-        document.getElementsByTagName("wline")[k].innerText = document.getElementsByTagName("wline")[k].innerText.replace('pron ','interrogative ')
-  }
-  if(document.getElementsByTagName("wline")[k].getAttribute('word')=='qui'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='quae'||
-		document.getElementsByTagName("wline")[k].getAttribute('word')=='quod'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='quem'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='quam'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='cuius'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='cui'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='quo'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='qua'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='quos'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='quas'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='quorum'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='quarum'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='quibus'
-	){
-		document.getElementsByTagName("wline")[k].setAttribute('pos','RELAT')
-		document.getElementsByTagName("wline")[k].innerText = document.getElementsByTagName("wline")[k].innerText.replace('pron ','relative ')
-	}
+document.getElementsByTagName("wline")[k].getAttribute('word')=='haec'||
+  document.getElementsByTagName("wline")[k].getAttribute('word')=='hoc'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='hunc'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='hanc'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='huius'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='huic'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='hac'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='hi'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='hae'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='hos'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='has'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='horum'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='harum'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='his'
+){
+  document.getElementsByTagName("wline")[k].setAttribute('pos','NDEM')
+  document.getElementsByTagName("wline")[k].innerText = document.getElementsByTagName("wline")[k].innerText.replace('pron ','demons (this) ')
+}
+
+if(document.getElementsByTagName("wline")[k].getAttribute('word')=='quis'||document.getElementsByTagName("wline")[k].getAttribute('word')=='quid'){
+      document.getElementsByTagName("wline")[k].setAttribute('pos','INTERROG')
+      document.getElementsByTagName("wline")[k].innerText = document.getElementsByTagName("wline")[k].innerText.replace('pron ','interrogative ')
+}
+if(document.getElementsByTagName("wline")[k].getAttribute('word')=='qui'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='quae'||
+  document.getElementsByTagName("wline")[k].getAttribute('word')=='quod'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='quem'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='quam'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='cuius'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='cui'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='quo'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='qua'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='quos'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='quas'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='quorum'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='quarum'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='quibus'
+){
+  document.getElementsByTagName("wline")[k].setAttribute('pos','RELAT')
+  document.getElementsByTagName("wline")[k].innerText = document.getElementsByTagName("wline")[k].innerText.replace('pron ','relative ')
+}
 if(document.getElementsByTagName("wline")[k].getAttribute('word')=='ipse'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='ipsa'||
-		document.getElementsByTagName("wline")[k].getAttribute('word')=='ipsud'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='ipsum'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='ipsam'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='ipsius'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='ipsi'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='ipso'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='ipsa'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='ipsae'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='ipsos'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='ipsas'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='ipsorum'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='ipsarum'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='ipsis'
-	){
-		document.getElementsByTagName("wline")[k].setAttribute('pos','INTENS')
-		document.getElementsByTagName("wline")[k].innerText = document.getElementsByTagName("wline")[k].innerText.replace('pron ','intensive ')
-	}
+document.getElementsByTagName("wline")[k].getAttribute('word')=='ipsa'||
+  document.getElementsByTagName("wline")[k].getAttribute('word')=='ipsud'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='ipsum'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='ipsam'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='ipsius'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='ipsi'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='ipso'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='ipsa'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='ipsae'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='ipsos'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='ipsas'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='ipsorum'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='ipsarum'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='ipsis'
+){
+  document.getElementsByTagName("wline")[k].setAttribute('pos','INTENS')
+  document.getElementsByTagName("wline")[k].innerText = document.getElementsByTagName("wline")[k].innerText.replace('pron ','intensive ')
+}
 if(document.getElementsByTagName("wline")[k].getAttribute('word')=='idem'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='eadem'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='eundem'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='eandem'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='eiusdem'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='eidem'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='eodem'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='eadem'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='eaedem'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='eosdem'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='easdem'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='eorundem'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='earundem'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='eisdem'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='isdem'
-	){
-		document.getElementsByTagName("wline")[k].setAttribute('pos','SDEM')
-		document.getElementsByTagName("wline")[k].innerText = document.getElementsByTagName("wline")[k].innerText.replace('pron ','demons (same) ')
-	}
+document.getElementsByTagName("wline")[k].getAttribute('word')=='eadem'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='eundem'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='eandem'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='eiusdem'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='eidem'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='eodem'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='eadem'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='eaedem'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='eosdem'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='easdem'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='eorundem'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='earundem'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='eisdem'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='isdem'
+){
+  document.getElementsByTagName("wline")[k].setAttribute('pos','SDEM')
+  document.getElementsByTagName("wline")[k].innerText = document.getElementsByTagName("wline")[k].innerText.replace('pron ','demons (same) ')
+}
 if(document.getElementsByTagName("wline")[k].getAttribute('word')=='ego'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='me'||
-		document.getElementsByTagName("wline")[k].getAttribute('word')=='mei'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='mihi'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='mi'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='nos'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='nostrum'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='nobis'
-	){
-		document.getElementsByTagName("wline")[k].setAttribute('pos','perspron')
-		document.getElementsByTagName("wline")[k].innerText = document.getElementsByTagName("wline")[k].innerText.replace('pron ','1st pron ')
-	}
-  if(document.getElementsByTagName("wline")[k].getAttribute('word')=='tu'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='te'||
-		document.getElementsByTagName("wline")[k].getAttribute('word')=='tui'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='tibi'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='vos'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='vestrum'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='vobis'
-	){
-		document.getElementsByTagName("wline")[k].setAttribute('pos','perspron')
-		document.getElementsByTagName("wline")[k].innerText = document.getElementsByTagName("wline")[k].innerText.replace('pron ','2nd pron ')
-	}
+document.getElementsByTagName("wline")[k].getAttribute('word')=='me'||
+  document.getElementsByTagName("wline")[k].getAttribute('word')=='mei'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='mihi'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='mi'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='nos'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='nostrum'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='nobis'
+){
+  document.getElementsByTagName("wline")[k].setAttribute('pos','perspron')
+  document.getElementsByTagName("wline")[k].innerText = document.getElementsByTagName("wline")[k].innerText.replace('pron ','1st pron ')
+}
+if(document.getElementsByTagName("wline")[k].getAttribute('word')=='tu'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='te'||
+  document.getElementsByTagName("wline")[k].getAttribute('word')=='tui'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='tibi'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='vos'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='vestrum'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='vobis'
+){
+  document.getElementsByTagName("wline")[k].setAttribute('pos','perspron')
+  document.getElementsByTagName("wline")[k].innerText = document.getElementsByTagName("wline")[k].innerText.replace('pron ','2nd pron ')
+}
 if(document.getElementsByTagName("wline")[k].getAttribute('word')=='se'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='sui'||
-		document.getElementsByTagName("wline")[k].getAttribute('word')=='sibi'||
-		document.getElementsByTagName("wline")[k].getAttribute('word')=='sese'||
-	document.getElementsByTagName("wline")[k].getAttribute('word')=='se'
-	){
-		document.getElementsByTagName("wline")[k].setAttribute('pos','refpron')
-		document.getElementsByTagName("wline")[k].innerText = document.getElementsByTagName("wline")[k].innerText.replace('pron ','reflex pron ')
-	}
+document.getElementsByTagName("wline")[k].getAttribute('word')=='sui'||
+  document.getElementsByTagName("wline")[k].getAttribute('word')=='sibi'||
+  document.getElementsByTagName("wline")[k].getAttribute('word')=='sese'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='se'
+){
+  document.getElementsByTagName("wline")[k].setAttribute('pos','refpron')
+  document.getElementsByTagName("wline")[k].innerText = document.getElementsByTagName("wline")[k].innerText.replace('pron ','reflex pron ')
+}
 
 }
 document.getElementsByTagName("wline")[k].innerText=document.getElementsByTagName("wline")[k].innerText.replace(/^\s/g,'')
@@ -833,88 +833,88 @@ document.getElementsByTagName("wline")[0].getAttribute('word')=='earum'||
 document.getElementsByTagName("wline")[0].getAttribute('word')=='eis'){
 var deleting = false
 for (yy = document.getElementById('menutable').childElementCount-1; yy>0; yy--){
-  if(document.getElementsByTagName("wline")[yy].getAttribute('wtype')=='definition'){deleting = false}
-  if(document.getElementsByTagName("wline")[yy].innerText.substr(0,4) == 'same'){
+if(document.getElementsByTagName("wline")[yy].getAttribute('wtype')=='definition'){deleting = false}
+if(document.getElementsByTagName("wline")[yy].innerText.substr(0,4) == 'same'){
 deleting = true
-  }
-  if(deleting == true){
-    document.getElementsByTagName("wline")[yy].parentElement.parentElement.parentElement.parentElement.removeChild(document.getElementsByTagName("wline")[yy].parentElement.parentElement.parentElement)
-  }
 }
-  }}
-  catch(err1){
+if(deleting == true){
+  document.getElementsByTagName("wline")[yy].parentElement.parentElement.parentElement.parentElement.removeChild(document.getElementsByTagName("wline")[yy].parentElement.parentElement.parentElement)
+}
+}
+}}
+catch(err1){
 if(document.getElementById('menutable').innerText.replace('UNKNOWN','') !== document.getElementById('menutable').innerText){
 document.getElementById('menutable').innerHTML = 'Unknown name<br><textarea id="unknownword">' + word + '</textarea><button onclick="adder()">Update</button>'
- document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/um$/g,'us')
-    document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/o$/g,'us')
-      document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/um$/g,'us')
-        document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/am$/g,'a')
-          document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/ae$/g,'a')
-            document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/cem$/g,'x')
-              document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/gem$/g,'x')
-                document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/onem$/g,'o')
-                  document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/em$/g,'')
-                    document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/cis$/g,'x')
-                      document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/gis$/g,'x')
-                        document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/onis$/g,'o')
-                            document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/ci$/g,'x')
-                              document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/gi$/g,'x')
-                                document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/oni$/g,'o')
-                                  document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/i$/g,'')
-                                    document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/ce$/g,'x')
-                                      document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/ge$/g,'x')
-                                        document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/one$/g,'o')
-                                          document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/e$/g,'')
-  
- }}
-  var definitionentries = document.getElementsByTagName('wline')
+document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/um$/g,'us')
+  document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/o$/g,'us')
+    document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/um$/g,'us')
+      document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/am$/g,'a')
+        document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/ae$/g,'a')
+          document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/cem$/g,'x')
+            document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/gem$/g,'x')
+              document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/onem$/g,'o')
+                document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/em$/g,'')
+                  document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/cis$/g,'x')
+                    document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/gis$/g,'x')
+                      document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/onis$/g,'o')
+                          document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/ci$/g,'x')
+                            document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/gi$/g,'x')
+                              document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/oni$/g,'o')
+                                document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/i$/g,'')
+                                  document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/ce$/g,'x')
+                                    document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/ge$/g,'x')
+                                      document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/one$/g,'o')
+                                        document.getElementById("unknownword").value = document.getElementById("unknownword").value.replace(/e$/g,'')
 
- for(var ccc=0; ccc<definitionentries.length;ccc++){
-   if(definitionentries[ccc].getAttribute('wtype')=='definition'){
-      var ds = definitionentries[ccc].innerText.split(',')
-      for(var cccc = 0;cccc<ds.length;cccc++){
-        ds[cccc] = '<inddef onclick="selectdef(this)">' + ds[cccc] +'</inddef>'
-        if(cccc != ds.length-1){
-          ds[cccc] = ds[cccc]+', '
-          }
-      }
-      definitionentries[ccc].innerHTML = ds.join('')
-      definitionentries[ccc].innerHTML = definitionentries[ccc].innerHTML + '<editdef onclick="editdef(this)" style="cursor:pointer;">&#9998;</editdef>'
-   }
+}}
+var definitionentries = document.getElementsByTagName('wline')
+
+for(var ccc=0; ccc<definitionentries.length;ccc++){
+ if(definitionentries[ccc].getAttribute('wtype')=='definition'){
+    var ds = definitionentries[ccc].innerText.split(',')
+    for(var cccc = 0;cccc<ds.length;cccc++){
+      ds[cccc] = '<inddef onclick="selectdef(this)">' + ds[cccc] +'</inddef>'
+      if(cccc != ds.length-1){
+        ds[cccc] = ds[cccc]+', '
+        }
+    }
+    definitionentries[ccc].innerHTML = ds.join('')
+    definitionentries[ccc].innerHTML = definitionentries[ccc].innerHTML + '<editdef onclick="editdef(this)" style="cursor:pointer;">&#9998;</editdef>'
  }
+}
 
 }
 function adder(){
-  var targetid = document.getElementById("ww").getAttribute("selectedbox")
-  var qq = document.getElementById(targetid).getElementsByTagName('A')[0].outerHTML
-  document.getElementById(targetid).innerHTML = qq
+var targetid = document.getElementById("ww").getAttribute("selectedbox")
+var qq = document.getElementById(targetid).getElementsByTagName('A')[0].outerHTML
+document.getElementById(targetid).innerHTML = qq
 document.getElementById(targetid).innerHTML = document.getElementById(targetid).innerHTML + '<br><meaning id="meaning' + targetid + '"></meaning>'
 
 document.getElementById('meaning' + targetid).innerText = document.getElementById("unknownword").value
 document.getElementById('meaning' + targetid).setAttribute('style','color:DarkOrange; font-size:70%; large;')
- updatetranslation()
+updatetranslation()
 
 
 }
 
 
 function selectform(element){
-	
-	var targetid = document.getElementById("ww").getAttribute("selectedbox")
 
-  //var newelement = document.createElement("li")
+var targetid = document.getElementById("ww").getAttribute("selectedbox")
+
+//var newelement = document.createElement("li")
 var rr = document.getElementById(targetid).getElementsByTagName('recreate')
 for(var ss=0; ss<rr.length; ss++){
-  var newelement = document.createElement("li")
-  newelement.setAttribute('id',rr[ss].getAttribute('formerid'))
-  newelement.innerHTML = '<a onclick="getww(this)" style="cursor:pointer;" parentid="' + rr[ss].getAttribute('formerid') + '">' + rr[ss].innerHTML + '</a>'
-  newelement.setAttribute('class','ui-state-default')
-  document.getElementById(targetid).parentElement.insertBefore(newelement,document.getElementById(targetid))
+var newelement = document.createElement("li")
+newelement.setAttribute('id',rr[ss].getAttribute('formerid'))
+newelement.innerHTML = '<a onclick="getww(this)" style="cursor:pointer;" parentid="' + rr[ss].getAttribute('formerid') + '">' + rr[ss].innerHTML + '</a>'
+newelement.setAttribute('class','ui-state-default ui-sortable-handle')
+document.getElementById(targetid).parentElement.insertBefore(newelement,document.getElementById(targetid))
 
 }
 
-  var qq = document.getElementById(targetid).getElementsByTagName('A')[0].outerHTML
-  document.getElementById(targetid).innerHTML = qq
+var qq = document.getElementById(targetid).getElementsByTagName('A')[0].outerHTML
+document.getElementById(targetid).innerHTML = qq
 
 document.getElementById(targetid).innerHTML = document.getElementById(targetid).innerHTML + '<splitjoin></splitjoin><br\><def style="line-height: 90%;color:red; font-size:50%; cursor:pointer;" id="def'+ targetid + '"></def> '
 document.getElementById(targetid).getElementsByTagName('splitjoin')[0].setAttribute('id','splitjoin'+ targetid)
@@ -942,7 +942,7 @@ if(word=='erant' && document.getElementById('gramm' + targetid).getAttribute('te
 
 
 if(endsWith(meaning,'$')){
-	meaning = meaning.substr(0,meaning.length-1)
+meaning = meaning.substr(0,meaning.length-1)
 }
 document.getElementById(targetid).setAttribute('meaning',meaning)
 document.getElementById('meaning' + targetid).setAttribute('style','color:DarkOrange; font-size:70%; large;')
@@ -990,7 +990,7 @@ if(document.getElementById('gramm' + targetid).getAttribute('pos') == 'adv'||doc
 document.getElementById(targetid).getElementsByTagName('splitjoin')[0].innerHTML = document.getElementById(targetid).getElementsByTagName('splitjoin')[0].innerHTML+ '<button style="background:#ffe6e6" style="cursor:pointer;" onclick="nonjoiner(this)" parentid =' + targetid + '>&#x2192;|</button>'
 }
 if(document.getElementById('gramm'+targetid).getAttribute('mood') == 'IND'||document.getElementById('gramm'+targetid).getAttribute('mood') == 'SUB'){
-  addquestionbutton(targetid)
+addquestionbutton(targetid)
 }
 if(document.getElementById('gramm' + targetid).innerText == 'supine acc sing neut'){
 document.getElementById(targetid).getElementsByTagName('splitjoin')[0].innerHTML = document.getElementById(targetid).getElementsByTagName('splitjoin')[0].innerHTML+ '<button style="background:#ffe6e6"  style="cursor:pointer;" onclick="supinejoiner(this)" parentid =' + targetid + '>&#x2192;iri</button>'
@@ -1000,44 +1000,44 @@ if(document.getElementById('gramm' + targetid).getAttribute('pos') == 'ADJ'){
 document.getElementById(targetid).getElementsByTagName('splitjoin')[0].innerHTML = document.getElementById(targetid).getElementsByTagName('splitjoin')[0].innerHTML+'<button style="background:#e5ffff"  style="cursor:pointer;" onclick="adjjoiner(this)" parentid =' + targetid + '>&#x2192;|</button>'
 }
 if(document.getElementById('gramm' + targetid).getAttribute('pos') == 'N' && document.getElementById('gramm' + targetid).getAttribute('case') == 'nom' ){
-  document.getElementById(targetid).getElementsByTagName('splitjoin')[0].innerHTML = document.getElementById(targetid).getElementsByTagName('splitjoin')[0].innerHTML+'<button style="background:#e5ffff"  style="cursor:pointer;" onclick="nounjoiner(this)" parentid =' + targetid + '>&#x2192;VERB</button>'
+document.getElementById(targetid).getElementsByTagName('splitjoin')[0].innerHTML = document.getElementById(targetid).getElementsByTagName('splitjoin')[0].innerHTML+'<button style="background:#e5ffff"  style="cursor:pointer;" onclick="nounjoiner(this)" parentid =' + targetid + '>&#x2192;VERB</button>'
 }
 
 if(document.getElementById('gramm' + targetid).getAttribute('pos') == 'PAP'||document.getElementById('gramm' + targetid).getAttribute('pos') == 'PPP'||document.getElementById('gramm' + targetid).getAttribute('pos') == 'FUTPPL'){
-  document.getElementById(targetid).getElementsByTagName('splitjoin')[0].innerHTML = document.getElementById(targetid).getElementsByTagName('splitjoin')[0].innerHTML+'<button style="background:##ffe6e6"  style="cursor:pointer;" onclick="verbjoiner(this)" parentid =' + targetid + '>&#x2192;SUM</button>'
+document.getElementById(targetid).getElementsByTagName('splitjoin')[0].innerHTML = document.getElementById(targetid).getElementsByTagName('splitjoin')[0].innerHTML+'<button style="background:##ffe6e6"  style="cursor:pointer;" onclick="verbjoiner(this)" parentid =' + targetid + '>&#x2192;SUM</button>'
 
 }
 if(document.getElementById("ww").getAttribute("tackon") == "yes")
 {
-  document.getElementById(targetid).getElementsByTagName('splitjoin')[0].innerHTML = document.getElementById(targetid).getElementsByTagName('splitjoin')[0].innerHTML+'<button style="background:#fff7e6"  style="cursor:pointer;" onclick="tackonsplitter(this)" parentid =' + targetid + '>&#x2190;|&#x2192;</button>'
+document.getElementById(targetid).getElementsByTagName('splitjoin')[0].innerHTML = document.getElementById(targetid).getElementsByTagName('splitjoin')[0].innerHTML+'<button style="background:#fff7e6"  style="cursor:pointer;" onclick="tackonsplitter(this)" parentid =' + targetid + '>&#x2190;|&#x2192;</button>'
 }
 var pos = document.getElementById('gramm' + targetid).getAttribute('pos')
 if(pos == 'V'){
-  document.getElementById(targetid).setAttribute('style','background:#ffe6e6')
+document.getElementById(targetid).setAttribute('style','background:#ffe6e6')
 }
 if(pos == 'N'|pos == 'GERUND'){
-  document.getElementById(targetid).setAttribute('style','background:#e5ffff')
+document.getElementById(targetid).setAttribute('style','background:#e5ffff')
 }
 if(pos == 'GERUNDIVE'||pos == 'VPAR'||pos == 'PPP'||pos == 'FUTPPL'||pos=='PRPPL'||pos == 'PAP'||pos == 'SUPINE'){
-  document.getElementById(targetid).setAttribute('style','background:#ffe5ff')
+document.getElementById(targetid).setAttribute('style','background:#ffe5ff')
 }
 if(pos == 'ADJ'){
-  document.getElementById(targetid).setAttribute('style','background:#ffe6cc')
+document.getElementById(targetid).setAttribute('style','background:#ffe6cc')
 }
 if(pos == 'ADV'){
-  document.getElementById(targetid).setAttribute('style','background:#d9ffcc')
+document.getElementById(targetid).setAttribute('style','background:#d9ffcc')
 }
 if(pos == 'CONJ'){
-  document.getElementById(targetid).setAttribute('style','background:#fff7e6')
+document.getElementById(targetid).setAttribute('style','background:#fff7e6')
 }
 if(pos == 'PREP'){
-  document.getElementById(targetid).setAttribute('style','background:#ffff99')
+document.getElementById(targetid).setAttribute('style','background:#ffff99')
 }
 if(pos == 'NUM'){
-  document.getElementById(targetid).setAttribute('style','background:#AA88ff')
+document.getElementById(targetid).setAttribute('style','background:#AA88ff')
 }
 if(pos == 'PRON'||pos == 'refpron'||pos == 'perspron'||pos == 'SD'||pos == 'INT'||pos == 'RELAT'||pos == 'FDEM'||pos == 'NDEM'||pos == 'SDEM'||pos == 'INTERROG'||pos == 'INTENS'){
-  document.getElementById(targetid).setAttribute('style','background:#e5ffff')
+document.getElementById(targetid).setAttribute('style','background:#e5ffff')
 }
 
 // refpron perspron perspron SDEM INTENS RELAT FDEM
@@ -1045,22 +1045,22 @@ if(pos == 'PRON'||pos == 'refpron'||pos == 'perspron'||pos == 'SD'||pos == 'INT'
 }
 
 function chooser(element){
-	var q = document.getElementById(element.getAttribute('parentid')).getAttribute(element.tagName.toLowerCase()) + '$'
-	q=q.replace(/\$\$/g,'$')
-	q=q.replace(/\$\$/g,'$')
+var q = document.getElementById(element.getAttribute('parentid')).getAttribute(element.tagName.toLowerCase()) + '$'
+q=q.replace(/\$\$/g,'$')
+q=q.replace(/\$\$/g,'$')
 var choices = q.split('$')
 var currentchoice = 0
 var changed = 0
 for(n=0;n<choices.length;n++) {
 
 if(choices[n].substr(0,1)=="%"&& changed == 0){
-	choices[n] =choices[n].replace("%","")
-	currentchoice = n+1
-	if(currentchoice>choices.length-2){currentchoice = 0}
-	element.innerText = choices[currentchoice]
-	choices[currentchoice] = '%' + choices[currentchoice] 
-	document.getElementById(element.getAttribute('parentid')).setAttribute(element.tagName,choices.join('$').replace('$$','$'))
-	changed = 1
+choices[n] =choices[n].replace("%","")
+currentchoice = n+1
+if(currentchoice>choices.length-2){currentchoice = 0}
+element.innerText = choices[currentchoice]
+choices[currentchoice] = '%' + choices[currentchoice] 
+document.getElementById(element.getAttribute('parentid')).setAttribute(element.tagName,choices.join('$').replace('$$','$'))
+changed = 1
 }
 
 }
@@ -1702,7 +1702,7 @@ return partscollection.lines[c].val1
 
 var e = 0
 
-    }
+  }
 }
 
 function build(targetid){
@@ -1740,13 +1740,13 @@ meaning=meaning.replace('$','').replace('%','')
 var meaningparts = meaning.split(' ')
 for (var b=0;b<meaningparts.length; b++){
 if(meaningparts[b].substr(0,1) == '^'){
-	var tagger = meaningparts[b].replace('^','')
+var tagger = meaningparts[b].replace('^','')
 meaningparts[b] = document.getElementById(targetid).getAttribute(meaningparts[b].replace('^',''))
 if (meaningparts[b].split('$').length>1) {
 var meaningpart = meaningparts[b].match(/\%(.*?)\$/g)[0]
 if(meaningpart == 0){
 }{
-	meaningparts[b] = '<' + tagger + '>' + meaningpart.replace('%','').replace('$','') + '</' +tagger + '>'
+meaningparts[b] = '<' + tagger + '>' + meaningpart.replace('%','').replace('$','') + '</' +tagger + '>'
 }
 }
 }	
@@ -1762,7 +1762,7 @@ document.getElementById('meaning' + targetid).children[c].setAttribute('parentid
 document.getElementById('meaning' + targetid).setAttribute('style','cursor:pointer; color:DarkOrange; font-size:70%;')
 updatetranslation()
 if(/(^|\s)a\s([aeiouAEIOU]|hono)/g.test(document.getElementById('meaning' + targetid).innerText)){
-  try{
+try{
 document.getElementById('meaning' + targetid).getElementsByTagName('sart')[0].innerText = 'an'}
 catch(err2){}
 }
@@ -1771,481 +1771,481 @@ catch(err2){}
 /* global define */
 
 (function (root, pluralize) {
-  /* istanbul ignore else */
-  if (typeof require === 'function' && typeof exports === 'object' && typeof module === 'object') {
-    // Node.
-    module.exports = pluralize();
-  } else if (typeof define === 'function' && define.amd) {
-    // AMD, registers as an anonymous module.
-    define(function () {
-      return pluralize();
-    });
-  } else {
-    // Browser global.
-    root.pluralize = pluralize();
-  }
+/* istanbul ignore else */
+if (typeof require === 'function' && typeof exports === 'object' && typeof module === 'object') {
+  // Node.
+  module.exports = pluralize();
+} else if (typeof define === 'function' && define.amd) {
+  // AMD, registers as an anonymous module.
+  define(function () {
+    return pluralize();
+  });
+} else {
+  // Browser global.
+  root.pluralize = pluralize();
+}
 })(this, function () {
-  // Rule storage - pluralize and singularize need to be run sequentially,
-  // while other rules can be optimized using an object for instant lookups.
-  var pluralRules = [];
-  var singularRules = [];
-  var uncountables = {};
-  var irregularPlurals = {};
-  var irregularSingles = {};
+// Rule storage - pluralize and singularize need to be run sequentially,
+// while other rules can be optimized using an object for instant lookups.
+var pluralRules = [];
+var singularRules = [];
+var uncountables = {};
+var irregularPlurals = {};
+var irregularSingles = {};
 
-  /**
-   * Title case a string.
-   *
-   * @param  {string} str
-   * @return {string}
-   */
-  function toTitleCase (str) {
-    return str.charAt(0).toUpperCase() + str.substr(1).toLowerCase();
+/**
+ * Title case a string.
+ *
+ * @param  {string} str
+ * @return {string}
+ */
+function toTitleCase (str) {
+  return str.charAt(0).toUpperCase() + str.substr(1).toLowerCase();
+}
+
+/**
+ * Sanitize a pluralization rule to a usable regular expression.
+ *
+ * @param  {(RegExp|string)} rule
+ * @return {RegExp}
+ */
+function sanitizeRule (rule) {
+  if (typeof rule === 'string') {
+    return new RegExp('^' + rule + '$', 'i');
   }
 
-  /**
-   * Sanitize a pluralization rule to a usable regular expression.
-   *
-   * @param  {(RegExp|string)} rule
-   * @return {RegExp}
-   */
-  function sanitizeRule (rule) {
-    if (typeof rule === 'string') {
-      return new RegExp('^' + rule + '$', 'i');
-    }
+  return rule;
+}
 
-    return rule;
+/**
+ * Pass in a word token to produce a function that can replicate the case on
+ * another word.
+ *
+ * @param  {string}   word
+ * @param  {string}   token
+ * @return {Function}
+ */
+function restoreCase (word, token) {
+  // Tokens are an exact match.
+  if (word === token) {
+    return token;
   }
 
-  /**
-   * Pass in a word token to produce a function that can replicate the case on
-   * another word.
-   *
-   * @param  {string}   word
-   * @param  {string}   token
-   * @return {Function}
-   */
-  function restoreCase (word, token) {
-    // Tokens are an exact match.
-    if (word === token) {
-      return token;
-    }
-
-    // Upper cased words. E.g. "HELLO".
-    if (word === word.toUpperCase()) {
-      return token.toUpperCase();
-    }
-
-    // Title cased words. E.g. "Title".
-    if (word[0] === word[0].toUpperCase()) {
-      return toTitleCase(token);
-    }
-
-    // Lower cased words. E.g. "test".
-    return token.toLowerCase();
+  // Upper cased words. E.g. "HELLO".
+  if (word === word.toUpperCase()) {
+    return token.toUpperCase();
   }
 
-  /**
-   * Interpolate a regexp string.
-   *
-   * @param  {string} str
-   * @param  {Array}  args
-   * @return {string}
-   */
-  function interpolate (str, args) {
-    return str.replace(/\$(\d{1,2})/g, function (match, index) {
-      return args[index] || '';
-    });
+  // Title cased words. E.g. "Title".
+  if (word[0] === word[0].toUpperCase()) {
+    return toTitleCase(token);
   }
 
-  /**
-   * Sanitize a word by passing in the word and sanitization rules.
-   *
-   * @param  {string}   token
-   * @param  {string}   word
-   * @param  {Array}    collection
-   * @return {string}
-   */
-  function sanitizeWord (token, word, collection) {
-    // Empty string or doesn't need fixing.
-    if (!token.length || uncountables.hasOwnProperty(token)) {
-      return word;
-    }
+  // Lower cased words. E.g. "test".
+  return token.toLowerCase();
+}
 
-    var len = collection.length;
+/**
+ * Interpolate a regexp string.
+ *
+ * @param  {string} str
+ * @param  {Array}  args
+ * @return {string}
+ */
+function interpolate (str, args) {
+  return str.replace(/\$(\d{1,2})/g, function (match, index) {
+    return args[index] || '';
+  });
+}
 
-    // Iterate over the sanitization rules and use the first one to match.
-    while (len--) {
-      var rule = collection[len];
-
-      // If the rule passes, return the replacement.
-      if (rule[0].test(word)) {
-        return word.replace(rule[0], function (match, index, word) {
-          var result = interpolate(rule[1], arguments);
-
-          if (match === '') {
-            return restoreCase(word[index - 1], result);
-          }
-
-          return restoreCase(match, result);
-        });
-      }
-    }
-
+/**
+ * Sanitize a word by passing in the word and sanitization rules.
+ *
+ * @param  {string}   token
+ * @param  {string}   word
+ * @param  {Array}    collection
+ * @return {string}
+ */
+function sanitizeWord (token, word, collection) {
+  // Empty string or doesn't need fixing.
+  if (!token.length || uncountables.hasOwnProperty(token)) {
     return word;
   }
 
-  /**
-   * Replace a word with the updated word.
-   *
-   * @param  {Object}   replaceMap
-   * @param  {Object}   keepMap
-   * @param  {Array}    rules
-   * @return {Function}
-   */
-  function replaceWord (replaceMap, keepMap, rules) {
-    return function (word) {
-      // Get the correct token and case restoration functions.
-      var token = word.toLowerCase();
+  var len = collection.length;
 
-      // Check against the keep object map.
-      if (keepMap.hasOwnProperty(token)) {
-        return restoreCase(word, token);
-      }
+  // Iterate over the sanitization rules and use the first one to match.
+  while (len--) {
+    var rule = collection[len];
 
-      // Check against the replacement map for a direct word replacement.
-      if (replaceMap.hasOwnProperty(token)) {
-        return restoreCase(word, replaceMap[token]);
-      }
+    // If the rule passes, return the replacement.
+    if (rule[0].test(word)) {
+      return word.replace(rule[0], function (match, index, word) {
+        var result = interpolate(rule[1], arguments);
 
-      // Run all the rules against the word.
-      return sanitizeWord(token, word, rules);
-    };
+        if (match === '') {
+          return restoreCase(word[index - 1], result);
+        }
+
+        return restoreCase(match, result);
+      });
+    }
   }
 
-  /**
-   * Pluralize or singularize a word based on the passed in count.
-   *
-   * @param  {string}  word
-   * @param  {number}  count
-   * @param  {boolean} inclusive
-   * @return {string}
-   */
-  function pluralize (word, count, inclusive) {
-    var pluralized = count === 1
-      ? pluralize.singular(word) : pluralize.plural(word);
+  return word;
+}
 
-    return (inclusive ? count + ' ' : '') + pluralized;
-  }
+/**
+ * Replace a word with the updated word.
+ *
+ * @param  {Object}   replaceMap
+ * @param  {Object}   keepMap
+ * @param  {Array}    rules
+ * @return {Function}
+ */
+function replaceWord (replaceMap, keepMap, rules) {
+  return function (word) {
+    // Get the correct token and case restoration functions.
+    var token = word.toLowerCase();
 
-  /**
-   * Pluralize a word.
-   *
-   * @type {Function}
-   */
-  pluralize.plural = replaceWord(
-    irregularSingles, irregularPlurals, pluralRules
-  );
-
-  /**
-   * Singularize a word.
-   *
-   * @type {Function}
-   */
-  pluralize.singular = replaceWord(
-    irregularPlurals, irregularSingles, singularRules
-  );
-
-  /**
-   * Add a pluralization rule to the collection.
-   *
-   * @param {(string|RegExp)} rule
-   * @param {string}          replacement
-   */
-  pluralize.addPluralRule = function (rule, replacement) {
-    pluralRules.push([sanitizeRule(rule), replacement]);
-  };
-
-  /**
-   * Add a singularization rule to the collection.
-   *
-   * @param {(string|RegExp)} rule
-   * @param {string}          replacement
-   */
-  pluralize.addSingularRule = function (rule, replacement) {
-    singularRules.push([sanitizeRule(rule), replacement]);
-  };
-
-  /**
-   * Add an uncountable word rule.
-   *
-   * @param {(string|RegExp)} word
-   */
-  pluralize.addUncountableRule = function (word) {
-    if (typeof word === 'string') {
-      uncountables[word.toLowerCase()] = true;
-      return;
+    // Check against the keep object map.
+    if (keepMap.hasOwnProperty(token)) {
+      return restoreCase(word, token);
     }
 
-    // Set singular and plural references for the word.
-    pluralize.addPluralRule(word, '$0');
-    pluralize.addSingularRule(word, '$0');
+    // Check against the replacement map for a direct word replacement.
+    if (replaceMap.hasOwnProperty(token)) {
+      return restoreCase(word, replaceMap[token]);
+    }
+
+    // Run all the rules against the word.
+    return sanitizeWord(token, word, rules);
   };
+}
 
-  /**
-   * Add an irregular word definition.
-   *
-   * @param {string} single
-   * @param {string} plural
-   */
-  pluralize.addIrregularRule = function (single, plural) {
-    plural = plural.toLowerCase();
-    single = single.toLowerCase();
+/**
+ * Pluralize or singularize a word based on the passed in count.
+ *
+ * @param  {string}  word
+ * @param  {number}  count
+ * @param  {boolean} inclusive
+ * @return {string}
+ */
+function pluralize (word, count, inclusive) {
+  var pluralized = count === 1
+    ? pluralize.singular(word) : pluralize.plural(word);
 
-    irregularSingles[single] = plural;
-    irregularPlurals[plural] = single;
-  };
+  return (inclusive ? count + ' ' : '') + pluralized;
+}
 
-  /**
-   * Irregular rules.
-   */
-  [
-    // Pronouns.
-    ['I', 'we'],
-    ['me', 'us'],
-    ['he', 'they'],
-    ['she', 'they'],
-    ['them', 'them'],
-    ['myself', 'ourselves'],
-    ['yourself', 'yourselves'],
-    ['itself', 'themselves'],
-    ['herself', 'themselves'],
-    ['himself', 'themselves'],
-    ['themself', 'themselves'],
-    ['is', 'are'],
-    ['was', 'were'],
-    ['has', 'have'],
-    ['this', 'these'],
-    ['that', 'those'],
-    // Words ending in with a consonant and `o`.
-    ['echo', 'echoes'],
-    ['dingo', 'dingoes'],
-    ['volcano', 'volcanoes'],
-    ['tornado', 'tornadoes'],
-    ['torpedo', 'torpedoes'],
-    // Ends with `us`.
-    ['genus', 'genera'],
-    ['viscus', 'viscera'],
-    // Ends with `ma`.
-    ['stigma', 'stigmata'],
-    ['stoma', 'stomata'],
-    ['dogma', 'dogmata'],
-    ['lemma', 'lemmata'],
-    ['schema', 'schemata'],
-    ['anathema', 'anathemata'],
-    // Other irregular rules.
-    ['ox', 'oxen'],
-    ['axe', 'axes'],
-    ['die', 'dice'],
-    ['yes', 'yeses'],
-    ['foot', 'feet'],
-    ['eave', 'eaves'],
-    ['goose', 'geese'],
-    ['tooth', 'teeth'],
-    ['quiz', 'quizzes'],
-    ['human', 'humans'],
-    ['Roman', 'Romans'],
-    ['proof', 'proofs'],
-    ['carve', 'carves'],
-    ['valve', 'valves'],
-    ['looey', 'looies'],
-    ['thief', 'thieves'],
-    ['groove', 'grooves'],
-    ['pickaxe', 'pickaxes'],
-    ['whiskey', 'whiskies']
-  ].forEach(function (rule) {
-    return pluralize.addIrregularRule(rule[0], rule[1]);
-  });
+/**
+ * Pluralize a word.
+ *
+ * @type {Function}
+ */
+pluralize.plural = replaceWord(
+  irregularSingles, irregularPlurals, pluralRules
+);
 
-  /**
-   * Pluralization rules.
-   */
-  [
-    [/s?$/i, 's'],
-    [/([^aeiou]ese)$/i, '$1'],
-    [/(ax|test)is$/i, '$1es'],
-    [/(alias|[^aou]us|tlas|gas|ris)$/i, '$1es'],
-    [/(e[mn]u)s?$/i, '$1s'],
-    [/([^l]ias|[aeiou]las|[emjzr]as|[iu]am)$/i, '$1'],
-    [/(alumn|syllab|octop|vir|radi|nucle|fung|cact|stimul|termin|bacill|foc|uter|loc|strat)(?:us|i)$/i, '$1i'],
-    [/(alumn|alg|vertebr)(?:a|ae)$/i, '$1ae'],
-    [/(seraph|cherub)(?:im)?$/i, '$1im'],
-    [/(her|at|gr)o$/i, '$1oes'],
-    [/(agend|addend|millenni|dat|extrem|bacteri|desiderat|strat|candelabr|errat|ov|symposi|curricul|automat|quor)(?:a|um)$/i, '$1a'],
-    [/(apheli|hyperbat|periheli|asyndet|noumen|phenomen|criteri|organ|prolegomen|hedr|automat)(?:a|on)$/i, '$1a'],
-    [/sis$/i, 'ses'],
-    [/(?:(kni|wi|li)fe|(ar|l|ea|eo|oa|hoo)f)$/i, '$1$2ves'],
-    [/([^aeiouy]|qu)y$/i, '$1ies'],
-    [/([^ch][ieo][ln])ey$/i, '$1ies'],
-    [/(x|ch|ss|sh|zz)$/i, '$1es'],
-    [/(matr|cod|mur|sil|vert|ind|append)(?:ix|ex)$/i, '$1ices'],
-    [/(m|l)(?:ice|ouse)$/i, '$1ice'],
-    [/(pe)(?:rson|ople)$/i, '$1ople'],
-    [/(child)(?:ren)?$/i, '$1ren'],
-    [/eaux$/i, '$0'],
-    [/m[ae]n$/i, 'men'],
-    ['thou', 'you']
-  ].forEach(function (rule) {
-    return pluralize.addPluralRule(rule[0], rule[1]);
-  });
+/**
+ * Singularize a word.
+ *
+ * @type {Function}
+ */
+pluralize.singular = replaceWord(
+  irregularPlurals, irregularSingles, singularRules
+);
 
-  /**
-   * Singularization rules.
-   */
-  [
-    [/s$/i, ''],
-    [/(ss)$/i, '$1'],
-    [/((a)naly|(b)a|(d)iagno|(p)arenthe|(p)rogno|(s)ynop|(t)he)(?:sis|ses)$/i, '$1sis'],
-    [/(^analy)(?:sis|ses)$/i, '$1sis'],
-    [/(wi|kni|(?:after|half|high|low|mid|non|night|[^\w]|^)li)ves$/i, '$1fe'],
-    [/(ar|(?:wo|[ae])l|[eo][ao])ves$/i, '$1f'],
-    [/ies$/i, 'y'],
-    [/\b([pl]|zomb|(?:neck|cross)?t|coll|faer|food|gen|goon|group|lass|talk|goal|cut)ies$/i, '$1ie'],
-    [/\b(mon|smil)ies$/i, '$1ey'],
-    [/(m|l)ice$/i, '$1ouse'],
-    [/(seraph|cherub)im$/i, '$1'],
-    [/(x|ch|ss|sh|zz|tto|go|cho|alias|[^aou]us|tlas|gas|(?:her|at|gr)o|ris)(?:es)?$/i, '$1'],
-    [/(e[mn]u)s?$/i, '$1'],
-    [/(movie|twelve)s$/i, '$1'],
-    [/(cris|test|diagnos)(?:is|es)$/i, '$1is'],
-    [/(alumn|syllab|octop|vir|radi|nucle|fung|cact|stimul|termin|bacill|foc|uter|loc|strat)(?:us|i)$/i, '$1us'],
-    [/(agend|addend|millenni|dat|extrem|bacteri|desiderat|strat|candelabr|errat|ov|symposi|curricul|quor)a$/i, '$1um'],
-    [/(apheli|hyperbat|periheli|asyndet|noumen|phenomen|criteri|organ|prolegomen|hedr|automat)a$/i, '$1on'],
-    [/(alumn|alg|vertebr)ae$/i, '$1a'],
-    [/(cod|mur|sil|vert|ind)ices$/i, '$1ex'],
-    [/(matr|append)ices$/i, '$1ix'],
-    [/(pe)(rson|ople)$/i, '$1rson'],
-    [/(child)ren$/i, '$1'],
-    [/(eau)x?$/i, '$1'],
-    [/men$/i, 'man']
-  ].forEach(function (rule) {
-    return pluralize.addSingularRule(rule[0], rule[1]);
-  });
+/**
+ * Add a pluralization rule to the collection.
+ *
+ * @param {(string|RegExp)} rule
+ * @param {string}          replacement
+ */
+pluralize.addPluralRule = function (rule, replacement) {
+  pluralRules.push([sanitizeRule(rule), replacement]);
+};
 
-  /**
-   * Uncountable rules.
-   */
-  [
-    // Singular words with no plurals.
-    'advice',
-    'adulthood',
-    'agenda',
-    'aid',
-    'alcohol',
-    'ammo',
-    'athletics',
-    'bison',
-    'blood',
-    'bream',
-    'buffalo',
-    'butter',
-    'carp',
-    'cash',
-    'chassis',
-    'chess',
-    'clothing',
-    'commerce',
-    'cod',
-    'cooperation',
-    'corps',
-    'digestion',
-    'debris',
-    'diabetes',
-    'energy',
-    'equipment',
-    'elk',
-    'excretion',
-    'expertise',
-    'flounder',
-    'fun',
-    'gallows',
-    'garbage',
-    'graffiti',
-    'headquarters',
-    'health',
-    'herpes',
-    'highjinks',
-    'homework',
-    'housework',
-    'information',
-    'jeans',
-    'justice',
-    'kudos',
-    'labour',
-    'literature',
-    'machinery',
-    'mackerel',
-    'mail',
-    'media',
-    'mews',
-    'more',
-    'moose',
-    'music',
-    'news',
-    'pike',
-    'plankton',
-    'pliers',
-    'pollution',
-    'premises',
-    'rain',
-    'research',
-    'rice',
-    'salmon',
-    'scissors',
-    'series',
-    'sewage',
-    'shambles',
-    'shrimp',
-    'species',
-    'staff',
-    'swine',
-    'trout',
-    'traffic',
-    'transporation',
-    'tuna',
-    'wealth',
-    'welfare',
-    'whiting',
-    'wildebeest',
-    'wildlife',
-    'you',
-    // Regexes.
-    /pox$/i, // "chickpox", "smallpox"
-    /ois$/i,
-    /deer$/i, // "deer", "reindeer"
-    /fish$/i, // "fish", "blowfish", "angelfish"
-    /sheep$/i,
-    /measles$/i,
-    /[^aeiou]ese$/i // "chinese", "japanese"
-  ].forEach(pluralize.addUncountableRule);
+/**
+ * Add a singularization rule to the collection.
+ *
+ * @param {(string|RegExp)} rule
+ * @param {string}          replacement
+ */
+pluralize.addSingularRule = function (rule, replacement) {
+  singularRules.push([sanitizeRule(rule), replacement]);
+};
 
-  return pluralize;
+/**
+ * Add an uncountable word rule.
+ *
+ * @param {(string|RegExp)} word
+ */
+pluralize.addUncountableRule = function (word) {
+  if (typeof word === 'string') {
+    uncountables[word.toLowerCase()] = true;
+    return;
+  }
+
+  // Set singular and plural references for the word.
+  pluralize.addPluralRule(word, '$0');
+  pluralize.addSingularRule(word, '$0');
+};
+
+/**
+ * Add an irregular word definition.
+ *
+ * @param {string} single
+ * @param {string} plural
+ */
+pluralize.addIrregularRule = function (single, plural) {
+  plural = plural.toLowerCase();
+  single = single.toLowerCase();
+
+  irregularSingles[single] = plural;
+  irregularPlurals[plural] = single;
+};
+
+/**
+ * Irregular rules.
+ */
+[
+  // Pronouns.
+  ['I', 'we'],
+  ['me', 'us'],
+  ['he', 'they'],
+  ['she', 'they'],
+  ['them', 'them'],
+  ['myself', 'ourselves'],
+  ['yourself', 'yourselves'],
+  ['itself', 'themselves'],
+  ['herself', 'themselves'],
+  ['himself', 'themselves'],
+  ['themself', 'themselves'],
+  ['is', 'are'],
+  ['was', 'were'],
+  ['has', 'have'],
+  ['this', 'these'],
+  ['that', 'those'],
+  // Words ending in with a consonant and `o`.
+  ['echo', 'echoes'],
+  ['dingo', 'dingoes'],
+  ['volcano', 'volcanoes'],
+  ['tornado', 'tornadoes'],
+  ['torpedo', 'torpedoes'],
+  // Ends with `us`.
+  ['genus', 'genera'],
+  ['viscus', 'viscera'],
+  // Ends with `ma`.
+  ['stigma', 'stigmata'],
+  ['stoma', 'stomata'],
+  ['dogma', 'dogmata'],
+  ['lemma', 'lemmata'],
+  ['schema', 'schemata'],
+  ['anathema', 'anathemata'],
+  // Other irregular rules.
+  ['ox', 'oxen'],
+  ['axe', 'axes'],
+  ['die', 'dice'],
+  ['yes', 'yeses'],
+  ['foot', 'feet'],
+  ['eave', 'eaves'],
+  ['goose', 'geese'],
+  ['tooth', 'teeth'],
+  ['quiz', 'quizzes'],
+  ['human', 'humans'],
+  ['Roman', 'Romans'],
+  ['proof', 'proofs'],
+  ['carve', 'carves'],
+  ['valve', 'valves'],
+  ['looey', 'looies'],
+  ['thief', 'thieves'],
+  ['groove', 'grooves'],
+  ['pickaxe', 'pickaxes'],
+  ['whiskey', 'whiskies']
+].forEach(function (rule) {
+  return pluralize.addIrregularRule(rule[0], rule[1]);
+});
+
+/**
+ * Pluralization rules.
+ */
+[
+  [/s?$/i, 's'],
+  [/([^aeiou]ese)$/i, '$1'],
+  [/(ax|test)is$/i, '$1es'],
+  [/(alias|[^aou]us|tlas|gas|ris)$/i, '$1es'],
+  [/(e[mn]u)s?$/i, '$1s'],
+  [/([^l]ias|[aeiou]las|[emjzr]as|[iu]am)$/i, '$1'],
+  [/(alumn|syllab|octop|vir|radi|nucle|fung|cact|stimul|termin|bacill|foc|uter|loc|strat)(?:us|i)$/i, '$1i'],
+  [/(alumn|alg|vertebr)(?:a|ae)$/i, '$1ae'],
+  [/(seraph|cherub)(?:im)?$/i, '$1im'],
+  [/(her|at|gr)o$/i, '$1oes'],
+  [/(agend|addend|millenni|dat|extrem|bacteri|desiderat|strat|candelabr|errat|ov|symposi|curricul|automat|quor)(?:a|um)$/i, '$1a'],
+  [/(apheli|hyperbat|periheli|asyndet|noumen|phenomen|criteri|organ|prolegomen|hedr|automat)(?:a|on)$/i, '$1a'],
+  [/sis$/i, 'ses'],
+  [/(?:(kni|wi|li)fe|(ar|l|ea|eo|oa|hoo)f)$/i, '$1$2ves'],
+  [/([^aeiouy]|qu)y$/i, '$1ies'],
+  [/([^ch][ieo][ln])ey$/i, '$1ies'],
+  [/(x|ch|ss|sh|zz)$/i, '$1es'],
+  [/(matr|cod|mur|sil|vert|ind|append)(?:ix|ex)$/i, '$1ices'],
+  [/(m|l)(?:ice|ouse)$/i, '$1ice'],
+  [/(pe)(?:rson|ople)$/i, '$1ople'],
+  [/(child)(?:ren)?$/i, '$1ren'],
+  [/eaux$/i, '$0'],
+  [/m[ae]n$/i, 'men'],
+  ['thou', 'you']
+].forEach(function (rule) {
+  return pluralize.addPluralRule(rule[0], rule[1]);
+});
+
+/**
+ * Singularization rules.
+ */
+[
+  [/s$/i, ''],
+  [/(ss)$/i, '$1'],
+  [/((a)naly|(b)a|(d)iagno|(p)arenthe|(p)rogno|(s)ynop|(t)he)(?:sis|ses)$/i, '$1sis'],
+  [/(^analy)(?:sis|ses)$/i, '$1sis'],
+  [/(wi|kni|(?:after|half|high|low|mid|non|night|[^\w]|^)li)ves$/i, '$1fe'],
+  [/(ar|(?:wo|[ae])l|[eo][ao])ves$/i, '$1f'],
+  [/ies$/i, 'y'],
+  [/\b([pl]|zomb|(?:neck|cross)?t|coll|faer|food|gen|goon|group|lass|talk|goal|cut)ies$/i, '$1ie'],
+  [/\b(mon|smil)ies$/i, '$1ey'],
+  [/(m|l)ice$/i, '$1ouse'],
+  [/(seraph|cherub)im$/i, '$1'],
+  [/(x|ch|ss|sh|zz|tto|go|cho|alias|[^aou]us|tlas|gas|(?:her|at|gr)o|ris)(?:es)?$/i, '$1'],
+  [/(e[mn]u)s?$/i, '$1'],
+  [/(movie|twelve)s$/i, '$1'],
+  [/(cris|test|diagnos)(?:is|es)$/i, '$1is'],
+  [/(alumn|syllab|octop|vir|radi|nucle|fung|cact|stimul|termin|bacill|foc|uter|loc|strat)(?:us|i)$/i, '$1us'],
+  [/(agend|addend|millenni|dat|extrem|bacteri|desiderat|strat|candelabr|errat|ov|symposi|curricul|quor)a$/i, '$1um'],
+  [/(apheli|hyperbat|periheli|asyndet|noumen|phenomen|criteri|organ|prolegomen|hedr|automat)a$/i, '$1on'],
+  [/(alumn|alg|vertebr)ae$/i, '$1a'],
+  [/(cod|mur|sil|vert|ind)ices$/i, '$1ex'],
+  [/(matr|append)ices$/i, '$1ix'],
+  [/(pe)(rson|ople)$/i, '$1rson'],
+  [/(child)ren$/i, '$1'],
+  [/(eau)x?$/i, '$1'],
+  [/men$/i, 'man']
+].forEach(function (rule) {
+  return pluralize.addSingularRule(rule[0], rule[1]);
+});
+
+/**
+ * Uncountable rules.
+ */
+[
+  // Singular words with no plurals.
+  'advice',
+  'adulthood',
+  'agenda',
+  'aid',
+  'alcohol',
+  'ammo',
+  'athletics',
+  'bison',
+  'blood',
+  'bream',
+  'buffalo',
+  'butter',
+  'carp',
+  'cash',
+  'chassis',
+  'chess',
+  'clothing',
+  'commerce',
+  'cod',
+  'cooperation',
+  'corps',
+  'digestion',
+  'debris',
+  'diabetes',
+  'energy',
+  'equipment',
+  'elk',
+  'excretion',
+  'expertise',
+  'flounder',
+  'fun',
+  'gallows',
+  'garbage',
+  'graffiti',
+  'headquarters',
+  'health',
+  'herpes',
+  'highjinks',
+  'homework',
+  'housework',
+  'information',
+  'jeans',
+  'justice',
+  'kudos',
+  'labour',
+  'literature',
+  'machinery',
+  'mackerel',
+  'mail',
+  'media',
+  'mews',
+  'more',
+  'moose',
+  'music',
+  'news',
+  'pike',
+  'plankton',
+  'pliers',
+  'pollution',
+  'premises',
+  'rain',
+  'research',
+  'rice',
+  'salmon',
+  'scissors',
+  'series',
+  'sewage',
+  'shambles',
+  'shrimp',
+  'species',
+  'staff',
+  'swine',
+  'trout',
+  'traffic',
+  'transporation',
+  'tuna',
+  'wealth',
+  'welfare',
+  'whiting',
+  'wildebeest',
+  'wildlife',
+  'you',
+  // Regexes.
+  /pox$/i, // "chickpox", "smallpox"
+  /ois$/i,
+  /deer$/i, // "deer", "reindeer"
+  /fish$/i, // "fish", "blowfish", "angelfish"
+  /sheep$/i,
+  /measles$/i,
+  /[^aeiou]ese$/i // "chinese", "japanese"
+].forEach(pluralize.addUncountableRule);
+
+return pluralize;
 });
 
 function getverbparts(word,pnumber){
-	if(word=="to be"){
-	word = "be"
+if(word=="to be"){
+word = "be"
 }
 var prefix=''
 
-	var q = word.split(' ')
+var q = word.split(' ')
 if(/^(re|dis|over|mis|out|be|co|de|fore|inter|pre|sub|trans|under|un|up|with)/g.test(q[0])){
 prefix = /^(re|dis|over|mis|out|be|co|de|fore|inter|pre|sub|trans|under|un|up|with)/g.exec(q[0])[0]
 if(prefix.length<q[0].length-1){
 q[0] = q[0].replace(/^(re|dis|over|mis|out|be|co|de|fore|inter|pre|sub|trans|under|un|up|with)/g,'')
 } else{prefix=''}
 }  
-	word = q[0]
+word = q[0]
 var partscollection = {"lines":[{"val0":"arise","val1":"arise","val2":"arise","val3":"arises","val4":"arose","val5":"arose","val6":"arisen","val7":"arising"},
 {"val0":"awake","val1":"awake","val2":"awake","val3":"awakes","val4":"awoke","val5":"awoke","val6":"awoken","val7":"awaking"},
 {"val0":"be","val1":"am","val2":"are","val3":"is","val4":"was","val5":"were","val6":"been","val7":"being"},
@@ -2430,19 +2430,19 @@ partscollection.lines[b-1].val2 = word
 if(word == word.replace(/[bcdefgiklmnpqrtvwy]$/g,'')){
 partscollection.lines[b-1].val3 = word + 'es'
 } else {
-	partscollection.lines[b-1].val3 = word + 's'
+partscollection.lines[b-1].val3 = word + 's'
 if(word == word.replace(/[bcdfghjklmnprstvwxz]y/g,'')){} else {
-  partscollection.lines[b-1].val3 = word.substr(0,word.length-2)
+partscollection.lines[b-1].val3 = word.substr(0,word.length-2)
 }
 
 }
 if(word == word.replace(/[(^)bcdfghjklmnpqrstvwxyz][aeiou][bdfgklmpstz]$/g,'')){
 partscollection.lines[b-1].val4 = word + 'ed'
 if (endsWith(word,'e')){
-	partscollection.lines[b-1].val4 = word + 'd'
+partscollection.lines[b-1].val4 = word + 'd'
 }
 if(word == word.replace(/[aeiou]c$/g,'')){} else {
-	partscollection.lines[b-1].val4 = word + 'ked'
+partscollection.lines[b-1].val4 = word + 'ked'
 }
 } else {
 
@@ -2450,51 +2450,51 @@ partscollection.lines[b-1].val4 = word + word.substr(word.length-1,1) + 'ed'
 }
 
 if(word == word.replace(/[bcdfghjklmnprstvwxz]y$/g,'')){} else {
-	partscollection.lines[b-1].val4 = word.substr(0,word.length-1) + 'ied'
+partscollection.lines[b-1].val4 = word.substr(0,word.length-1) + 'ied'
 }
 partscollection.lines[b-1].val5 = partscollection.lines[b-1].val4
 partscollection.lines[b-1].val6 = partscollection.lines[b-1].val5
 if(word == word.replace(/[(^)bcdfghjklmnpqrstvwxyz][aeiou][bdfgklmpstz]$/g,'')){
 if(endsWith(word,'e')){ 
-	partscollection.lines[b-1].val7 = word.substr(0,word.length-1) + 'ing'
+partscollection.lines[b-1].val7 = word.substr(0,word.length-1) + 'ing'
 } else {
 partscollection.lines[b-1].val7 = word + 'ing'
 
 if(word == word.replace(/[aeiou]c$/g,'')){} else {
-	partscollection.lines[b-1].val7 = word + 'king'
+partscollection.lines[b-1].val7 = word + 'king'
 }
 
 }
 
 } else {
 
-	partscollection.lines[b-1].val7 = word + word.substr(word.length-1,1) + 'ing'
+partscollection.lines[b-1].val7 = word + word.substr(word.length-1,1) + 'ing'
 }
 if(word == word.replace(/[dlt]ie/g,'')){} else {
-	partscollection.lines[b-1].val7 = word.substr(0,1) + 'ying'
+partscollection.lines[b-1].val7 = word.substr(0,1) + 'ying'
 }
 var addprefix = false
 var partmatched=0
 var verblinenumber
 for (var c=0;c<b-1;c++){
 if(partscollection.lines[c].val0 == prefix + word){
-	if(partmatched == 0){
+if(partmatched == 0){
 partmatched= 1
 //return partscollection.lines[c].val1
 verblinenumber=c
-	}
- }
+}
+}
 }
 if(partmatched==0)
 for(var c=0;c<b;c++){
 if(prefix+partscollection.lines[c].val0 == prefix + word){
-	if(partmatched == 0){
+if(partmatched == 0){
 partmatched= 1
 //return partscollection.lines[c].val1
 verblinenumber=c
 addprefix = true
-	}
- }
+}
+}
 
 }
 
@@ -2528,12 +2528,12 @@ q[0] = prefix + q[0]
 return q.join(" ")
 }
 function syllablecount(word){
- word = word.replace(/[^aeiouy][^aeiouy]ed$/g,'CVC')
+word = word.replace(/[^aeiouy][^aeiouy]ed$/g,'CVC')
 word = word.replace(/[^aeiouy]le$/g,'CVC')
 word = word.replace(/creat/g,"CVCVC")
-	if(endsWith(word,'ted')||endsWith(word,'ded')){
+if(endsWith(word,'ted')||endsWith(word,'ded')){
 word = word.substr(0,word.length-3) + 'CVC'
-	}
+}
 if (endsWith(word, 'ed')){
 word = word.substr(0,word.length-2)
 }
@@ -2543,7 +2543,7 @@ word = word.replace(/[^aeiouV]ia[^aeiouV]/g,'CVCVC')
 word = word.replace(/[^aeiouV]ua[^aeiouV]/g,'CVCVC')
 word = word.replace(/[^aeiouV]y[aeiou]/g,'CVCV')
 if(endsWith(word,'e')){
-	word=word.substr(0,word.length-1)
+word=word.substr(0,word.length-1)
 }
 word = word.replace(/[^aeiouV]y$/g,'CV')
 word = word.replace(/[^aeiouV]y[^aeiouV]/g,'CVC')
@@ -2560,46 +2560,46 @@ if (sc==0){sc = 1}
 return sc
 }
 function sanitise(originalword) {
-  var text = document.getElementById("ww").getAttribute('returnedtext')
-  text= text.replace('drive/urge/conduct/act;', 'drive, act, do, spend;')
-  text = text.replace('keep back; recover;','keep back; receive; recover;')
-  text = text.replace('terrace; archive;','terrace; study;')
-  text = text.replace('fall; catastrophe;','fall; ruin; catastrophe;')
-  text = text.replace(/\n.*?MORE.*?RETURN.*?\nUnexpected.*?(?=\n)/g,'')
-  text = text.replace(/ \(1st\)/g,'')
-  text = text.replace(/ \(2nd\)/g,'')
-  text = text.replace(/ \(3rd\)/g,'')
-  text = text.replace(/ \(4th\)/g,'')
-  text = text.replace(/ \(5th\)/g,'')
-  text = text.replace(/ \(6th\)/g,'')
-  text = text.replace(/ \(7th\)/g,'')
-  text = text.replace(/ \(8th\)/g,'')
-  text = text.replace(/the_/g,'the ')
-  
-  text = text.replace(/[\u0020]/g,'$')
-  text = text.replace(/\$\$/g,'$')
-  text = text.replace(/\$\$/g,'$')
-  text = text.replace(/\$\$/g,'$')
-  text = text.replace(/\$\$/g,'$')
-  text = text.replace(/\$\$/g,'$')
-  text = text.replace(/\$/g,' ')
-  text = text.replace(/NUM 1 [0-9] X X X ADVERB/g,'ADV')
-  text = text.replace(/\sor\s/g,'; ')
-  text = text.replace(/1 times/g,'once')
-  text = text.replace(/2 times/g,'twice')
-  text = text.replace(/3 times/g,'three times')
-  text = text.replace(/4 times/g,'four times')
-  text = text.replace(/5 times/g,'five times')
-  text = text.replace(/6 times/g,'six times')
-  text = text.replace(/7 times/g,'seven times')
-  text = text.replace(/8 times/g,'eight times')
-  text = text.replace(/9 times/g,'nine times')
-  text = text.replace(/10 times/g,'ten times')
-  text = text.replace(/on 1 occasions -/g,'on one occasion' )
-  text = text.replace(/on ([0-9]) occasions -/g,'on $1 occasions' )
-  text = text.replace('farm/country home/estate', 'villa, house, farm')
-  text = text.replace('stretch, draw tight', 'hurry, make for')
-  text = text.replace('drive, urge, conduct', 'drive, act, do, urge, conduct')
+var text = document.getElementById("ww").getAttribute('returnedtext')
+text= text.replace('drive/urge/conduct/act;', 'drive, act, do, spend;')
+text = text.replace('keep back; recover;','keep back; receive; recover;')
+text = text.replace('terrace; archive;','terrace; study;')
+text = text.replace('fall; catastrophe;','fall; ruin; catastrophe;')
+text = text.replace(/\n.*?MORE.*?RETURN.*?\nUnexpected.*?(?=\n)/g,'')
+text = text.replace(/ \(1st\)/g,'')
+text = text.replace(/ \(2nd\)/g,'')
+text = text.replace(/ \(3rd\)/g,'')
+text = text.replace(/ \(4th\)/g,'')
+text = text.replace(/ \(5th\)/g,'')
+text = text.replace(/ \(6th\)/g,'')
+text = text.replace(/ \(7th\)/g,'')
+text = text.replace(/ \(8th\)/g,'')
+text = text.replace(/the_/g,'the ')
+
+text = text.replace(/[\u0020]/g,'$')
+text = text.replace(/\$\$/g,'$')
+text = text.replace(/\$\$/g,'$')
+text = text.replace(/\$\$/g,'$')
+text = text.replace(/\$\$/g,'$')
+text = text.replace(/\$\$/g,'$')
+text = text.replace(/\$/g,' ')
+text = text.replace(/NUM 1 [0-9] X X X ADVERB/g,'ADV')
+text = text.replace(/\sor\s/g,'; ')
+text = text.replace(/1 times/g,'once')
+text = text.replace(/2 times/g,'twice')
+text = text.replace(/3 times/g,'three times')
+text = text.replace(/4 times/g,'four times')
+text = text.replace(/5 times/g,'five times')
+text = text.replace(/6 times/g,'six times')
+text = text.replace(/7 times/g,'seven times')
+text = text.replace(/8 times/g,'eight times')
+text = text.replace(/9 times/g,'nine times')
+text = text.replace(/10 times/g,'ten times')
+text = text.replace(/on 1 occasions -/g,'on one occasion' )
+text = text.replace(/on ([0-9]) occasions -/g,'on $1 occasions' )
+text = text.replace('farm/country home/estate', 'villa, house, farm')
+text = text.replace('stretch, draw tight', 'hurry, make for')
+text = text.replace('drive, urge, conduct', 'drive, act, do, urge, conduct')
 text = text.replace('lookout for', 'wait, wait for, look out for')
 
 
@@ -2675,172 +2675,172 @@ text = text.replace(/((^|\r?\n)(((?!(\[[A-Z]{5}\]|;|\r?\n))).)*(?=\r?\n))((\r?\n
 var texts = text.split(/\r?\n/)
 for(var x = texts.length - 1; x > 0; x--){
 if(texts[x].replace(';','')!==texts[x] && texts[x-1].replace(';','')!==texts[x-1]) {
-  texts[x-1] = texts[x-1] + texts[x] 
-  texts[x] = ''
+texts[x-1] = texts[x-1] + texts[x] 
+texts[x] = ''
 }
 }
 
 text = texts.join('\r\n')
 if(originalword == "a"|| originalword=="ab"){
-  text = text.replace("by", "by, from")
+text = text.replace("by", "by, from")
 }
 if(originalword=='quid'){
-  text = text.replace('[XXXAO]','INTERROG [XXXAO]')
-  text = text.replace(', what','')  
-  text = text.replace('anyone','what')
-  text = text.replace(' whoever you pick;','')
+text = text.replace('[XXXAO]','INTERROG [XXXAO]')
+text = text.replace(', what','')  
+text = text.replace('anyone','what')
+text = text.replace(' whoever you pick;','')
 }
 if(originalword=='quis'){
-  text="quis PRON 0 nom S C \r\nquis, interrogative pronoun [XXXXX] \r\nwho, what, which, someone, anyone;\r\n\r\nqui.s V 6 1 PRES ACTIVE IND 2 S \r\nqueo, quire, quivi, quitus V [XXXBX] \r\nbe able;"
+text="quis PRON 0 nom S C \r\nquis, interrogative pronoun [XXXXX] \r\nwho, what, which, someone, anyone;\r\n\r\nqui.s V 6 1 PRES ACTIVE IND 2 S \r\nqueo, quire, quivi, quitus V [XXXBX] \r\nbe able;"
 }
 if(originalword == "Caecilium"){
-  text = "UNKNOWN"
+text = "UNKNOWN"
 }
 
 if(originalword == "Felix"){
-  text = text + ' \r\nFelix N 2 1 NOM S M \r\nFelix N 2 1 VOC S M \r\nFelix, Felicis N M [XXXAX] \r\nFelix;'
+text = text + ' \r\nFelix N 2 1 NOM S M \r\nFelix N 2 1 VOC S M \r\nFelix, Felicis N M [XXXAX] \r\nFelix;'
 }
 if(originalword == "inquit"){
-  text = "inqu.it V 7 2 PRES ACTIVE IND 3 S \r\ninqu.it V 7 2 PERF ACTIVE IND 3 S \r\nV IMPERS [XXXCX] \r\nsay;"
+text = "inqu.it V 7 2 PRES ACTIVE IND 3 S \r\ninqu.it V 7 2 PERF ACTIVE IND 3 S \r\nV IMPERS [XXXCX] \r\nsay;"
 }
 if(originalword == "inquiunt"){
-  text = "inqu.it V 7 2 PRES ACTIVE IND 3 P \r\ninqu.it V 7 2 PERF ACTIVE IND 3 P \r\nV IMPERS [XXXCX] \r\nsay;"
+text = "inqu.it V 7 2 PRES ACTIVE IND 3 P \r\ninqu.it V 7 2 PERF ACTIVE IND 3 P \r\nV IMPERS [XXXCX] \r\nsay;"
 }
 if(originalword == "Felicem"){
-  text = text + ' \r\nFelix N 2 1 ACC S M \r\nFelix, Felicis N M [XXXAX] \r\nFelix;'
+text = text + ' \r\nFelix N 2 1 ACC S M \r\nFelix, Felicis N M [XXXAX] \r\nFelix;'
 }
 if(originalword == "Felici"){
-  text = text + ' \r\nFelix N 2 1 DAT S M \r\nFelix, Felicis N M [XXXAX] \r\nFelix;'
+text = text + ' \r\nFelix N 2 1 DAT S M \r\nFelix, Felicis N M [XXXAX] \r\nFelix;'
 }
 if(originalword == "Felicis"){
-  text = text + ' \r\nFelix N 2 1 GEN S M \r\nFelix, Felicis N M [XXXAX] \r\nFelix;'
+text = text + ' \r\nFelix N 2 1 GEN S M \r\nFelix, Felicis N M [XXXAX] \r\nFelix;'
 }
 if(originalword == "Felice"){
-  text = text + ' \r\nFelix N 2 1 ABL S M \r\nFelix, Felicis N M [XXXAX] \r\nFelix;'
+text = text + ' \r\nFelix N 2 1 ABL S M \r\nFelix, Felicis N M [XXXAX] \r\nFelix;'
 }
 if(originalword == "Paris"){
-  text = text + ' \r\nParis N 2 1 NOM S M \r\nParis N 2 1 VOC S M \r\nParis, Paridis N M [XXXAX] \r\nParis;'
+text = text + ' \r\nParis N 2 1 NOM S M \r\nParis N 2 1 VOC S M \r\nParis, Paridis N M [XXXAX] \r\nParis;'
 }
 if(originalword == "Paridem"){
-  text = text + ' \r\nParis N 2 1 ACC S M \r\nParis, Paridis N M [XXXAX] \r\nParis;'
+text = text + ' \r\nParis N 2 1 ACC S M \r\nParis, Paridis N M [XXXAX] \r\nParis;'
 }
 if(originalword == "Paridis"){
-  text = text + ' \r\nParis N 2 1 GEN S M \r\nParis, Paridis N M [XXXAX] \r\nParis;'
+text = text + ' \r\nParis N 2 1 GEN S M \r\nParis, Paridis N M [XXXAX] \r\nParis;'
 }
 if(originalword == "Paridi"){
-  text = text + ' \r\nParis N 2 1 DAT S M \r\nParis, Paridis N M [XXXAX] \r\nParis;'
+text = text + ' \r\nParis N 2 1 DAT S M \r\nParis, Paridis N M [XXXAX] \r\nParis;'
 }
 if(originalword == "Paride"){
-  text = text + ' \r\nParis N 2 1 ABL S M \r\nParis, Paridis N M [XXXAX] \r\nParis;'
+text = text + ' \r\nParis N 2 1 ABL S M \r\nParis, Paridis N M [XXXAX] \r\nParis;'
 }
 if(originalword == "Salvius"){
-  text = text + ' \r\nSalvius N 2 1 NOM S M \r\nSavlius, Salvii N M [XXXAX] \r\nSalvius;'
+text = text + ' \r\nSalvius N 2 1 NOM S M \r\nSavlius, Salvii N M [XXXAX] \r\nSalvius;'
 }
 if(originalword == "Salvi"){
-  text = text + ' \r\nSalvius N 2 1 VOC S M \r\nSavlius, Salvii N M [XXXAX] \r\nSalvius;'
+text = text + ' \r\nSalvius N 2 1 VOC S M \r\nSavlius, Salvii N M [XXXAX] \r\nSalvius;'
 }
 if(originalword == "Salvium"){
-  text = text + ' \r\nSalvius N 2 1 ACC S M \r\nSavlius, Salvii N M [XXXAX] \r\nSalvius;'
+text = text + ' \r\nSalvius N 2 1 ACC S M \r\nSavlius, Salvii N M [XXXAX] \r\nSalvius;'
 }
 if(originalword == "Salvii"){
-  text = text + ' \r\nSalvius N 2 1 GEN S M \r\nSavlius, Salvii N M [XXXAX] \r\nSalvius;'
+text = text + ' \r\nSalvius N 2 1 GEN S M \r\nSavlius, Salvii N M [XXXAX] \r\nSalvius;'
 }
 if(originalword == "Salvio"){
-  text = text + ' \r\nSalvio N 2 1 DAT S M \r\nSalvio N 2 1 ABL S M \r\nSavlius, Salvii N M [XXXAX] \r\nSalvius;'
+text = text + ' \r\nSalvio N 2 1 DAT S M \r\nSalvio N 2 1 ABL S M \r\nSavlius, Salvii N M [XXXAX] \r\nSalvius;'
 }
 if(originalword == "Clemens"){
-  text = text + ' \r\nClemens N 2 1 NOM S M \r\nClemens, Clementis N M [XXXAX] \r\nClemens;'
+text = text + ' \r\nClemens N 2 1 NOM S M \r\nClemens, Clementis N M [XXXAX] \r\nClemens;'
 }
 if(originalword == "Clementem"){
-  text = text + ' \r\nClemens N 2 1 ACC S M \r\nClemens, Clementis N M [XXXAX] \r\nClemens;'
+text = text + ' \r\nClemens N 2 1 ACC S M \r\nClemens, Clementis N M [XXXAX] \r\nClemens;'
 }
 if(originalword == "Clementis"){
-  text = text + ' \r\nClemens N 2 1 GEN S M \r\nClemens, Clementis N M [XXXAX] \r\nClemens;'
+text = text + ' \r\nClemens N 2 1 GEN S M \r\nClemens, Clementis N M [XXXAX] \r\nClemens;'
 }
 if(originalword == "Clementi"){
-  text = text + ' \r\nClemens N 2 1 DAT S M \r\nClemens, Clementis N M [XXXAX] \r\nClemens;'
+text = text + ' \r\nClemens N 2 1 DAT S M \r\nClemens, Clementis N M [XXXAX] \r\nClemens;'
 }
 if(originalword == "Clemente"){
-  text = text + ' \r\nClemens N 2 1 ABL S M \r\nClemens, Clementis N M [XXXAX] \r\nClemens;'
+text = text + ' \r\nClemens N 2 1 ABL S M \r\nClemens, Clementis N M [XXXAX] \r\nClemens;'
 }
 
 if(originalword == "Memor"){
-  text = text + ' \r\nMemor N 2 1 NOM S M \r\nMemor, Memor N M [XXXAX] \r\nMemor;'
+text = text + ' \r\nMemor N 2 1 NOM S M \r\nMemor, Memor N M [XXXAX] \r\nMemor;'
 }
 if(originalword == "Memorem"){
-  text = text + ' \r\nMemorem N 2 1 ACC S M \r\nMemor, Memoris N M [XXXAX] \r\nMemor;'
+text = text + ' \r\nMemorem N 2 1 ACC S M \r\nMemor, Memoris N M [XXXAX] \r\nMemor;'
 }
 if(originalword == "Memoris"){
-  text = text + ' \r\nMemor N 2 1 GEN S M \r\nMemor, Memoris N M [XXXAX] \r\nMemor;'
+text = text + ' \r\nMemor N 2 1 GEN S M \r\nMemor, Memoris N M [XXXAX] \r\nMemor;'
 }
 if(originalword == "Memori"){
-  text = text + ' \r\nMemor N 2 1 DAT S M \r\nMemor, Memoris N M [XXXAX] \r\nMemor;'
+text = text + ' \r\nMemor N 2 1 DAT S M \r\nMemor, Memoris N M [XXXAX] \r\nMemor;'
 }
 if(originalword == "Clemente"){
-  text = text + ' \r\nClemens N 2 1 ABL S M \r\nClemens, Clementis N M [XXXAX] \r\nMemor;'
+text = text + ' \r\nClemens N 2 1 ABL S M \r\nClemens, Clementis N M [XXXAX] \r\nMemor;'
 }
 if(originalword == "Metella"){
-  text = text + ' \r\nMetella N 1 1 NOM S F \r\nMetella, Metellae N F [XXXAX] \r\nMetella;'
+text = text + ' \r\nMetella N 1 1 NOM S F \r\nMetella, Metellae N F [XXXAX] \r\nMetella;'
 }
 if(originalword == "Metellam"){
-  text = text + ' \r\nMetellam N 1 1 ACC S F \r\nMetella, Metellae N F [XXXAX] \r\nMetella;'
+text = text + ' \r\nMetellam N 1 1 ACC S F \r\nMetella, Metellae N F [XXXAX] \r\nMetella;'
 }
 if(originalword == "Metellae"){
-  text = text + ' \r\nMetellae N 1 1 GEN S F \r\nMetellae N 1 1 DAT S F \r\nMetella, Metellae N F [XXXAX] \r\nMetella;'
+text = text + ' \r\nMetellae N 1 1 GEN S F \r\nMetellae N 1 1 DAT S F \r\nMetella, Metellae N F [XXXAX] \r\nMetella;'
 }
 if(originalword == "et"){
-  text = text.replace("and", "and, both")
+text = text.replace("and", "and, both")
 }
 if(originalword == "ut"){
-  text = text.replace("to,", "to, that,")
+text = text.replace("to,", "to, that,")
 }
 if(originalword == "ne"){
-  text = text.replace(/not.{1,70}assuredly;/g, "?;can it be that?")
+text = text.replace(/not.{1,70}assuredly;/g, "?;can it be that?")
 }
 if(originalword == "quoque"){
-  text = text.replace("likewise", "also, likewise")
+text = text.replace("likewise", "also, likewise")
 }
 if(originalword == "cinis"){
-  text = text.replace("ashes", "ash")
+text = text.replace("ashes", "ash")
 }
 if(originalword == "tamen"){
-  text = text.replace("yet", "however, yet")
+text = text.replace("yet", "however, yet")
 }
 if(originalword == "que"){
-  text = text.replace("and", "and, both")
+text = text.replace("and", "and, both")
 }
 text = text.replace("laugh aloud or boisterously", "laugh, cackle, jeer")
 if(originalword == "sicut"){
-  text = text.replace("sicut ADV POS \r\nsicut ADV [XXXAX] \r\n", '')
+text = text.replace("sicut ADV POS \r\nsicut ADV [XXXAX] \r\n", '')
 }
 if(originalword == "esse"){
-  text = ".esse V 5 1 PRES ACTIVE INF 0 X \r\nsum, esse, fui, futurus V [XXXAX] \r\nto be, exist; also used to form verb perfect passive tenses with NOM PERF PPL"
+text = ".esse V 5 1 PRES ACTIVE INF 0 X \r\nsum, esse, fui, futurus V [XXXAX] \r\nto be, exist; also used to form verb perfect passive tenses with NOM PERF PPL"
 }
 if(originalword == "es"){
-  text = ".es V 5 1 PRES ACTIVE IND 2 S \r\n.es V 5 1 PRES ACTIVE IMP 2 S \r\nsum, esse, fui, futurus V [XXXAX] \r\nto be, exist; also used to form verb perfect passive tenses with NOM PERF PPL"
+text = ".es V 5 1 PRES ACTIVE IND 2 S \r\n.es V 5 1 PRES ACTIVE IMP 2 S \r\nsum, esse, fui, futurus V [XXXAX] \r\nto be, exist; also used to form verb perfect passive tenses with NOM PERF PPL"
 }
 if(originalword == "est"){
-  text = ".est V 5 1 PRES ACTIVE IND 3 S \r\nsum, esse, fui, futurus V [XXXAX] \r\nto be, exist; also used to form verb perfect passive tenses with NOM PERF PPL"
+text = ".est V 5 1 PRES ACTIVE IND 3 S \r\nsum, esse, fui, futurus V [XXXAX] \r\nto be, exist; also used to form verb perfect passive tenses with NOM PERF PPL"
 }
 if(originalword.substr(0,2) == "su"){
-  text = text.replace('theirs','her, its, their, his own, her own, its own, their own')
+text = text.replace('theirs','her, its, their, his own, her own, its own, their own')
 }
 if(originalword == "canis"){
-  text = "canis N 3 3 NOM S C \r\ncanis N 3 3 VOC S C \r\ncan.is N 3 3 GEN S C \r\ncan.is N 3 3 ACC P C Early \r\ncanis, canis N C [XAXAO] \r\ndog; hound; subordinate; \jackal\; dog-star/fish; lowest dice throw; clamp;\r\ncan.is N 2 1 LOC P M \r\ncan.is N 2 1 DAT P M \r\ncan.is N 2 1 ABL P M \r\ncanus, cani N M [XBXCO] \r\ngray hairs; old age;\r\ncan.is N 2 2 LOC P N \r\ncan.is N 2 2 DAT P N \r\ncan.is N 2 2 ABL P N \r\ncanum, cani N N [XXXFS] veryrare\r\nwicker basket;\r\ncan.is ADJ 1 1 DAT P X POS \r\ncan.is ADJ 1 1 ABL P X POS \r\ncanus, cana, canum ADJ [XXXBO] \r\nwhite, gray; aged, old, wise; hoary; foamy, white-capped; white w/snow/frost;\r\ncan.is V 3 1 PRES ACTIVE IND 2 S \r\ncano, canere, cani, canitus V [EXXFS] Later veryrare\r\ncano, canere, cecini, cantus V [XXXAO] \r\nsing, celebrate, chant; crow; recite; play; foretell;\r\n"}
+text = "canis N 3 3 NOM S C \r\ncanis N 3 3 VOC S C \r\ncan.is N 3 3 GEN S C \r\ncan.is N 3 3 ACC P C Early \r\ncanis, canis N C [XAXAO] \r\ndog; hound; subordinate; \jackal\; dog-star/fish; lowest dice throw; clamp;\r\ncan.is N 2 1 LOC P M \r\ncan.is N 2 1 DAT P M \r\ncan.is N 2 1 ABL P M \r\ncanus, cani N M [XBXCO] \r\ngray hairs; old age;\r\ncan.is N 2 2 LOC P N \r\ncan.is N 2 2 DAT P N \r\ncan.is N 2 2 ABL P N \r\ncanum, cani N N [XXXFS] veryrare\r\nwicker basket;\r\ncan.is ADJ 1 1 DAT P X POS \r\ncan.is ADJ 1 1 ABL P X POS \r\ncanus, cana, canum ADJ [XXXBO] \r\nwhite, gray; aged, old, wise; hoary; foamy, white-capped; white w/snow/frost;\r\ncan.is V 3 1 PRES ACTIVE IND 2 S \r\ncano, canere, cani, canitus V [EXXFS] Later veryrare\r\ncano, canere, cecini, cantus V [XXXAO] \r\nsing, celebrate, chant; crow; recite; play; foretell;\r\n"}
 
 if(text !== text.replace("FUT PASSIVE PPL","")){
-  text=text.replace(/(FUT PASSIVE PPL).{1,10}(\r\n)/g,'$1$2')
+text=text.replace(/(FUT PASSIVE PPL).{1,10}(\r\n)/g,'$1$2')
 for(var bb=0;bb<text.match(/VPAR.*FUT PASSIVE PPL/g).length;bb++){
 text =  text.replace(text.match(/VPAR .*FUT PASSIVE PPL/g)[bb], 'GERUNDIVE ' + text.match(/VPAR .*FUT PASSIVE PPL/g)[bb])
 texts = text.split('\r\n')
 for(var cc=0; cc< texts.length;cc++){
 if(texts[cc] !== texts[cc].replace("GERUNDIVE",'')){
-  texts[cc] = texts[cc].replace("VPAR ", '')
-    texts[cc] = texts[cc].replace(" FUT PASSIVE PPL", '')
-    texts[cc] = texts[cc].replace(/GERUNDIVE\s[0-9]\s[0-9]\s/g,'GERUNDIVE 1 1 ')
-    if(endsWith(texts[cc],"GERUNDIVE 1 1 ACC S N")||endsWith(texts[cc],"GERUNDIVE 1 1 GEN S N")||endsWith(texts[cc],"GERUNDIVE 1 1 DAT S N")||endsWith(texts[cc],"GERUNDIVE 1 1 ABL S N")){
-      texts[cc] = texts[cc] + '\r\n' + texts[cc].replace('GERUNDIVE','GERUND')
-    }
+texts[cc] = texts[cc].replace("VPAR ", '')
+  texts[cc] = texts[cc].replace(" FUT PASSIVE PPL", '')
+  texts[cc] = texts[cc].replace(/GERUNDIVE\s[0-9]\s[0-9]\s/g,'GERUNDIVE 1 1 ')
+  if(endsWith(texts[cc],"GERUNDIVE 1 1 ACC S N")||endsWith(texts[cc],"GERUNDIVE 1 1 GEN S N")||endsWith(texts[cc],"GERUNDIVE 1 1 DAT S N")||endsWith(texts[cc],"GERUNDIVE 1 1 ABL S N")){
+    texts[cc] = texts[cc] + '\r\n' + texts[cc].replace('GERUNDIVE','GERUND')
+  }
 
 }
 
@@ -2936,10 +2936,10 @@ return text
 }
 
 function updatetranslation(){
-  document.getElementById("finalsentence").innerText = ""  
+document.getElementById("finalsentence").innerText = ""  
 var meanings = document.getElementsByTagName("meaning")
 for(var a = 0; a<meanings.length; a++){
-  document.getElementById("finalsentence").innerText = document.getElementById("finalsentence").innerText + meanings[a].innerText + '$'
+document.getElementById("finalsentence").innerText = document.getElementById("finalsentence").innerText + meanings[a].innerText + '$'
 }
 document.getElementById("finalsentence").innerText = document.getElementById("finalsentence").innerText.replace(/[\u2B1a]/g,' ').replace(/\$\$/g,'$').replace(/\$\$/g,'$').replace(/\$\$/g,'$').replace(/\$/g,' ')
 document.getElementById("finalsentence").innerText = document.getElementById("finalsentence").innerText.replace(/\s\s/g,' ').replace(/\s\s/g,' ')
@@ -2954,45 +2954,45 @@ comp = "more " + word
 sup = "most " + word
 } else {
 
-  if(word !== word.replace(/[bcdfghjklmnpqrstvwxyz][aeiou][bcdfgklmnprstz]$/g)){
+if(word !== word.replace(/[bcdfghjklmnpqrstvwxyz][aeiou][bcdfgklmnprstz]$/g)){
 var wordsuffletter = word.substr(word.length-1,1)
 if(wordsuffletter == 'c'){wordsuffletter = 'k'}
 comp =  word + wordsuffletter + 'er'
 sup =  word + wordsuffletter + 'est'
-  
+
 } else {
 if(endsWith(word,'y')){
-  comp =  word.substr(0,word.length-1) + 'ier'
-  sup =  word.substr(0,word.length-1) + 'iest'
+comp =  word.substr(0,word.length-1) + 'ier'
+sup =  word.substr(0,word.length-1) + 'iest'
 } else {
-  if(endsWith(word,'e')){
+if(endsWith(word,'e')){
 comp = word + 'r'
 sup = word + 'st'    
-  } else {
+} else {
 comp = word + 'er'
 sup = word + 'est'
 }}
 }
 }
 if(word == 'good'){
-  comp = 'better'
-  sup = 'best'
+comp = 'better'
+sup = 'best'
 }
 
 if(word == 'bad'){
-  comp = 'worse'
-  sup = 'worst'
+comp = 'worse'
+sup = 'worst'
 }
 if(word == 'much'){
-  comp = 'more'
-  sup = 'most'
+comp = 'more'
+sup = 'most'
 }
 if(word == 'many'){
-  comp = 'more'
-  sup = 'most'
+comp = 'more'
+sup = 'most'
 }
 if(endsWith(sup,'estest')){
-  sup=sup.substr(0,sup.length-3)
+sup=sup.substr(0,sup.length-3)
 }
 
 if (grade == 0){return comp} else {return sup}
@@ -3009,39 +3009,39 @@ return pluralize(word) + "'"
 }
 
 function tackonsplitter(element){
-  var word = element.parentElement.parentElement.firstChild.innerText
-  var tackon = ""
-  if(endsWith(word,'ue')||endsWith(word,'ve')){
-    tackon ="ve"
-  }
-    if(endsWith(word,'que')){
-    tackon ="que"
-  }
-      if(endsWith(word,'ne')){
-    tackon ="ne"
-  }
-      if(endsWith(word,'pte')){
-    tackon ="pte"
-  }
-        if(endsWith(word,'cum')){
-    tackon ="cum"
-  }
-  var newelement = document.createElement("li") 
-  newelement.innerText = tackon
- element.parentElement.parentElement.parentElement.insertBefore(newelement,element.parentElement.parentElement)
- newelement.innerHTML = '<a onclick="getww(this)" style="cursor:pointer;"  parentid="' + element.getAttribute('parentid') + 'a">' +  tackon + '</a>'
-  newelement.setAttribute('onmouseup', 'updatetranslation()')
-  newelement.setAttribute('id',element.getAttribute('parentid')+'a')
-  newelement.setAttribute('class','ui-state-default')
-  element.parentElement.parentElement.firstChild.innerHTML = word.substr(0,word.length-tackon.length)
-  element.parentElement.removeChild(element)
+var word = element.parentElement.parentElement.firstChild.innerText
+var tackon = ""
+if(endsWith(word,'ue')||endsWith(word,'ve')){
+  tackon ="ve"
+}
+  if(endsWith(word,'que')){
+  tackon ="que"
+}
+    if(endsWith(word,'ne')){
+  tackon ="ne"
+}
+    if(endsWith(word,'pte')){
+  tackon ="pte"
+}
+      if(endsWith(word,'cum')){
+  tackon ="cum"
+}
+var newelement = document.createElement("li") 
+newelement.innerText = tackon
+element.parentElement.parentElement.parentElement.insertBefore(newelement,element.parentElement.parentElement)
+newelement.innerHTML = '<a onclick="getww(this)" style="cursor:pointer;"  parentid="' + element.getAttribute('parentid') + 'a">' +  tackon + '</a>'
+newelement.setAttribute('onmouseup', 'updatetranslation()')
+newelement.setAttribute('id',element.getAttribute('parentid')+'a')
+newelement.setAttribute('class','ui-state-default ui-sortable-handle')
+element.parentElement.parentElement.firstChild.innerHTML = word.substr(0,word.length-tackon.length)
+element.parentElement.removeChild(element)
 //element.parent.insertBefore("li",element)
 }
 function adv(word){
 var adv = word
-  if(word.replace(/[bdfghiklmnopqrstuvwxz]$/g,'') !== word){
+if(word.replace(/[bdfghiklmnopqrstuvwxz]$/g,'') !== word){
 adv = adv + 'ly'
-  }
+}
 if (endsWith(word,'c')){
 adv = adv + 'ally'
 }
@@ -3051,19 +3051,19 @@ adv = adv.replace(/e$/g,'ely')
 
 }
 if(endsWith(word,'y')){
-  adv = word.substr(0,word.length-1) + 'ily'
+adv = word.substr(0,word.length-1) + 'ily'
 }
-  return adv
+return adv
 }
 
 function nonjoiner(element){
 var nonbox = element.parentElement.parentElement
 if(nonbox !== nonbox.parentElement.lastChild){
 if(document.getElementById('gramm' + nonbox.nextElementSibling.id).getAttribute('pos')=='V'){
-  nonbox.nextElementSibling.setAttribute('neg','not')
-  nonbox.nextElementSibling.innerHTML = '<recreate formerid="' + nonbox.id +'">' + nonbox.getElementsByTagName('a')[0].innerText + '</recreate> ' + nonbox.nextElementSibling.innerHTML 
-  build(nonbox.nextElementSibling.id)
-  nonbox.parentElement.removeChild(nonbox)
+nonbox.nextElementSibling.setAttribute('neg','not')
+nonbox.nextElementSibling.innerHTML = '<recreate formerid="' + nonbox.id +'">' + nonbox.getElementsByTagName('a')[0].innerText + '</recreate> ' + nonbox.nextElementSibling.innerHTML 
+build(nonbox.nextElementSibling.id)
+nonbox.parentElement.removeChild(nonbox)
 }
 }
 }
@@ -3078,16 +3078,16 @@ var verbboxperson = verbboxgrammar.getAttribute('person')
 var verbboxnumber = verbboxgrammar.getAttribute ('number')
 var verbboxpos = verbboxgrammar.getAttribute('pos')
 if(verbboxpos == 'V' && verbboxnumber == nounboxnumber && verbboxperson == 3){
-  verbbox.innerHTML = verbbox.innerHTML.replace('<a','<recreate formerid="' + nounbox.id +'">' + nounbox.getElementsByTagName('a')[0].innerHTML + '</recreate> <a')
+verbbox.innerHTML = verbbox.innerHTML.replace('<a','<recreate formerid="' + nounbox.id +'">' + nounbox.getElementsByTagName('a')[0].innerHTML + '</recreate> <a')
 if(nounbox.getElementsByTagName('recreate').length>0){
-  for (var ll=0; ll<nounbox.getElementsByTagName('recreate').length>0; ll++){
-    verbbox.innerHTML = verbbox.innerHTML.replace('<recreate',nounbox.getElementsByTagName('recreate')[ll].outerHTML + ' <recreate')
-  }
+for (var ll=0; ll<nounbox.getElementsByTagName('recreate').length>0; ll++){
+  verbbox.innerHTML = verbbox.innerHTML.replace('<recreate',nounbox.getElementsByTagName('recreate')[ll].outerHTML + ' <recreate')
 }
-  verbbox.setAttribute('he', nounbox.getElementsByTagName('meaning')[0].innerText)
-  verbbox.setAttribute('they', nounbox.getElementsByTagName('meaning')[0].innerText)
-  build(verbbox.id)
-  nounbox.parentElement.removeChild(nounbox)
+}
+verbbox.setAttribute('he', nounbox.getElementsByTagName('meaning')[0].innerText)
+verbbox.setAttribute('they', nounbox.getElementsByTagName('meaning')[0].innerText)
+build(verbbox.id)
+nounbox.parentElement.removeChild(nounbox)
 }
 }
 
@@ -3095,13 +3095,13 @@ function supinejoiner(element){
 var nonbox = element.parentElement.parentElement
 if(nonbox !== nonbox.parentElement.lastChild){
 if(nonbox.nextElementSibling.getElementsByTagName('A')[0].innerText=='iri'){
-  nonbox.innerHTML = nonbox.innerHTML.replace('</a>','</a> <recreate formerid="' + nonbox.id +'">iri</recreate>')  
-  nonbox.getElementsByTagName('grammar')[0].innerText = 'verb fut passive infinitive'
-    document.getElementById("ww").setAttribute("selectedbox",nonbox.id)
-  nonbox.setAttribute('meaning',getparts())
-  build(nonbox.id)
-  nonbox.nextElementSibling.parentElement.removeChild(nonbox.nextElementSibling)
-   nonbox.setAttribute('style','background:#ffe6e6')
+nonbox.innerHTML = nonbox.innerHTML.replace('</a>','</a> <recreate formerid="' + nonbox.id +'">iri</recreate>')  
+nonbox.getElementsByTagName('grammar')[0].innerText = 'verb fut passive infinitive'
+  document.getElementById("ww").setAttribute("selectedbox",nonbox.id)
+nonbox.setAttribute('meaning',getparts())
+build(nonbox.id)
+nonbox.nextElementSibling.parentElement.removeChild(nonbox.nextElementSibling)
+ nonbox.setAttribute('style','background:#ffe6e6')
 }
 }
 }
@@ -3118,13 +3118,13 @@ var adjboxnumber = adjboxgramm.getAttribute('number')
 
 if(adjbox !== adjbox.parentElement.lastChild && document.getElementById('gramm' + adjbox.nextElementSibling.id).getAttribute('pos')=='N'&&nounboxnumber==adjboxnumber&&nounboxcase==adjboxcase){
 if(document.getElementById('gramm' + adjbox.id).getAttribute('gradation')=='POS'){
- adjbox.nextElementSibling.setAttribute('adj',adjbox.nextElementSibling.getAttribute('adj') + ' ' + adjbox.getAttribute('inf'))}
-  if(document.getElementById('gramm' + adjbox.id).getAttribute('gradation')=='COMP'){
-  adjbox.nextElementSibling.setAttribute('adj',adjbox.nextElementSibling.getAttribute('adj') + ' ' + adjbox.getAttribute('comp'))}
- if(document.getElementById('gramm' + adjbox.id).getAttribute('gradation')=='SUPER'){
+adjbox.nextElementSibling.setAttribute('adj',adjbox.nextElementSibling.getAttribute('adj') + ' ' + adjbox.getAttribute('inf'))}
+if(document.getElementById('gramm' + adjbox.id).getAttribute('gradation')=='COMP'){
+adjbox.nextElementSibling.setAttribute('adj',adjbox.nextElementSibling.getAttribute('adj') + ' ' + adjbox.getAttribute('comp'))}
+if(document.getElementById('gramm' + adjbox.id).getAttribute('gradation')=='SUPER'){
 adjbox.nextElementSibling.setAttribute('adj',adjbox.nextElementSibling.getAttribute('adj') + ' ' + adjbox.getAttribute('sup'))}
 adjbox.nextElementSibling.innerHTML = '<recreate formerid="' + adjbox.id +'">' + adjbox.getElementsByTagName('a')[0].innerText + '</recreate> ' + adjbox.nextElementSibling.innerHTML 
-  build(adjbox.nextElementSibling.id)
+build(adjbox.nextElementSibling.id)
 adjbox.parentElement.removeChild(adjbox)
 }
 }
@@ -3136,7 +3136,7 @@ var PLgrammar = PLbox.getElementsByTagName('grammar')[0]
 var sumbox = PLbox.nextElementSibling
 var partofsum = false
 if(sumbox.getElementsByTagName("A")[0].innerText == 'sum'||sumbox.getElementsByTagName("A")[0].innerText == 'es'||sumbox.getElementsByTagName("A")[0].innerText == 'est'||sumbox.getElementsByTagName("A")[0].innerText == 'sumus'||sumbox.getElementsByTagName("A")[0].innerText == 'estis'||sumbox.getElementsByTagName("A")[0].innerText == 'sunt'||sumbox.getElementsByTagName("A")[0].innerText == 'eram'||sumbox.getElementsByTagName("A")[0].innerText == 'eras'||sumbox.getElementsByTagName("A")[0].innerText == 'erat'||sumbox.getElementsByTagName("A")[0].innerText == 'eramus'||sumbox.getElementsByTagName("A")[0].innerText == 'eratis'||sumbox.getElementsByTagName("A")[0].innerText == 'erant'||sumbox.getElementsByTagName("A")[0].innerText == 'sim'||sumbox.getElementsByTagName("A")[0].innerText == 'sis'||sumbox.getElementsByTagName("A")[0].innerText == 'sit'||sumbox.getElementsByTagName("A")[0].innerText == 'simus'||sumbox.getElementsByTagName("A")[0].innerText == 'sitis'||sumbox.getElementsByTagName("A")[0].innerText == 'sint'||sumbox.getElementsByTagName("A")[0].innerText == 'essem'||sumbox.getElementsByTagName("A")[0].innerText == 'esses'||sumbox.getElementsByTagName("A")[0].innerText == 'esset'||sumbox.getElementsByTagName("A")[0].innerText == 'essemus'||sumbox.getElementsByTagName("A")[0].innerText == 'essetis'||sumbox.getElementsByTagName("A")[0].innerText == 'essent'||sumbox.getElementsByTagName("A")[0].innerText == 'ero'||sumbox.getElementsByTagName("A")[0].innerText == 'eris'||sumbox.getElementsByTagName("A")[0].innerText == 'erit'||sumbox.getElementsByTagName("A")[0].innerText == 'erimus'||sumbox.getElementsByTagName("A")[0].innerText == 'eritis'||sumbox.getElementsByTagName("A")[0].innerText == 'erunt'||sumbox.getElementsByTagName("A")[0].innerText == 'esse'){
-  partofsum = true
+partofsum = true
 }
 var sumgrammar = sumbox.getElementsByTagName('grammar')[0]
 var PLnumber = PLgrammar.getAttribute('number')
@@ -3147,48 +3147,48 @@ var PLvoice = PLgrammar.getAttribute('voice')
 var summood = sumgrammar.getAttribute('mood')
 var sumtext = sumbox.getElementsByTagName('A')[0].innerText
 if(summood!=='INF'){
-  var sumperson = sumgrammar.getAttribute('person')
-  var sumnumber = sumgrammar.getAttribute('number')
-  var sumtense = sumgrammar.getAttribute('tense')
+var sumperson = sumgrammar.getAttribute('person')
+var sumnumber = sumgrammar.getAttribute('number')
+var sumtense = sumgrammar.getAttribute('tense')
 }
 var newgrammartext = ''
 if((PLtype == 'PAP'||PLtype == 'PPP')&& partofsum == true && PLnumber== sumnumber && PLcase == 'nom' && summood !== 'inf'){
-  extrahtml = '<recreate formerid="' + sumbox.id + '">' + sumtext + '</recreate>'
-  PLbox.innerHTML = PLbox.innerHTML.replace('</a>','</a> ' + extrahtml)
-  newgrammartext = 'verb '
-  if(sumtense == 'PRES'){newgrammartext = newgrammartext +'perf ' }
-  if(sumtense == 'IMPF'){newgrammartext = newgrammartext +'plup ' }
-  if(sumtense == 'FUT'){newgrammartext = newgrammartext +'futp ' }
-  if (PLvoice == 'PASSIVE'){newgrammartext = newgrammartext +'passive ' }
-  if (sumperson == '1'){newgrammartext= newgrammartext +'1st ' }
-  if (sumperson == '2'){newgrammartext = newgrammartext +'2nd ' }
-  if (sumperson == '3'){newgrammartext = newgrammartext +'3rd ' }
-  if (sumnumber == 'S'){newgrammartext = newgrammartext +'sing' }
-  if (sumnumber == 'P'){newgrammartext= newgrammartext +'plur' }
-  newgrammartext = newgrammartext.trim()
-  changed = true
-  }
+extrahtml = '<recreate formerid="' + sumbox.id + '">' + sumtext + '</recreate>'
+PLbox.innerHTML = PLbox.innerHTML.replace('</a>','</a> ' + extrahtml)
+newgrammartext = 'verb '
+if(sumtense == 'PRES'){newgrammartext = newgrammartext +'perf ' }
+if(sumtense == 'IMPF'){newgrammartext = newgrammartext +'plup ' }
+if(sumtense == 'FUT'){newgrammartext = newgrammartext +'futp ' }
+if (PLvoice == 'PASSIVE'){newgrammartext = newgrammartext +'passive ' }
+if (sumperson == '1'){newgrammartext= newgrammartext +'1st ' }
+if (sumperson == '2'){newgrammartext = newgrammartext +'2nd ' }
+if (sumperson == '3'){newgrammartext = newgrammartext +'3rd ' }
+if (sumnumber == 'S'){newgrammartext = newgrammartext +'sing' }
+if (sumnumber == 'P'){newgrammartext= newgrammartext +'plur' }
+newgrammartext = newgrammartext.trim()
+changed = true
+}
 if(partofsum == true && sumtext == 'esse'){
- extrahtml = '<recreate formerid="' + sumbox.id + '">' + sumtext + '</recreate>'
- PLbox.innerHTML = PLbox.innerHTML.replace('</a>','</a> ' + extrahtml)
+extrahtml = '<recreate formerid="' + sumbox.id + '">' + sumtext + '</recreate>'
+PLbox.innerHTML = PLbox.innerHTML.replace('</a>','</a> ' + extrahtml)
 if(PLtype == 'PPP'){newgrammartext = 'verb perf passive infinitive'}
 if(PLtype == 'FUTPPL'){newgrammartext = 'verb future infinitive'}
 if(PLtype == 'PAP'){newgrammartext = 'verb perf infinitive'}
 changed = true
 }
 if (changed = true){
-  document.getElementById('gramm' + PLbox.id).innerText = newgrammartext
-  if(summood=='SUB'|summood=='IND'){addquestionbutton(PLbox.id)}
-  sumbox.parentElement.removeChild(sumbox)
-  PLbox.getElementsByTagName('splitjoin')[0].innerHTML = ""
-  document.getElementById("ww").setAttribute("selectedbox",PLbox.id)
-  PLbox.setAttribute('meaning',getparts())
-  build(PLbox.id)
-   PLbox.setAttribute('style','background:#ffe6e6')
+document.getElementById('gramm' + PLbox.id).innerText = newgrammartext
+if(summood=='SUB'|summood=='IND'){addquestionbutton(PLbox.id)}
+sumbox.parentElement.removeChild(sumbox)
+PLbox.getElementsByTagName('splitjoin')[0].innerHTML = ""
+document.getElementById("ww").setAttribute("selectedbox",PLbox.id)
+PLbox.setAttribute('meaning',getparts())
+build(PLbox.id)
+ PLbox.setAttribute('style','background:#ffe6e6')
 }
 }
 function addquestionbutton(targetid){
-  document.getElementById(targetid).getElementsByTagName('splitjoin')[0].innerHTML =document.getElementById(targetid).getElementsByTagName('splitjoin')[0].innerHTML +' <button style="background:#e5ffff"  style="cursor:pointer;" onclick="questioninvert(this)" parentid =' + targetid + '>&#x2192;?</button>'
+document.getElementById(targetid).getElementsByTagName('splitjoin')[0].innerHTML =document.getElementById(targetid).getElementsByTagName('splitjoin')[0].innerHTML +' <button style="background:#e5ffff"  style="cursor:pointer;" onclick="questioninvert(this)" parentid =' + targetid + '>&#x2192;?</button>'
 }
 function questioninvert(element){
 meaning = element.parentElement.parentElement.getAttribute('meaning')
@@ -3196,16 +3196,16 @@ meaning = element.parentElement.parentElement.getAttribute('meaning')
 var meanings = meaning.split('$')
 var selectedmeaning = false
 for(var ee =0;ee<meanings.length;ee ++){
-  if(meanings[ee].substr(0,1) == '%'){selectedmeaning = true}
-  meanings[ee] = meanings[ee].replace('%','')
-    var meaningelements = meanings[ee].split(' ')
-    var firstword = meaningelements[0]
-    var secondword = meaningelements[1]
-    meaningelements[0] = secondword
-    meaningelements[1] = firstword
-    meanings[ee] = meaningelements.join(' ')
-    if(selectedmeaning == true){meanings[ee] = '%' + meanings[ee]}
-    selectedmeaning = false
+if(meanings[ee].substr(0,1) == '%'){selectedmeaning = true}
+meanings[ee] = meanings[ee].replace('%','')
+  var meaningelements = meanings[ee].split(' ')
+  var firstword = meaningelements[0]
+  var secondword = meaningelements[1]
+  meaningelements[0] = secondword
+  meaningelements[1] = firstword
+  meanings[ee] = meaningelements.join(' ')
+  if(selectedmeaning == true){meanings[ee] = '%' + meanings[ee]}
+  selectedmeaning = false
 }
 
 meaning = meanings.join('$').trim()
@@ -3214,7 +3214,7 @@ element.parentElement.parentElement.setAttribute('meaning',meaning)
 build(element.parentElement.parentElement.id)
 }
 function selectdef(element){
-  var targetid = document.getElementById("ww").getAttribute("selectedbox")
+var targetid = document.getElementById("ww").getAttribute("selectedbox")
 var defno1 = document.getElementById('gramm'+targetid).getAttribute('formnumber')
 var defno2 = element.parentElement.id.substr(1,element.parentElement.id.length-1)
 var lll= '$' + document.getElementById(targetid).getAttribute('def') + '$'
@@ -3224,21 +3224,21 @@ var me = '$'+element.innerText.trim()+'$'
 if(lll.replace(me,'')!=lll){replaceable = true}
 
 if(replaceable==true && defno1 == defno2){
-  lll = lll.replace('%','')
-  lll= lll.replace(me, '$%' + element.innerText.trim() + '$')
-  lll = lll.substr(1,lll.length-1)
+lll = lll.replace('%','')
+lll= lll.replace(me, '$%' + element.innerText.trim() + '$')
+lll = lll.substr(1,lll.length-1)
 document.getElementById(targetid).setAttribute('def',lll)
 build(targetid)
 }
 
 }
 function editdef(element){
-  var newdef = prompt("Enter your preferred definition:", "");
-  var targetid = document.getElementById("ww").getAttribute("selectedbox")
-  defno = element.parentElement.id.substr(1,element.parentElement.id.length-1)
-  var q = document.getElementsByTagName('wline')
-  for(a=0;a<q.length;a++){
-    if(defno == q[a].getAttribute('formnumber')){q[a].setAttribute('definition',newdef)}
-  }
-  element.parentElement.innerHTML = '<editdef onclick="editdef(this)" style="cursor:pointer">' + newdef + '</editdef>'
+var newdef = prompt("Enter your preferred definition:", "");
+var targetid = document.getElementById("ww").getAttribute("selectedbox")
+defno = element.parentElement.id.substr(1,element.parentElement.id.length-1)
+var q = document.getElementsByTagName('wline')
+for(a=0;a<q.length;a++){
+  if(defno == q[a].getAttribute('formnumber')){q[a].setAttribute('definition',newdef)}
+}
+element.parentElement.innerHTML = '<editdef onclick="editdef(this)" style="cursor:pointer">' + newdef + '</editdef>'
 }
