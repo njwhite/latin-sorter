@@ -1,3 +1,13 @@
+.ui-sortable-handle > A
+{
+  display: block;
+  padding: 10px;
+}
+.ui-sortable-handle > a
+{
+  display: block;
+  padding: 10px;
+}
 body
 {
   font-family: Arial, Helvetica, sans-serif 
