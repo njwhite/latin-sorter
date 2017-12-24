@@ -1,12 +1,18 @@
 .ui-sortable-handle > A
 {
-  display: block;
-  padding: 10px;
+  display: inline-block;     
+  position: relative;    
+  z-index: 1;     
+  padding: 2em;     
+  margin: -2em; 
 }
 .ui-sortable-handle > a
 {
-  display: block;
-  padding: 10px;
+  display: inline-block;     
+  position: relative;    
+  z-index: 1;     
+  padding: 2em;     
+  margin: -2em; 
 }
 body
 {
