@@ -3263,19 +3263,21 @@ element.parentElement.innerHTML = '<editdef onclick="editdef(this)" style="curso
 }
 
 function freezebutton(){
-  document.getElementById('spare').innerHTML = '<button onclick="freeze()"><font style="font-size: 5em;">&#10052;</font></button>'
+  document.getElementById('spare').innerHTML = '<button class = "stopButton" onclick="freeze()"><font  id="stopButton" style="font-size: 5em;"> &#10073;&#10073;</font></button>'
 }
 
 function freeze(){
   var q = document.getElementById('sortable').tagName
   if(document.getElementById('sortable').tagName == 'UL') {
     document.getElementById('sortable').outerHTML = document.getElementById('sortable').outerHTML.replace(/^(<)[uU][lL](.*)[uU][lL](>)$/g,'$1y$2y$3')
+    document.getElementById('stopButton').innerHTML = '&#9654;'
   }
   else
   {
     document.getElementById('sortable').outerHTML = document.getElementById('sortable').outerHTML.replace(/^(<)[yY](.*)[yY](>)$/g,'$1ul$2ul$3')
     $( "#sortable" ).sortable();
     $( "#sortable" ).disableSelection();
+    document.getElementById('stopButton').innerHTML = ' &#10073;&#10073;'
     }
   
 }
