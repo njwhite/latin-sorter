@@ -8,6 +8,7 @@ try{
 var newtext = getParameterByName('text');
 if (newtext.length>0){
 document.getElementById("inputtextbox").value = newtext
+input1()
 } 
 
 }
