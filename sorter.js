@@ -3263,7 +3263,7 @@ element.parentElement.innerHTML = '<editdef onclick="editdef(this)" style="curso
 }
 
 function freezebutton(){
-  document.getElementById('spare').innerHTML = '<button class = "stopButton" onclick="freeze()"><font  id="stopButton" style="font-size: 5em;"> &#10073;&#10073;</font></button>'
+  document.getElementById('spare').innerHTML = '<button class = "stopButton" onclick="freeze()"><font  id="stopButton" style="font-size: 5em;">&#x23ef;</font></button>'
 }
 
 function freeze(){
@@ -3277,7 +3277,7 @@ function freeze(){
     document.getElementById('sortable').outerHTML = document.getElementById('sortable').outerHTML.replace(/^(<)[yY](.*)[yY](>)$/g,'$1ul$2ul$3')
     $( "#sortable" ).sortable();
     $( "#sortable" ).disableSelection();
-    document.getElementById('stopButton').innerHTML = ' &#10073;&#10073;'
+    document.getElementById('stopButton').innerHTML = '&#x23ef;'
     }
   
 }
