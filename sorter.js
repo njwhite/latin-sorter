@@ -8,6 +8,8 @@ try{
 var newtext = getParameterByName('text');
 if (newtext.length>0){
 document.getElementById("inputtextbox").value = newtext
+document.getElementById("sortable").innerHTML = ''
+document.getElementById("sentence").innerHTML = ''
 input1()
 } 
 
