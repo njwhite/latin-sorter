@@ -13,6 +13,10 @@ document.getElementById("inputtextbox").value = newtext
 }
 catch(err3){}
 
+if(detectmob() == true){
+  freezebutton()
+}
+
 }
 function getParameterByName(name, url) {
   if (!url) {
@@ -62,6 +66,21 @@ function endsWith(str, suffix) {
     document.getElementById("inputtextbox").setAttribute("clicked", "yes")
   }
   }
+  function detectmob() { 
+    if( navigator.userAgent.match(/Android/i)
+    || navigator.userAgent.match(/webOS/i)
+    || navigator.userAgent.match(/iPhone/i)
+    || navigator.userAgent.match(/iPad/i)
+    || navigator.userAgent.match(/iPod/i)
+    || navigator.userAgent.match(/BlackBerry/i)
+    || navigator.userAgent.match(/Windows Phone/i)
+    ){
+       return true;
+     }
+    else {
+       return false;
+     }
+   }
   function input1() {
     document.getElementById('linkedtext').setAttribute('selectedsentence','none')
 document.getElementById("inputtextbox").value = document.getElementById("inputtextbox").value.replace(/[0-9]/g,'')
@@ -3241,4 +3260,24 @@ for(a=0;a<q.length;a++){
   if(defno == q[a].getAttribute('formnumber')){q[a].setAttribute('definition',newdef)}
 }
 element.parentElement.innerHTML = '<editdef onclick="editdef(this)" style="cursor:pointer">' + newdef + '</editdef>'
+}
+
+function freezebutton(){
+  document.getElementById('spare').innerHTML = '<button onclick="freeze()"><font style="font-size: 5em;">&#10052;</font></button>'
+}
+
+function freeze(){
+  if(document.getElementById('sortable').className == 'ui-sortable') {
+    document.getElementById('sortable').className =''
+    for(var j = 0;j<document.getElementById('sortable').getElementsByTagName('li').length;j++){
+      document.getElementById('sortable').getElementsByTagName('li')[j].className = ''
+    }
+  }
+  else
+  {
+    document.getElementById('sortable').className = 'ui-sortable'
+    for(var j = 0;j<document.getElementById('sortable').getElementsByTagName('li').length;j++){
+      document.getElementById('sortable').getElementsByTagName('li')[j].className = 'ui-state-default ui-sortable-handle'
+    }
+  }
 }
