@@ -3274,6 +3274,8 @@ function freeze(){
   else
   {
     document.getElementById('sortable').outerHTML = document.getElementById('sortable').outerHTML.replace(/^(<)[yY](.*)[yY](>)$/g,'$1ul$2ul$3')
+    $( "#sortable" ).sortable();
+    $( "#sortable" ).disableSelection();
     }
   
 }
