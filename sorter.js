@@ -3267,17 +3267,13 @@ function freezebutton(){
 }
 
 function freeze(){
-  if(document.getElementById('sortable').className == 'ui-sortable') {
-    document.getElementById('sortable').className =''
-    for(var j = 0;j<document.getElementById('sortable').getElementsByTagName('li').length;j++){
-      document.getElementById('sortable').getElementsByTagName('li')[j].className = ''
-    }
+  var q = document.getElementById('sortable').tagName
+  if(document.getElementById('sortable').tagName == 'UL') {
+    document.getElementById('sortable').outerHTML = document.getElementById('sortable').outerHTML.replace(/^(<)[uU][lL](.*)[uU][lL](>)$/g,'$1y$2y$3')
   }
   else
   {
-    document.getElementById('sortable').className = 'ui-sortable'
-    for(var j = 0;j<document.getElementById('sortable').getElementsByTagName('li').length;j++){
-      document.getElementById('sortable').getElementsByTagName('li')[j].className = 'ui-state-default ui-sortable-handle'
+    document.getElementById('sortable').outerHTML = document.getElementById('sortable').outerHTML.replace(/^(<)[yY](.*)[yY](>)$/g,'$1ul$2ul$3')
     }
-  }
+  
 }
