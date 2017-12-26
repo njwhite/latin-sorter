@@ -219,6 +219,7 @@ wlines[i]=wlines[i].replace('Medieval','');
 wlines[i]=wlines[i].replace('Later','');
 wlines[i]=wlines[i].replace('Late','');
 wlines[i]=wlines[i].replace('veryrare','');
+wlines[i]=wlines[i].replace('Archaic',''); 
 
 //Later veryrare
 wlines[i]=wlines[i].replace('NeoLatin','')
