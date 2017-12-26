@@ -3272,12 +3272,12 @@ function freezebutton(){
 function freeze(){
   var q = document.getElementById('sortable').tagName
   if(document.getElementById('sortable').tagName == 'UL') {
-    document.getElementById('sortable').outerHTML = document.getElementById('sortable').outerHTML.replace(/^(<)[uU][lL](.*)[uU][lL](>)$/g,'$1y$2y$3')
+    document.getElementById('sortable').outerHTML = document.getElementById('sortable').outerHTML.replace(/^(<)[uU][lL](.*)[uU][lL](>)$/g,'$1div$2div$3')
     document.getElementById('stopButton').innerHTML = '&#9654;'
   }
   else
   {
-    document.getElementById('sortable').outerHTML = document.getElementById('sortable').outerHTML.replace(/^(<)[yY](.*)[yY](>)$/g,'$1ul$2ul$3')
+    document.getElementById('sortable').outerHTML = document.getElementById('sortable').outerHTML.replace(/^(<)[dD][iI][vV](.*)[dD][iI][vV](>)$/g,'$1ul$2ul$3')
     $( "#sortable" ).sortable();
     $( "#sortable" ).disableSelection();
     document.getElementById('stopButton').innerHTML = '<b>ll</b>'
