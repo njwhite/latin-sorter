@@ -3,6 +3,10 @@ $(function() {
   $( "#sortable" ).disableSelection();
 });
 
+$( window ).resize(function() {
+  resizerow()
+});
+
 function updatetext(){
 try{
 var newtext = getParameterByName('text');
@@ -11,6 +15,7 @@ document.getElementById("inputtextbox").value = newtext
 document.getElementById("sortable").innerHTML = ''
 document.getElementById("sentence").innerHTML = ''
 input1()
+
 } 
 
 }
@@ -19,6 +24,24 @@ catch(err3){}
 if(detectmob() == true){
   freezebutton()
 }
+resizerow()
+
+}
+function resizerow(){
+  document.getElementById('sortable').style.height = 300
+  document.getElementById('textcell').style.height = 300
+  document.getElementById('words').style.height = 300
+  document.getElementById('linkedtext').style.height = 300
+  document.getElementById('menus').style.height = 300
+  
+
+
+var trueheight = document.getElementById('sortablerow').scrollHeight - 10
+document.getElementById('sortable').style.height = trueheight
+document.getElementById('textcell').style.height = trueheight
+document.getElementById('words').style.height = trueheight
+document.getElementById('linkedtext').style.height = trueheight
+document.getElementById('menus').style.height = trueheight
 
 }
 function getParameterByName(name, url) {
