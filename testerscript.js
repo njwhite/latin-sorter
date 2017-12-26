@@ -60,6 +60,12 @@ function resizefunction()
   if(document.getElementById("tablediv")){
     document.getElementById('tablediv').style.height = tableheight
 }
+
+var lw = document.getElementById('list').scrollWidth +60
+var cw =document.getElementById('modal-content').scrollWidth -140
+if(lw > cw && detectmob() == false){
+document.getElementById('tablediv').style.width = cw - 80}
+
 }
 
 function getParameterByName(name, url) {
@@ -137,7 +143,6 @@ document.getElementById('latinword').setAttribute('list',q)
 
 var tableheight = document.getElementById('modal-content').scrollHeight - 370
 
-
 if(detectmob()==true){
   tableheight = tableheight - 210
 document.getElementById("selectionform").innerHTML = '<h2 id="enterfilter">Choose words</h2><p><textarea id="criteria" style = "height:50px; width:60%; font-size:40px;" oninput="filter()"></textarea><p><div id = "tablediv" style="overflow-y: scroll; height:' + tableheight+ 'px;">'+ list +'</div><p><div syle="bottom:5px"><td><button id="go" onclick="go()" style="width:50%;font-size:40px">Go</button></td><td><button id="selectall" onclick="selectall()" style="width:50%;font-size:40px">Select all</button><br></td><td><button id="selectnone" onclick="selectnone()" style="width:50%;font-size:40px">Clear selection</button></td><td><button id="recenterr" onclick="recenterr()" style="width:50%;font-size:40px">Past errors</button></td><td><button id="printable" onclick="printable()" style="width:50%;font-size:40px">Print test</button></td><br><span style="font-size:30px">Link to this test:</span><div id="urlline" style="font-size:30px"></div><div style = "position:absolute; top:0px;right:15px"><h3 style="width: *;text-align: right;">Number selected: <span id = "numberselected";>0</span></h3></div><div id="tips" style = "position:absolute; top:115px; right:50px; background-color: Moccasin; border: 2px solid orange; border-radius: 5px; width:250px;height:130px; padding:10px;"></div> </div>'
@@ -150,6 +155,15 @@ else{
   
 document.getElementById("selectionform").innerHTML = '<h2 id="enterfilter">Choose words</h2><p><textarea id="criteria" style = "height:30px; width:60%;" oninput="filter()"></textarea><p><div id = "tablediv" style="overflow-y: scroll; height:' + tableheight+ 'px;">'+ list +'</div><p><div syle="bottom:5px"><td><button id="go" onclick="go()">Go</button></td><td><button id="selectall" onclick="selectall()">Select all</button></td><td><button id="selectnone" onclick="selectnone()">Clear selection</button></td><td><button id="recenterr" onclick="recenterr()">Past errors</button></td><td><button id="printable" onclick="printable()">Print test</button></td><br>Link to this test:<div id="urlline"></div><div style = "position:absolute; top:50px;right:50px"><h3 style="width: *;text-align: right;">Number selected: <span id = "numberselected";>0</span></h3></div><div id="tips" style = "position:absolute; top:115px; right:50px; background-color: Moccasin; border: 2px solid orange; border-radius: 5px; width:250px;height:130px; padding:10px;"></div> </div>'
 }
+
+var lw = document.getElementById('list').scrollWidth +60
+var cw =document.getElementById('modal-content').scrollWidth -140
+if(lw > cw && detectmob() == false){
+document.getElementById('tablediv').style.width = cw - 80
+
+
+
+} 
 
 document.getElementById('urlline').innerText = window.location.href.split('?')[0] + '?test='
 var testname 
