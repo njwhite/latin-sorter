@@ -61,10 +61,8 @@ function resizefunction()
     document.getElementById('tablediv').style.height = tableheight
 }
 
-var lw = document.getElementById('list').scrollWidth +60
-var cw =document.getElementById('modal-content').scrollWidth -140
-if(lw > cw && detectmob() == false){
-document.getElementById('tablediv').style.width = cw - 80}
+if(detectmob() == false){
+  document.getElementById('container').style.width = window.innerWidth * .8- 40}
 
 }
 
@@ -156,13 +154,10 @@ else{
 document.getElementById("selectionform").innerHTML = '<h2 id="enterfilter">Choose words</h2><p><textarea id="criteria" style = "height:30px; width:60%;" oninput="filter()"></textarea><p><div id = "tablediv" style="overflow-y: scroll; height:' + tableheight+ 'px;">'+ list +'</div><p><div syle="bottom:5px"><td><button id="go" onclick="go()">Go</button></td><td><button id="selectall" onclick="selectall()">Select all</button></td><td><button id="selectnone" onclick="selectnone()">Clear selection</button></td><td><button id="recenterr" onclick="recenterr()">Past errors</button></td><td><button id="printable" onclick="printable()">Print test</button></td><br>Link to this test:<div id="urlline"></div><div style = "position:absolute; top:50px;right:50px"><h3 style="width: *;text-align: right;">Number selected: <span id = "numberselected";>0</span></h3></div><div id="tips" style = "position:absolute; top:115px; right:50px; background-color: Moccasin; border: 2px solid orange; border-radius: 5px; width:250px;height:130px; padding:10px;"></div> </div>'
 }
 
-var lw = document.getElementById('list').scrollWidth +60
+var lw = document.getElementById('list').scrollWidth +90
 var cw =document.getElementById('modal-content').scrollWidth -140
-if(lw > cw && detectmob() == false){
-document.getElementById('tablediv').style.width = cw - 80
-
-
-
+if(detectmob() == false){
+  document.getElementById('container').style.width = window.innerWidth * .8- 40
 } 
 
 document.getElementById('urlline').innerText = window.location.href.split('?')[0] + '?test='
