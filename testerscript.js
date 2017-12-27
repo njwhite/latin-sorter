@@ -145,18 +145,22 @@ function menuhide(){
   }
     catch(err){  }
     try {
-      document.getElementById('CLC2').style.display = 'none'}
+      document.getElementById('CLC2').style.display = 'none'
+    }
       catch(err){  } 
 }
 function menuhide1(){
 
     try {
-      document.getElementById('CLC2').style.display = 'none'}
+      document.getElementById('CLC2').style.display = 'none'
+      document.getElementById('CLC1').style.display = 'block'
+    }
       catch(err){  } 
 }
 function menuhide2(){
   try {
     document.getElementById('CLC1').style.display = 'none'
+    document.getElementById('CLC2').style.display = 'block'
   }
     catch(err){  }
 
