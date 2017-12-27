@@ -1,7 +1,10 @@
 
 function chooser(){
 button()
+
 c = getParameterByName('test')
+f = getParameterByName('filter')
+
 if(c==''){}
 else if(c=='stage1'){listselect('Stage 1')}
 else if(c=='stage2'){listselect('Stage 2')}
@@ -31,9 +34,14 @@ else if(c=='livy'){listselect('Additional Livy')}
 else if(c=='clc1'){listselect('All Cambridge Latin Course 1')}
 else if(c=='clc2'){listselect('All Cambridge Latin Course 2')}
 if(c!= '' && typeof(c) !== 'undefined' && c !== null){
-  document.getElementById('criteria').value = getParameterByName('filter').replace(/\+/g,',')
+  document.getElementById('criteria').value = f.replace(/\+/g,',')
   if(document.getElementById('criteria').value !=''){
   filter()}
+  try {
+    ChangeUrl('vocabtester' + document.getElementById('urlline').innerText.split('vocabtester')[1],document.getElementById('urlline').innerText.split('vocabtester')[0]+ 'vocabtester' + document.getElementById('urlline').innerText.split('vocabtester')[1])
+  }
+  catch(err) {
+  }
 }
 
     if(detectmob() == true){
@@ -48,14 +56,14 @@ if(c!= '' && typeof(c) !== 'undefined' && c !== null){
         qq[b].setAttribute( 'style','font-size:40px')
       }
     }
-
+resizefunction()
 }
 
 function resizefunction()
  {
-  var tableheight = window.innerHeight *.8 - 370
+  var tableheight = window.innerHeight *.8 - 300
   if(detectmob == true){
-    tableheight = tableheight - 210
+    tableheight = tableheight - 270
   }
   if(document.getElementById("tablediv")){
     document.getElementById('tablediv').style.height = tableheight
@@ -143,7 +151,7 @@ var tableheight = document.getElementById('modal-content').scrollHeight - 370
 
 if(detectmob()==true){
   tableheight = tableheight - 210
-document.getElementById("selectionform").innerHTML = '<h2 id="enterfilter">Choose words</h2><p><textarea id="criteria" style = "height:50px; width:60%; font-size:40px;" oninput="filter()"></textarea><p><div id = "tablediv" style="overflow-y: scroll; height:' + tableheight+ 'px;">'+ list +'</div><p><div syle="bottom:5px"><td><button id="go" onclick="go()" style="width:50%;font-size:40px">Go</button></td><td><button id="selectall" onclick="selectall()" style="width:50%;font-size:40px">Select all</button><br></td><td><button id="selectnone" onclick="selectnone()" style="width:50%;font-size:40px">Clear selection</button></td><td><button id="recenterr" onclick="recenterr()" style="width:50%;font-size:40px">Past errors</button></td><td><button id="printable" onclick="printable()" style="width:50%;font-size:40px">Print test</button></td><br><span style="font-size:30px">Link to this test:</span><div id="urlline" style="font-size:30px"></div><div style = "position:absolute; top:0px;right:15px"><h3 style="width: *;text-align: right;">Number selected: <span id = "numberselected";>0</span></h3></div><div id="tips" style = "position:absolute; top:115px; right:50px; background-color: Moccasin; border: 2px solid orange; border-radius: 5px; width:250px;height:130px; padding:10px;"></div> </div>'
+document.getElementById("selectionform").innerHTML = '<h2 id="enterfilter">Choose words</h2><p><textarea id="criteria" style = "height:50px; width:60%; font-size:40px;" oninput="filter()"></textarea><p><div id = "tablediv" style="overflow-y: scroll; height:' + tableheight+ 'px;">'+ list +'</div><p><div syle="bottom:5px"><td><button id="go" onclick="go()" style="width:50%;font-size:40px">Go</button></td><td><button id="selectall" onclick="selectall()" style="width:50%;font-size:40px">Select all</button><br></td><td><button id="selectnone" onclick="selectnone()" style="width:50%;font-size:40px">Clear selection</button></td><td><button id="recenterr" onclick="recenterr()" style="width:50%;font-size:40px">Past errors</button></td><td><button id="printable" onclick="printable()" style="width:50%;font-size:40px">Print test</button></td><br><div hidden id="urlline" style="font-size:30px"></div><div style = "position:absolute; top:0px;right:15px"><h3 style="width: *;text-align: right;">Number selected: <span id = "numberselected";>0</span></h3></div><div id="tips" style = "position:absolute; top:115px; right:50px; background-color: Moccasin; border: 2px solid orange; border-radius: 5px; width:250px;height:130px; padding:10px;"></div> </div>'
 var rows = document.getElementsByTagName('tr')
 document.getElementById('list').setAttribute("style",'line-height:45px; font-size:30px;')
 document.getElementById('list').setAttribute('border','2')
@@ -151,7 +159,7 @@ document.getElementById('runningtotal').setAttribute('style','position:fixed; to
 }
 else{
   
-document.getElementById("selectionform").innerHTML = '<h2 id="enterfilter">Choose words</h2><p><textarea id="criteria" style = "height:30px; width:60%;" oninput="filter()"></textarea><p><div id = "tablediv" style="overflow-y: scroll; height:' + tableheight+ 'px;">'+ list +'</div><p><div syle="bottom:5px"><td><button id="go" onclick="go()">Go</button></td><td><button id="selectall" onclick="selectall()">Select all</button></td><td><button id="selectnone" onclick="selectnone()">Clear selection</button></td><td><button id="recenterr" onclick="recenterr()">Past errors</button></td><td><button id="printable" onclick="printable()">Print test</button></td><br>Link to this test:<div id="urlline"></div><div style = "position:absolute; top:50px;right:50px"><h3 style="width: *;text-align: right;">Number selected: <span id = "numberselected";>0</span></h3></div><div id="tips" style = "position:absolute; top:115px; right:50px; background-color: Moccasin; border: 2px solid orange; border-radius: 5px; width:250px;height:130px; padding:10px;"></div> </div>'
+document.getElementById("selectionform").innerHTML = '<h2 id="enterfilter">Choose words</h2><p><textarea id="criteria" style = "height:30px; width:60%;" oninput="filter()"></textarea><p><div id = "tablediv" style="overflow-y: scroll; height:' + tableheight+ 'px;">'+ list +'</div><p><div syle="bottom:5px"><td><button id="go" onclick="go()">Go</button></td><td><button id="selectall" onclick="selectall()">Select all</button></td><td><button id="selectnone" onclick="selectnone()">Clear selection</button></td><td><button id="recenterr" onclick="recenterr()">Past errors</button></td><td><button id="printable" onclick="printable()">Print test</button></td><div hidden id="urlline"></div><div style = "position:absolute; top:50px;right:50px"><h3 style="width: *;text-align: right;">Number selected: <span id = "numberselected";>0</span></h3></div><div id="tips" style = "position:absolute; top:115px; right:50px; background-color: Moccasin; border: 2px solid orange; border-radius: 5px; width:250px;height:130px; padding:10px;"></div> </div>'
 }
 
 var lw = document.getElementById('list').scrollWidth +90
@@ -199,6 +207,11 @@ document.getElementById('enterfilter').innerText='Choose words or click "Go"'
 }
 criteria.focus()
 //rebuild()
+try {
+  ChangeUrl('vocabtester' + document.getElementById('urlline').innerText.split('vocabtester')[1],document.getElementById('urlline').innerText.split('vocabtester')[0]+ 'vocabtester' + document.getElementById('urlline').innerText.split('vocabtester')[1])
+}
+catch(err) {
+}
 
 }
 function filter(){
@@ -250,7 +263,7 @@ if(firstletterofLatin>=lowercode && firstletterofLatin<=highercode){
 }
 
 }
-}// end alpha filtering
+}// end alp \qha filtering
 else if(type=='num'){
 var lower = Number(filter.split('-')[0].trim())
 if(lower==0){
@@ -284,6 +297,11 @@ for(i=1;i<document.getElementById('selectionform').getElementsByTagName('tr').le
 
 }
 countselected()
+try {
+  ChangeUrl('vocabtester' + document.getElementById('urlline').innerText.split('vocabtester')[1],document.getElementById('urlline').innerText.split('vocabtester')[0]+ 'vocabtester' + document.getElementById('urlline').innerText.split('vocabtester')[1])
+}
+catch(err) {
+}
 }
 function changecolour(vocabrow){
   if(vocabrow.style.backgroundColor!='yellow'){
@@ -934,6 +952,12 @@ document.getElementById('criteria').value = rangestring
 var newurl =  document.getElementById('urlline').innerText.split('filter=')[0] + 'filter='
  newurl = newurl + document.getElementById('criteria').value.replace(/ /g,'+')
  document.getElementById('urlline').innerText = newurl
+ try {
+  ChangeUrl('vocabtester' + document.getElementById('urlline').innerText.split('vocabtester')[1],document.getElementById('urlline').innerText.split('vocabtester')[0]+ 'vocabtester' + document.getElementById('urlline').innerText.split('vocabtester')[1])
+}
+catch(err) {
+}
+
 }
 function printable(){
   //create random sorted array of selected words
@@ -967,3 +991,19 @@ function printable(){
         return true;
 
 }
+
+function ChangeUrl(page, url) {
+  
+          if (typeof (history.pushState) != "undefined") {
+  
+              var obj = { Page: page, Url: url };
+  
+              history.pushState(obj, obj.Page, obj.Url);
+  
+          } else {
+  
+              alert("Browser does not support HTML5.");
+  
+          }
+  
+      }
