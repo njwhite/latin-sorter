@@ -139,8 +139,38 @@ document.getElementById('numberselected').innerText = selected
 
 }
 
+function menuhide(){
+  try {
+    document.getElementById('CLC1').style.display = 'none'
+  }
+    catch(err){  }
+    try {
+      document.getElementById('CLC2').style.display = 'none'}
+      catch(err){  } 
+}
+function menuhide1(){
+
+    try {
+      document.getElementById('CLC2').style.display = 'none'}
+      catch(err){  } 
+}
+function menuhide2(){
+  try {
+    document.getElementById('CLC1').style.display = 'none'
+  }
+    catch(err){  }
+
+}
+
+
 function listselect(list){
-    
+  try {
+    document.getElementById('CLC1').style.display = 'none'
+  }
+    catch(err){  }
+    try {
+      document.getElementById('CLC2').style.display = 'none'}
+      catch(err){  } 
 
 var q = list.innerText
 if(typeof(q) == 'undefined'){q=list}  
@@ -189,6 +219,7 @@ if (document.getElementById('menuname').innerText == 'OCR GCSE'){
 else if (document.getElementById('menuname').innerText == 'All Cambridge Latin Course 1'){
   document.getElementById('tips').innerHTML = 'Try these filters:<br><i>1-10<br>a-c<br>a, d, e<br>stage:01, stage:02</i>'
   testname = 'clc1'
+    
 }else if (document.getElementById('menuname').innerText == 'All Cambridge Latin Course 2'){
   document.getElementById('tips').innerHTML = 'Try these filters:<br><i>1-10<br>a-c<br>a, d, e<br>stage:13, stage:14</i>'
   testname = 'clc2'
@@ -196,6 +227,8 @@ else if (document.getElementById('menuname').innerText == 'All Cambridge Latin C
   document.getElementById('tips').innerHTML = '<span style="font-size:20px; text-align:justify;">Try these criteria:<br><i>1-10</i></span>'
   testname = 'stage' + document.getElementById('menuname').innerText.split(' ')[1]
   }
+
+
   document.getElementById('urlline').innerText = document.getElementById('urlline').innerText + testname + '&filter='
 for (i=0; i<document.getElementById("selectionform").getElementsByTagName('tr').length;i++){
 document.getElementById("selectionform").getElementsByTagName('tr')[i].innerHTML = '<td style="width: 40";>' + i + '</td>' + document.getElementById("selectionform").getElementsByTagName('tr')[i].innerHTML 

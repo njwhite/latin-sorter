@@ -54,8 +54,8 @@
     <button id="menuname" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Select vocab
     <span class="caret"></span></button>
     <ul class="dropdown-menu">
-      <li class="dropdown-submenu">
-        <a class="test" tabindex="-1" href="#" id="CLC1">Cambridge Latin Course 1<span class="caret"></span></a>
+      <li class="dropdown-submenu" onmouseover="menuhide1()">
+        <a class="test" tabindex="-1" href="#">Cambridge Latin Course 1<span class="caret"></span></a>
         <ul class="dropdown-menu" id="CLC1" style="position: absolute; left:50%; top:20px">
             <li><a onclick = "listselect(this)" tabindex="-1" href="#">All Cambridge Latin Course 1</a></li>
           <li><a onclick = "listselect(this)" tabindex="-1" href="#">Stage 1</a></li>
@@ -72,7 +72,7 @@
           <li><a onclick = "listselect(this)" tabindex="-1" href="#">Stage 12</a></li>
         </ul>
       </li>
-      <li class="dropdown-submenu">
+      <li class="dropdown-submenu" onmouseover="menuhide2()">
         <a class="test" tabindex="-1" href="#">Cambridge Latin Course 2<span class="caret"></span></a>
         <ul class="dropdown-menu" id="CLC2" style="position: absolute; left:50%; top:20px">
             <li><a onclick = "listselect(this)" tabindex="-1" href="#">All Cambridge Latin Course 2</a></li>
@@ -86,11 +86,11 @@
           <li><a onclick = "listselect(this)" tabindex="-1" href="#">Stage 20</a></li>
         </ul>
       </li>
-      <li><a onclick = "listselect(this)" tabindex="-1" href="#">OCR GCSE</a></li>
-      <li><a onclick = "listselect(this)" tabindex="-1" href="#">Eduqas GCSE</a></li>
-      <li><a onclick = "listselect(this)" tabindex="-1" href="#">AS Level</a></li>
-      <li><a onclick = "listselect(this)" tabindex="-1" href="#">Additional Ovid</a></li>
-      <li><a onclick = "listselect(this)" tabindex="-1" href="#">Additional Livy</a></li>
+      <li><a  onmouseover="menuhide()" onclick = "listselect(this)" tabindex="-1" href="#">OCR GCSE</a></li>
+      <li><a  onmouseover="menuhide()" onclick = "listselect(this)" tabindex="-1" href="#">Eduqas GCSE</a></li>
+      <li><a  onmouseover="menuhide()" onclick = "listselect(this)" tabindex="-1" href="#">AS Level</a></li>
+      <li><a  onmouseover="menuhide()" onclick = "listselect(this)" tabindex="-1" href="#">Additional Ovid</a></li>
+      <li><a  onmouseover="menuhide()" onclick = "listselect(this)" tabindex="-1" href="#">Additional Livy</a></li>
       
     </ul>
   </div>
