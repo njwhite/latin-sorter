@@ -1,10 +1,12 @@
 <html>
     <head>
         <script src="testerscript.js">var dictionary; var vocabtest; var testlength; var fingoes; var activeel</script>
-        <link rel="stylesheet" href="modal.css">
-          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+             
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="popper.js"></script>
+  <script src="bootstrap.min.js"></script>
+  <link rel="stylesheet" href="bootstrap.min.css">
+  <link rel="stylesheet" href="modal.css"> 
     </head>
     <title> Latin vocab tester for GCSE, A-Level, Cambridge Latin Course, with autocomplete suggestions </title>
     <body onload="chooser()" onresize="resizefunction()">
@@ -53,11 +55,11 @@
   <div id="dropdown" class="dropdown" id="ddm">
     <button id="menuname" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Select vocab
     <span class="caret"></span></button>
-    <ul class="dropdown-menu">
+    <ul class="dropdown-menu" style="background-color: buttonface;">
       <li class="dropdown-submenu" onmouseover="menuhide1()">
-        <a class="test" tabindex="-1" href="#">Cambridge Latin Course 1<span class="caret"></span></a>
-        <ul class="dropdown-menu" id="CLC1" style="position: absolute; left:50%; top:20px">
-            <li><a onclick = "listselect(this)" tabindex="-1" href="#">All Cambridge Latin Course 1</a></li>
+        <a class="test" tabindex="-1" href="#">Cambridge Latin Course 1 &#9654;<span class="caret"></span></a>
+        <ul class="dropdown-menu" id="CLC1" style="position: absolute; left:50%; top:20px; width:18em; background-color: buttonface;">
+            <li><a onclick = "listselect(this)" tabindex="-1" href="#">All CLC 1</a></li>
           <li><a onclick = "listselect(this)" tabindex="-1" href="#">Stage 1</a></li>
           <li><a onclick = "listselect(this)" tabindex="-1" href="#">Stage 2</a></li>
           <li><a onclick = "listselect(this)" tabindex="-1" href="#">Stage 3</a></li>
@@ -73,9 +75,9 @@
         </ul>
       </li>
       <li class="dropdown-submenu" onmouseover="menuhide2()">
-        <a class="test" tabindex="-1" href="#">Cambridge Latin Course 2<span class="caret"></span></a>
-        <ul class="dropdown-menu" id="CLC2" style="position: absolute; left:50%; top:20px">
-            <li><a onclick = "listselect(this)" tabindex="-1" href="#">All Cambridge Latin Course 2</a></li>
+        <a class="test" tabindex="-1" href="#">Cambridge Latin Course 2 &#9654;<span class="caret"></span></a>
+        <ul class="dropdown-menu" id="CLC2" style="position: absolute; left:50%; top:20px; width:18em; background-color: buttonface;">
+            <li><a onclick = "listselect(this)" tabindex="-1" href="#">All CLC 2</a></li>
           <li><a onclick = "listselect(this)" tabindex="-1" href="#">Stage 13</a></li>
           <li><a onclick = "listselect(this)" tabindex="-1" href="#">Stage 14</a></li>
           <li><a onclick = "listselect(this)" tabindex="-1" href="#">Stage 15</a></li>
