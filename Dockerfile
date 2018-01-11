@@ -19,7 +19,7 @@ RUN apt-get -y update &&\
     zip \
     make
 ADD nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
-ADD *.js *.css *.htm *.html *.ico .htaccess /usr/local/openresty/nginx/html/
+ADD *.js *.css *.htm *.html *.ico *.png /usr/local/openresty/nginx/html/
 
 # as gzip_static is on, we should pre-gzip the files.
 RUN gzip -rkf9 /usr/local/openresty/nginx/html &&\

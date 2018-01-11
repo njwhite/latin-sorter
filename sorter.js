@@ -1,5 +1,5 @@
 $(function() {
-  $( "#sortable" ).sortable();
+  $( "#sortable" ).sortable(); 
   $( "#sortable" ).disableSelection();
 });
 
@@ -243,6 +243,7 @@ wlines[i]=wlines[i].replace('Later','');
 wlines[i]=wlines[i].replace('Late','');
 wlines[i]=wlines[i].replace('veryrare','');
 wlines[i]=wlines[i].replace('Archaic',''); 
+wlines[i]=wlines[i].replace('Pliny',''); 
 
 //Later veryrare
 wlines[i]=wlines[i].replace('NeoLatin','')
@@ -347,7 +348,7 @@ if(wlinetext[i]==" "){
 wlinetext[i]="RELAT"
 }
 }
-document.getElementById("menutable").innerHTML = document.getElementById("menutable").innerHTML +'<tr><td>' + 'Entry</td><td><wline wtype="entry">' + wlinetext[i] + '</wline></td></tr>'
+document.getElementById("menutable").innerHTML = document.getElementById("menutable").innerHTML +'<tr><td class="entry">' + 'Entry</td><td><wline wtype="entry">' + wlinetext[i] + '</wline></td></tr>'
 
 } 
 if (wlines[i] == "3"){
@@ -437,6 +438,7 @@ if(formwords[m] == 'V'){formwords[m] = 'verb'}
 if(formwords[m] == 'N'){formwords[m] = 'noun'}
 if(formwords[m] == 'ADJ'){formwords[m] = 'adj'}
 if(formwords[m] == 'ADV'){formwords[m] = 'adv'}
+if(formwords[m] == 'INTERJ'){formwords[m] = 'interjection'}
 if(formwords[m] == 'CONJ'){formwords[m] = 'conj'}
 if(formwords[m] == 'PRON'){formwords[m] = 'pron'}
 if(formwords[m] == 'NUM'){formwords[m] = 'number'}
@@ -472,6 +474,7 @@ if(formwords[m] == 'SUPER'){
 document.getElementsByTagName("wline")[k].setAttribute('gradation',formwords[m])
 formwords[m] = 'superlative'
 }
+
 
 }
 if (m>3){
@@ -929,6 +932,21 @@ for(var ccc=0; ccc<definitionentries.length;ccc++){
  }
 }
 
+//start table addition
+
+var entrycount = document.getElementsByClassName('entry').length
+for (iii=0;iii<entrycount;iii++){
+  var typenode = document.getElementsByClassName('entry')[iii].parentElement.childNodes[1].innerText.trim()
+  var entrytype = typenode.split(' ')[typenode.split(' ').length-1]
+  var pps = document.getElementsByClassName('entry')[iii].parentElement.childNodes[1].innerText
+  var eng = document.getElementsByClassName('entry')[iii].parentElement.parentElement.nextSibling.firstChild.childNodes[1].innerText
+  eng = eng.substr(0,eng.length-1)
+  
+  if(pps.split('abb.').length==1 &&pps.split(' ').length>2 && pps.split(', -, - ').length==1 && (entrytype=='V'||entrytype=='C'||entrytype=='X'||entrytype=='M'||entrytype=='F'||entrytype=='N'||entrytype=='V'||entrytype=='ADJ'||entrytype=='PRON'||entrytype=='INTRANS'||entrytype=='TRANS'||entrytype=='DEP'||entrytype=='SEMIDEP'||entrytype=='PERFDEF'||entrytype=='IMPERS')){
+  document.getElementsByClassName('entry')[iii].innerHTML = document.getElementsByClassName('entry')[iii].innerHTML + '<button onclick="javascript:popout(&quot;' + pps + '&quot;,&quot;' + eng + '&quot;)"><img alt="Vector toolbar insert table button.png" src="/Vector_toolbar_insert_table_button.png" width="28" height="28" data-file-width="28" data-file-height="28"></button>'
+  }
+}
+
 }
 function adder(){
 var targetid = document.getElementById("ww").getAttribute("selectedbox")
@@ -1035,6 +1053,9 @@ build(targetid)
 if(document.getElementById('gramm' + targetid).getAttribute('pos') == 'adv'||document.getElementById('def'+targetid).innerText == "not"){
 document.getElementById(targetid).getElementsByTagName('splitjoin')[0].innerHTML = document.getElementById(targetid).getElementsByTagName('splitjoin')[0].innerHTML+ '<button style="background:#ffe6e6" style="cursor:pointer;" onclick="nonjoiner(this)" parentid =' + targetid + '>&#x2192;|</button>'
 }
+if(document.getElementById('gramm' + targetid).getAttribute('pos') == 'adv'||document.getElementById('def'+targetid).innerText == "never"){
+  document.getElementById(targetid).getElementsByTagName('splitjoin')[0].innerHTML = document.getElementById(targetid).getElementsByTagName('splitjoin')[0].innerHTML+ '<button style="background:#ffe6e6" style="cursor:pointer;" onclick="nonjoiner(this)" parentid =' + targetid + '>&#x2192;|</button>'
+  }
 if(document.getElementById('gramm'+targetid).getAttribute('mood') == 'IND'||document.getElementById('gramm'+targetid).getAttribute('mood') == 'SUB'){
 addquestionbutton(targetid)
 }
@@ -1061,6 +1082,9 @@ var pos = document.getElementById('gramm' + targetid).getAttribute('pos')
 if(pos == 'V'){
 document.getElementById(targetid).setAttribute('style','background:#ffe6e6')
 }
+if(pos == 'INTERJ'){
+  document.getElementById(targetid).setAttribute('style','background:#ffe6e6')
+  }
 if(pos == 'N'|pos == 'GERUND'){
 document.getElementById(targetid).setAttribute('style','background:#e5ffff')
 }
@@ -1234,6 +1258,7 @@ var partscollection = {"lines":[{"val0":"verb pres 1st sing","val1":"%^II ^pres1
 {"val0":"verb plup passive subj 2nd plur","val1":"%^you might ^neg have been ^papl$^you had ^neg been ^papl$"},
 {"val0":"verb plup passive subj 3rd plur","val1":"%^they might ^neg have been ^papl$^they had ^neg been ^papl$"},
 {"val0":"adv","val1":"%^word$"},
+{"val0":"interjection","val1":"%^word$"},
 {"val0":"noun masc","val1":"%^word$"},
 {"val0":"noun fem","val1":"%^word$"},
 {"val0":"noun","val1":"%^word$"},
@@ -2282,6 +2307,19 @@ function getverbparts(word,pnumber){
 if(word=="to be"){
 word = "be"
 }
+
+var preword = word
+word = word.replace(/^it\s([a-zA-Z]*)s/g,'$1')
+if(preword != word && endsWith(word,'ie')){
+  word=word.substr(0,world.length - 2)
+}
+
+if(word.length>3){
+  if(word.substr(0,4) == 'not '){
+    word = word.substr(4,word.length - 4) + ' not'
+  }
+}
+
 var prefix=''
 
 var q = word.split(' ')
@@ -2457,7 +2495,7 @@ var partscollection = {"lines":[{"val0":"arise","val1":"arise","val2":"arise","v
 {"val0":"thrust","val1":"thrust","val2":"thrust","val3":"thrusts","val4":"thrust","val5":"thrust","val6":"thrust","val7":"thrusting"},
 {"val0":"tread","val1":"tread","val2":"tread","val3":"treads","val4":"trod","val5":"trod","val6":"trodden","val7":"treading"},
 {"val0":"value","val1":"value","val2":"value","val3":"values","val4":"valued","val5":"valued","val6":"valued","val7":"valuing"},
-{"val0":"visit","val1":"visit","val2":"visit","val3":"visits","val4":"visited","val5":"visited","val6":"visited","val7":"visitting"},
+{"val0":"visit","val1":"visit","val2":"visit","val3":"visits","val4":"visited","val5":"visited","val6":"visited","val7":"visiting"},
 {"val0":"wake","val1":"wake","val2":"wake","val3":"wakes","val4":"woke","val5":"woke","val6":"woken","val7":"waking"},
 {"val0":"wear","val1":"wear","val2":"wear","val3":"wears","val4":"wore","val5":"wore","val6":"worn","val7":"wearing"},
 {"val0":"weave","val1":"weave","val2":"weave","val3":"weaves","val4":"wove","val5":"wove","val6":"woven","val7":"weaving"},
@@ -2478,7 +2516,7 @@ partscollection.lines[b-1].val3 = word + 'es'
 } else {
 partscollection.lines[b-1].val3 = word + 's'
 if(word == word.replace(/[bcdfghjklmnprstvwxz]y/g,'')){} else {
-partscollection.lines[b-1].val3 = word.substr(0,word.length-2)
+partscollection.lines[b-1].val3 = word.substr(0,word.length-1) + 'ies'
 }
 
 }
@@ -2542,6 +2580,21 @@ addprefix = true
 }
 }
 
+}
+if(partscollection.lines[verblinenumber].val0 == 'can'){
+  partscollection.lines[verblinenumber].val0 = 'be able'
+}
+if(prefix == 'de'){
+if(partscollection.lines[verblinenumber].val4 == 'lit'){
+  partscollection.lines[verblinenumber].val4 = 'lighted'
+}
+
+if(partscollection.lines[verblinenumber].val5 == 'lit'){
+  partscollection.lines[verblinenumber].val5 = 'lighted'
+}
+if(partscollection.lines[verblinenumber].val6 == 'lit'){
+  partscollection.lines[verblinenumber].val6 = 'lighted'
+}
 }
 
 if(pnumber==0){
@@ -2607,6 +2660,8 @@ return sc
 }
 function sanitise(originalword) {
 var text = document.getElementById("ww").getAttribute('returnedtext')
+text = text.replace(/(^)(\s*)(\[[A-Z]{5}\]\s*\nwho)/gm,'qui, quae, quod PRON $3')
+text = text.replace(/([\.a-z]*)(\s*PRON[A-Z0-9\s]*\s*^)(\s*\[[A-Z]{5}\])/gm,'$1$2$1 PRON$3')
 text= text.replace('drive/urge/conduct/act;', 'drive, act, do, spend;')
 text = text.replace('keep back; recover;','keep back; receive; recover;')
 text = text.replace('terrace; archive;','terrace; study;')
@@ -2737,7 +2792,7 @@ text = text.replace('anyone','what')
 text = text.replace(' whoever you pick;','')
 }
 if(originalword=='quis'){
-text="quis PRON 0 nom S C \r\nquis, interrogative pronoun [XXXXX] \r\nwho, what, which, someone, anyone;\r\n\r\nqui.s V 6 1 PRES ACTIVE IND 2 S \r\nqueo, quire, quivi, quitus V [XXXBX] \r\nbe able;"
+text="quis PRON 0 nom S C \r\nquis, interrogative PRON [XXXXX] \r\nwho, what, which, someone, anyone;\r\n\r\nqui.s V 6 1 PRES ACTIVE IND 2 S \r\nqueo, quire, quivi, quitus V [XXXBX] \r\nbe able;"
 }
 if(originalword == "Caecilium"){
 text = "UNKNOWN"
@@ -2966,14 +3021,14 @@ if(originalword == 'quisnam'){text="quis.nam ADV \r\necquis PRON [XXXXX] \r\nwho
 if(originalword == 'quaenam'){text="quae.nam ADV \r\necquis PRON [XXXXX] \r\nwho pray?; \r\n"}
 if(originalword == 'quidnam'){text="quid.nam ADV \r\necquis PRON [XXXXX] \r\nwhat pray?; \r\n"}
 if(originalword == 'quodnam'){text="quod.nam ADV ecquis PRON [XXXXX] \r\nwhat pray?; \r\n"}
-if(originalword == 'quidam'){text="qui.dam N 1 1 NOM S M \r\nquidam PRON [XXXXX] \r\ncertain; some; \r\n"}
-if(originalword == 'quaedam'){text="quae.dam N 1 1 NOM S F \r\nquidam PRON [XXXXX] \r\ncertain; some; \r\n"}
-if(originalword == 'quoddam'){text="quod.dam ADJ 1 1 NOM S N \r\nquidam PRON [XXXXX] \r\ncertain; some; \r\n"}
-if(originalword == 'quendam'){text="quem.dam ADJ 1 1 ACC S M \r\nquidam PRON [XXXXX] \r\ncertain; some; \r\n"}
-if(originalword == 'quandam'){text="quam.dam ADJ 1 1 ACC S F \r\nquidam PRON [XXXXX] \r\ncertain; some; \r\n"}
-if(originalword == 'cuiusdam'){text="cuius.dam ADJ 1 1 GEN S X \r\nquidam PRON [XXXXX] \r\ncertain; some; \r\n"}
-if(originalword == 'cuidam'){text="cui.dam ADJ 1 1 DAT S X \r\nquidam PRON [XXXXX] \r\ncertain; some; \r\n"}
-if(originalword == 'quodam'){text="quo.dam ADJ 1 1 ABL S M \r\n quo.dam ADJ 1 1 ABL S N \r\nquidam PRON [XXXXX] \r\ncertain; some; \r\n"}
+if(originalword == 'quidam'){text="qui.dam N 1 1 NOM S M \r\nquidam, quaedam, quoddam PRON [XXXXX] \r\ncertain; some; \r\n"}
+if(originalword == 'quaedam'){text="quae.dam N 1 1 NOM S F \r\nquidam, quaedam, quoddam PRON [XXXXX] \r\ncertain; some; \r\n"}
+if(originalword == 'quoddam'){text="quod.dam ADJ 1 1 NOM S N \r\nquidam, quaedam, quoddam PRON [XXXXX] \r\ncertain; some; \r\n"}
+if(originalword == 'quendam'){text="quem.dam ADJ 1 1 ACC S M \r\nquidam, quaedam, quoddam PRON [XXXXX] \r\ncertain; some; \r\n"}
+if(originalword == 'quandam'){text="quam.dam ADJ 1 1 ACC S F \r\nquidam, quaedam, quoddam PRON [XXXXX] \r\ncertain; some; \r\n"}
+if(originalword == 'cuiusdam'){text="cuius.dam ADJ 1 1 GEN S X \r\nquidam, quaedam, quoddam PRON [XXXXX] \r\ncertain; some; \r\n"}
+if(originalword == 'cuidam'){text="cui.dam ADJ 1 1 DAT S X \r\nquidam, quaedam, quoddam PRON [XXXXX] \r\ncertain; some; \r\n"}
+if(originalword == 'quodam'){text="quo.dam ADJ 1 1 ABL S M \r\n quo.dam ADJ 1 1 ABL S N \r\nquidam, quaedam, quoddam PRON [XXXXX] \r\ncertain; some; \r\n"}
 
 
 text = text.replace(/NUM(.{1,20})ORD/g,'ADJ$1')
@@ -2995,7 +3050,7 @@ document.getElementById("finalsentence").innerText = document.getElementById("fi
 function gradation(word,grade){
 var comp = ""
 var sup = ""
-if(syllablecount(word)>2||(endsWith(word,'ing')&&syllablecount(word)>1)||(endsWith(word,'ed')&&syllablecount(word)>1)||(endsWith(word,'ent'))||(endsWith(word,'ous'))||(endsWith(word,'ile')&&syllablecount(word)>1)||(endsWith(word,'er'))){
+if(syllablecount(word)>2||(endsWith(word,'ing')&&syllablecount(word)>1)||(endsWith(word,'ired'))||(endsWith(word,'ed')&&syllablecount(word)>1)||(endsWith(word,'ent'))||(endsWith(word,'ous'))||(endsWith(word,'ile')&&syllablecount(word)>1)||(endsWith(word,'er'))||(endsWith(word,'ic')&&syllablecount(word)>1)){
 comp = "more " + word
 sup = "most " + word
 } else {
@@ -3106,7 +3161,7 @@ function nonjoiner(element){
 var nonbox = element.parentElement.parentElement
 if(nonbox !== nonbox.parentElement.lastChild){
 if(document.getElementById('gramm' + nonbox.nextElementSibling.id).getAttribute('pos')=='V'){
-nonbox.nextElementSibling.setAttribute('neg','not')
+nonbox.nextElementSibling.setAttribute('neg',document.getElementById('def' + nonbox.id).innerText)
 nonbox.nextElementSibling.innerHTML = '<recreate formerid="' + nonbox.id +'">' + nonbox.getElementsByTagName('a')[0].innerText + '</recreate> ' + nonbox.nextElementSibling.innerHTML 
 build(nonbox.nextElementSibling.id)
 nonbox.parentElement.removeChild(nonbox)
@@ -3307,4 +3362,2785 @@ function freeze(){
     document.getElementById('stopButton').innerHTML = '<b>ll</b>'
     }
   
+}
+function closer() {
+  // Get the modal
+var modal = document.getElementById('myModal');
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+  modal.style.display = "none";
+}
+
+function popout(pps,eng){
+    // Get the modal
+    var modal = document.getElementById('myModal');
+    
+    // Get the button that opens the modal
+    var btn = document.getElementById("myBtn");
+    
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+    
+    modal.style.display = "block";
+    
+    document.getElementById('pronountitle').innerText = ''
+
+    document.getElementById('website').setAttribute('style','overflow-y:scroll; overflow-x:hidden')
+     
+    document.getElementById('website').innerHTML = '<div id="tablecontainervisible">' + document.getElementById('tablecontainerinvisible').innerHTML + '</div>'
+    document.getElementById('modal-content').style.height = '80%'
+    document.getElementById('modal-content').style.width = '80%'
+    document.getElementById('website').height = document.getElementById('modal-content').offsetHeight - document.getElementById('close').offsetHeight
+    initiatetable(pps,eng)
+    var newwidth = document.getElementById('tablecontainervisible').children[0].offsetWidth
+    document.getElementById('website').style.width = newwidth
+    document.getElementById('tablecontainervisible').style.height = document.getElementById('tablecontainervisible').children[0].scrollHeight
+    if(document.getElementById('website').children[0].scrollHeight < document.getElementById('modal-content').offsetHeight - document.getElementById('close').offsetHeight){
+      document.getElementById('website').style.overflowY = 'hidden'
+    }
+
+    document.getElementById('modal-content').style.height = document.getElementById('website').offsetHeight + document.getElementById('close').offsetHeight+ document.getElementById('tabletitle').offsetHeight + 40
+    document.getElementById('modal-content').style.width = document.getElementById('website').offsetWidth + 40
+}
+
+function identifypos(pps){
+  pos = pps[pps.length-1]
+  if(pos=='M'||pos=='F'||pos=='N'||pos=='C'||pos=='X'||pos=='INTRANS'||pos=='TRANS'||pos=='DEP'||pos=='SEMIDEP'||pos=='PERFDEF'||pos=='IMPERS'){
+    pos = pps[pps.length-2]
+  }
+  return pos
+} 
+
+
+function noun(pps){
+  var gender = pps[pps.length - 1]
+  var declension = 0
+  var stem = ''
+  var istem = false
+  pps[0] = pps[0].replace(/j/g,'i')
+  pps[0] = pps[0].replace(/J/g,'I')
+
+  pps[1] = pps[1].replace(/j/g,'i')
+  pps[1] = pps[1].replace(/J/g,'I')
+
+  if(pps[0].substr(pps[0].length-2,2) == 'es' && pps[1].substr(pps[0].length-1,1) == 'i'){
+    declension = 5
+    stem = pps[1].substr(0,pps[1].length-1)
+  } 
+  else if (pps[1].substr(pps[1].length-2,2) == 'us'){
+      declension = 4
+      stem = pps[1].substr(0,pps[1].length-2)
+    }
+  else if (pps[1].substr(pps[1].length-2,2) == 'is'){
+      declension = 3
+      stem = pps[1].substr(0,pps[1].length-2)
+      var sylcount0 = pps[0].match(/(([bcdfghjklmnpqrstvwxz]|qu|[BCDFGHJKLMNPQRSTVWXZ]|Qu|QU|[^\na-zA-Z\u0101\u0100\u0113\u0112\u012B\u012A\u014D\u014C\u016B\u016A\u0233\u0232\u0103\u0102\u0115\u0114\u012D\u012C\u014F\u014E\u016D\u016C\u0177\u0176])*([aAeEiIoOuUyY])([bcdfghjklmnpqrstvwxz]|qu|[BCDFGHJKLMNPQRSTVWXZ]|Qu|QU|[^\na-zA-Z\u0101\u0100\u0113\u0112\u012B\u012A\u014D\u014C\u016B\u016A\u0233\u0232\u0103\u0102\u0115\u0114\u012D\u012C\u014F\u014E\u016D\u016C\u0177\u0176])*)/g).length
+      var sylcount1 = pps[1].match(/(([bcdfghjklmnpqrstvwxz]|qu|[BCDFGHJKLMNPQRSTVWXZ]|Qu|QU|[^\na-zA-Z\u0101\u0100\u0113\u0112\u012B\u012A\u014D\u014C\u016B\u016A\u0233\u0232\u0103\u0102\u0115\u0114\u012D\u012C\u014F\u014E\u016D\u016C\u0177\u0176])*([aAeEiIoOuUyY])([bcdfghjklmnpqrstvwxz]|qu|[BCDFGHJKLMNPQRSTVWXZ]|Qu|QU|[^\na-zA-Z\u0101\u0100\u0113\u0112\u012B\u012A\u014D\u014C\u016B\u016A\u0233\u0232\u0103\u0102\u0115\u0114\u012D\u012C\u014F\u014E\u016D\u016C\u0177\u0176])*)/g).length
+
+      if(sylcount0 == sylcount1 && pps[0] != 'pater' && pps[0] != 'mater' && pps[0] != 'frater' && pps[0] != 'senex' && pps[0] != 'iuvenis' && pps[0] != 'juvenis' && pps[0] != 'canis'){
+        istem = true
+      }
+      if(pps[0] == 'animal'){istem = true}
+      if(pps[0] == 'calcar'){istem = true}
+    }
+    else if (pps[1].substr(pps[1].length-1,1) == 'i'){
+      declension = 2
+      stem = pps[1].substr(0,pps[1].length-1)
+    }
+    else if (pps[1].substr(pps[1].length-2,2) == 'ae'){
+      declension = 1
+      stem = pps[1].substr(0,pps[1].length-2)
+    }
+    var nounendings = [['a','a','am','ae','ae','a','ae','ae','as','arum','is','is'],['us','e','um','i','o','o','i','i','os','orum','is','is'],['x','x','em','is','i','e','es','es','es','um','ibus','ibus'],['us','us','um','us','ui','u','us','us','us','uum','ibus','ibus'],['s','s','m','i','i','','s','s','s','rum','bus','bus']]
+    var ns = (pps[0])
+    var vs = pps[0]
+    if(declension==2 && pps[0].substr(pps[0].length-3,3) == 'ius'){
+      vs = stem
+    } else if (declension==2 && pps[0].substr(pps[0].length-2,2) == 'us'){
+      vs = stem + 'e'
+    }
+    var as = stem + nounendings[declension-1][2]
+    if (gender == 'N'){as = pps[0]}
+    if(pps[0] == 'sitis' && as == 'sitem'){as = 'sitim'}
+    var gs = stem + nounendings[declension-1][3]
+    var ds = stem + nounendings[declension-1][4]
+    var abs = stem + nounendings[declension-1][5]
+    var np = stem + nounendings[declension-1][6]
+    if (gender == 'N'){np = stem + 'a'}
+    if (istem == true && gender == 'N'){np = stem + 'ia'}
+    if (gender == 'N' && declension == 4){np = stem + 'ua'}
+    var vp = np
+    var ap = stem + nounendings[declension-1][8]
+    if (gender == 'N'){ap = np}
+    var gp = stem + nounendings[declension-1][9]
+    if(istem == true){
+      gp = stem + 'ium'
+    }
+    var dp = stem + nounendings[declension-1][10]
+    var abp = stem + nounendings[declension-1][11]
+    if(dp == 'bovibus'){dp = 'bobus/bubus'}
+    if(abp == 'bovibus'){abp = 'bobus/bubus'}
+    if(ns == 'filia'){abp = 'filiabus'; dp = 'filiabus'}
+
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ns</g,'>' + ns + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>vs</g,'>' + vs + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>as</g,'>' + as + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>gs</g,'>' + gs + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ds</g,'>' + ds + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>abs</g,'>' + abs + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>np</g,'>' + np + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>vp</g,'>' + vp + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ap</g,'>' + ap + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>gp</g,'>' + gp + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>dp</g,'>' + dp + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>abp</g,'>' + abp + '<')
+    
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').children[1].outerHTML
+  }
+
+  
+function verb(pps){
+  var conjugation
+  var deponent = false
+  var semidep = false
+  var impers = false
+if(endsWith(pps[0],'t')){
+  impers = true
+  if(endsWith(pps[0],'at')){
+    pps[0] = pps[0].substr(0,pps[0].length-2) + 'o'
+  }
+  else if(endsWith(pps[0],'t')){
+    pps[0] = pps[0].substr(0,pps[0].length-1) + 'o'
+  }
+
+  if(endsWith(pps[2],'t')){
+    pps[2] = pps[2].substr(0,pps[2].length - 1)
+  } 
+  document.getElementById('tablecontainervisible').getElementsByTagName('tr')[3].getElementsByTagName('td')[4].innerHTML = document.getElementById('tablecontainervisible').getElementsByTagName('tr')[5].getElementsByTagName('td')[4].innerHTML.replace(/^he/,'I')
+  document.getElementById('tablecontainervisible').innerHTML=document.getElementById('tablecontainervisible').innerHTML.replace(/>([a-z]*)1([a-z]*)</g,'>$13$2<')
+  document.getElementById('tablecontainervisible').innerHTML=document.getElementById('tablecontainervisible').innerHTML.replace(/>I\s/g,'>it ')
+  document.getElementById('tablecontainervisible').getElementsByTagName('tr')[4].outerHTML = ''
+  document.getElementById('tablecontainervisible').getElementsByTagName('tr')[4].outerHTML = ''
+  document.getElementById('tablecontainervisible').getElementsByTagName('tr')[6].outerHTML = ''
+  document.getElementById('tablecontainervisible').getElementsByTagName('tr')[6].outerHTML = ''
+  document.getElementById('tablecontainervisible').getElementsByTagName('tr')[8].outerHTML = ''
+  document.getElementById('tablecontainervisible').getElementsByTagName('tr')[8].outerHTML = ''
+  document.getElementById('tablecontainervisible').getElementsByTagName('tr')[10].outerHTML = ''
+  document.getElementById('tablecontainervisible').getElementsByTagName('tr')[10].outerHTML = ''
+  document.getElementById('tablecontainervisible').getElementsByTagName('tr')[12].outerHTML = ''
+  document.getElementById('tablecontainervisible').getElementsByTagName('tr')[12].outerHTML = ''
+  document.getElementById('tablecontainervisible').getElementsByTagName('tr')[14].outerHTML = ''
+  document.getElementById('tablecontainervisible').getElementsByTagName('tr')[14].outerHTML = ''
+  document.getElementById('tablecontainervisible').getElementsByTagName('tr')[18].outerHTML = ''
+  document.getElementById('tablecontainervisible').getElementsByTagName('tr')[18].outerHTML = ''
+  document.getElementById('tablecontainervisible').getElementsByTagName('tr')[20].outerHTML = ''
+  document.getElementById('tablecontainervisible').getElementsByTagName('tr')[20].outerHTML = ''
+  document.getElementById('tablecontainervisible').getElementsByTagName('tr')[22].outerHTML = ''
+  document.getElementById('tablecontainervisible').getElementsByTagName('tr')[22].outerHTML = ''
+  document.getElementById('tablecontainervisible').getElementsByTagName('tr')[24].outerHTML = ''
+  document.getElementById('tablecontainervisible').getElementsByTagName('tr')[24].outerHTML = ''
+
+  for(ff = 0; ff , ff<document.getElementById('tablecontainervisible').getElementsByClassName('xl8416351').length; ff++){
+    document.getElementById('tablecontainervisible').getElementsByClassName('xl8416351')[ff].setAttribute('style','border-bottom:.5pt solid')
+  }
+  for(ff = 0; ff , ff<document.getElementById('tablecontainervisible').getElementsByClassName('xl8516351').length; ff++){
+    document.getElementById('tablecontainervisible').getElementsByClassName('xl8516351')[ff].setAttribute('style','border-bottom:.5pt solid;border-right:.5pt solid')
+  }
+  for(ff = 0; ff , ff<document.getElementById('tablecontainervisible').getElementsByClassName('xl10216351').length; ff++){
+    document.getElementById('tablecontainervisible').getElementsByClassName('xl10216351')[ff].setAttribute('style','border-right:.5pt solid')
+  }
+  for(ff = 0; ff , ff<document.getElementById('tablecontainervisible').getElementsByClassName('xl10516351').length; ff++){
+    document.getElementById('tablecontainervisible').getElementsByClassName('xl10516351')[ff].setAttribute('style','border-right:.5pt solid')
+  }
+}
+
+  if(pps[1].substr(pps[1].length-3,3) == 'are'){conjugation = '1'}
+  if(pps[1].substr(pps[1].length-3,3) == 'ere' && pps[0].substr(pps[0].length-2,2) == 'eo'){conjugation = '2'}
+  else if(pps[1].substr(pps[1].length-3,3) == 'ere' && pps[0].substr(pps[0].length-1,1)=='o'){conjugation = '3'}
+  if(pps[1].substr(pps[1].length-3,3) == 'ire' && pps[0].substr(pps[0].length-2,2)=='io'){conjugation = '4'}
+  if(pps[1].substr(pps[1].length-4,4) == 'erre'){conjugation = 'ferro'}
+  if(pps[1].substr(pps[1].length-3,3) == 'ere' && pps[0].substr(pps[0].length-2,2)=='io'){conjugation = '5'}
+  if(pps[1].substr(pps[1].length-4,4) == 'isse' && pps[0].substr(pps[0].length-1,1)=='i'){conjugation = 'defective'}
+  if(pps[1].substr(pps[1].length-3,3) == 'lle'){conjugation = 'volo'}
+  if(pps[0].substr(pps[0].length-3,3) == 'sum'){conjugation = 'sum'}
+  if(pps[0]=='fio'){conjugation = 'fio'}
+  if(pps[1].substr(pps[1].length-3,3) == 'ire' && pps[0].substr(pps[0].length-2,2)=='eo'){conjugation = 'eo'}
+  if(pps[1].substr(pps[1].length-3,3) == 'ari'){conjugation = '1d'; deponent = true}
+  else if(pps[1].substr(pps[1].length-3,3) == 'eri' && pps[0].substr(pps[0].length-3,3) == 'eor'){conjugation = '2d'; deponent = true}
+  else if(pps[1].substr(pps[1].length-1,1) == 'i' && pps[0].substr(pps[0].length-2,2)=='or'){conjugation = '3d'; deponent = true}
+  if(pps[1].substr(pps[1].length-3,3) == 'iri' && pps[0].substr(pps[0].length-3,3)=='ior'){conjugation = '4d'; deponent = true}
+  if(pps[1].substr(pps[1].length-1,1) == 'i' && pps[0].substr(pps[0].length-3,3)=='ior'){conjugation = '5d'; deponent = true}
+  if(deponent == false && pps[2].substr(pps[2].length-2,2)=='us'){semidep = true}
+  var presentstem
+  var perfstem
+  var ppstem
+  var sing1pres = pps[0]
+  var presinf = pps[1]
+  var sing2pres
+  var sing3pres
+  var plur1pres
+  var plur2pres
+  var plur3pres
+  
+  var sing1fut
+  var sing2fut
+  var sing3fut
+  var plur1fut
+  var plur2fut
+  var plur3fut
+
+  
+  var sing1impf
+  var sing2impf
+  var sing3impf
+  var plur1impf
+  var plur2impf
+  var plur3impf
+
+  var sing1pressubj
+  var sing2pressubj
+  var sing3pressubj
+  var plur1pressubj
+  var plur2pressubj
+  var plur3pressubj
+  
+  var sing1prespass
+  var sing2prespass
+  var sing3prespass
+  var plur1prespass
+  var plur2prespass
+  var plur3prespass
+  
+  var sing1futpass
+  var sing2futpass
+  var sing3futpass
+  var plur1futpass
+  var plur2futpass
+  var plur3futpass
+
+  var sing1impfpass 
+  var sing2impfpass
+  var sing3impfpass
+  var plur1impfpass
+  var plur2impfpass
+  var plur3impfpass
+
+  var sing1pressubjpass
+  var sing2pressubjpass
+  var sing3pressubjpass
+  var plur1pressubjpass
+  var plur2pressubjpass
+  var plur3pressubjpass
+  
+  var presinfpass
+
+  var prespplstem
+  var gerstem
+
+  var imperativesing
+  var imperativeplur
+  var imperativesingpass
+  var imperativeplurpass
+  
+  if(conjugation == '1'){
+    presentstem = pps[0].substr(0,pps[0].length-1)
+    perfstem = pps[2].substr(0,pps[2].length-1)
+    ppstem = pps[3].substr(0,pps[3].length-2)
+    sing2pres = presentstem + 'as'
+    sing3pres = presentstem + 'at'
+    plur1pres = presentstem + 'amus'
+    plur2pres = presentstem + 'atis'
+    plur3pres = presentstem + 'ant'
+
+    presinfpass = presentstem + 'ari'
+
+    sing1fut = presentstem + "abo"
+    sing2fut = presentstem + "abis"
+    sing3fut = presentstem + "abit"
+    plur1fut = presentstem + "abimus"
+    plur2fut = presentstem + "abitis"
+    plur3fut = presentstem + "abunt"
+
+    sing1impf = presentstem + "abam"
+    sing2impf = presentstem + "abas"
+    sing3impf = presentstem + "abat"
+    plur1impf = presentstem + "abamus"
+    plur2impf = presentstem + "abatis"
+    plur3impf = presentstem + "abant"
+
+    sing1pressubj = presentstem + 'em'
+    sing2pressubj = presentstem + 'es'
+    sing3pressubj = presentstem + 'et'
+    plur1pressubj = presentstem + 'emus'
+    plur2pressubj = presentstem + 'etis'
+    plur3pressubj = presentstem + 'ent'
+    
+    sing1prespass = presentstem + 'or'    
+    sing2prespass = presentstem + 'aris'
+    sing3prespass = presentstem + 'atur'
+    plur1prespass = presentstem + 'amur'
+    plur2prespass = presentstem + 'amini'
+    plur3prespass = presentstem + 'antur'
+    
+    sing1futpass = presentstem + "abor"
+    sing2futpass = presentstem + "aberis"
+    sing3futpass = presentstem + "abitur"
+    plur1futpass = presentstem + "abimur"
+    plur2futpass = presentstem + "abimini"
+    plur3futpass = presentstem + "abuntur"
+
+    sing1impfpass = presentstem + "abar"
+    sing2impfpass = presentstem + "abaris"
+    sing3impfpass = presentstem + "abatur"
+    plur1impfpass = presentstem + "abamur"
+    plur2impfpass = presentstem + "abamini"
+    plur3impfpass = presentstem + "abantur"
+
+    sing1pressubjpass = presentstem + 'er'
+    sing2pressubjpass = presentstem + 'eris'
+    sing3pressubjpass = presentstem + 'etur'
+    plur1pressubjpass = presentstem + 'emur'
+    plur2pressubjpass = presentstem + 'emini'
+    plur3pressubjpass = presentstem + 'entur'
+
+    prespplstem = presentstem + 'an'
+    gerstem = prespplstem + 'd'
+
+    imperativesing = presentstem + 'a'
+    imperativeplur = imperativesing + 'te'
+  }
+  if(conjugation == '2'){
+    presentstem = pps[0].substr(0,pps[0].length-2)
+    perfstem = pps[2].substr(0,pps[2].length-1)
+    ppstem = pps[3].substr(0,pps[3].length-2)
+    sing2pres = presentstem + 'es'
+    sing3pres = presentstem + 'et'
+    plur1pres = presentstem + 'emus'
+    plur2pres = presentstem + 'etis'
+    plur3pres = presentstem + 'ent'
+
+    presinfpass = presentstem + 'eri'
+    
+    sing1fut = presentstem + "ebo"
+    sing2fut = presentstem + "ebis"
+    sing3fut = presentstem + "ebit"
+    plur1fut = presentstem + "ebimus"
+    plur2fut = presentstem + "ebitis"
+    plur3fut = presentstem + "ebunt"
+
+    sing1impf = presentstem + "ebam"
+    sing2impf = presentstem + "ebas"
+    sing3impf = presentstem + "ebat"
+    plur1impf = presentstem + "ebamus"
+    plur2impf = presentstem + "ebatis"
+    plur3impf = presentstem + "ebant"
+
+    sing1pressubj = presentstem + 'eam'
+    sing2pressubj = presentstem + 'eas'
+    sing3pressubj = presentstem + 'eat'
+    plur1pressubj = presentstem + 'eamus'
+    plur2pressubj = presentstem + 'eatis'
+    plur3pressubj = presentstem + 'eant'
+    
+    sing1prespass = presentstem + 'eor'    
+    sing2prespass = presentstem + 'eris'
+    sing3prespass = presentstem + 'etur'
+    plur1prespass = presentstem + 'emur'
+    plur2prespass = presentstem + 'emini'
+    plur3prespass = presentstem + 'entur'
+    
+    sing1futpass = presentstem + "ebor"
+    sing2futpass = presentstem + "eberis"
+    sing3futpass = presentstem + "ebitur"
+    plur1futpass = presentstem + "ebimur"
+    plur2futpass = presentstem + "ebimini"
+    plur3futpass = presentstem + "ebuntur"
+
+    sing1impfpass = presentstem + "ebar"
+    sing2impfpass = presentstem + "ebaris"
+    sing3impfpass = presentstem + "ebatur"
+    plur1impfpass = presentstem + "ebamur"
+    plur2impfpass = presentstem + "ebamini"
+    plur3impfpass = presentstem + "ebantur"
+
+    sing1pressubjpass = presentstem + 'ear'
+    sing2pressubjpass = presentstem + 'earis'
+    sing3pressubjpass = presentstem + 'eatur'
+    plur1pressubjpass = presentstem + 'eamur'
+    plur2pressubjpass = presentstem + 'eamini'
+    plur3pressubjpass = presentstem + 'eantur'
+
+    prespplstem = presentstem + 'en'
+    gerstem = prespplstem + 'd'
+
+    imperativesing = presentstem + 'e'
+    imperativeplur = imperativesing + 'te'
+  }
+  if(conjugation == '3'){
+    presentstem = pps[0].substr(0,pps[0].length-1)
+    perfstem = pps[2].substr(0,pps[2].length-1)
+    ppstem = pps[3].substr(0,pps[3].length-2)
+    sing2pres = presentstem + 'is'
+    sing3pres = presentstem + 'it'
+    plur1pres = presentstem + 'imus'
+    plur2pres = presentstem + 'itis'
+    plur3pres = presentstem + 'unt'
+
+    presinfpass = presentstem + 'i'
+    
+    sing1fut = presentstem + "am"
+    sing2fut = presentstem + "es"
+    sing3fut = presentstem + "et"
+    plur1fut = presentstem + "emus"
+    plur2fut = presentstem + "etis"
+    plur3fut = presentstem + "ent"
+
+    sing1impf = presentstem + "ebam"
+    sing2impf = presentstem + "ebas"
+    sing3impf = presentstem + "ebat"
+    plur1impf = presentstem + "ebamus"
+    plur2impf = presentstem + "ebatis"
+    plur3impf = presentstem + "ebant"
+
+    sing1pressubj = presentstem + 'am'
+    sing2pressubj = presentstem + 'as'
+    sing3pressubj = presentstem + 'at'
+    plur1pressubj = presentstem + 'amus'
+    plur2pressubj = presentstem + 'atis'
+    plur3pressubj = presentstem + 'ant'
+    
+    sing1prespass = presentstem + 'or'    
+    sing2prespass = presentstem + 'eris'
+    sing3prespass = presentstem + 'itur'
+    plur1prespass = presentstem + 'imur'
+    plur2prespass = presentstem + 'imini'
+    plur3prespass = presentstem + 'untur'
+    
+    sing1futpass = presentstem + "ar"
+    sing2futpass = presentstem + "eris"
+    sing3futpass = presentstem + "etur"
+    plur1futpass = presentstem + "emur"
+    plur2futpass = presentstem + "emini"
+    plur3futpass = presentstem + "entur"
+
+    sing1impfpass = presentstem + "ebar"
+    sing2impfpass = presentstem + "ebaris"
+    sing3impfpass = presentstem + "ebatur"
+    plur1impfpass = presentstem + "ebamur"
+    plur2impfpass = presentstem + "ebamini"
+    plur3impfpass = presentstem + "ebantur"
+
+    sing1pressubjpass = presentstem + 'ar'
+    sing2pressubjpass = presentstem + 'aris'
+    sing3pressubjpass = presentstem + 'atur'
+    plur1pressubjpass = presentstem + 'amur'
+    plur2pressubjpass = presentstem + 'amini'
+    plur3pressubjpass = presentstem + 'antur'
+
+    prespplstem = presentstem + 'en'
+    gerstem = prespplstem + 'd'
+
+    imperativesing = presentstem + 'e'
+    if(imperativesing == 'duce'){imperativesing = 'duc'}
+    imperativeplur = imperativesing + 'te'
+  }
+  if(conjugation == 'ferro'){
+    presentstem = pps[0].substr(0,pps[0].length-1)
+    perfstem = pps[2].substr(0,pps[2].length-1)
+    ppstem = pps[3].substr(0,pps[3].length-2)
+    sing2pres = presentstem + 's'
+    sing3pres = presentstem + 't'
+    plur1pres = presentstem + 'imus'
+    plur2pres = presentstem + 'tis'
+    plur3pres = presentstem + 'unt'
+
+    presinfpass = presentstem + 'ri'
+    
+    sing1fut = presentstem + "am"
+    sing2fut = presentstem + "es"
+    sing3fut = presentstem + "et"
+    plur1fut = presentstem + "emus"
+    plur2fut = presentstem + "etis"
+    plur3fut = presentstem + "ent"
+
+    sing1impf = presentstem + "ebam"
+    sing2impf = presentstem + "ebas"
+    sing3impf = presentstem + "ebat"
+    plur1impf = presentstem + "ebamus"
+    plur2impf = presentstem + "ebatis"
+    plur3impf = presentstem + "ebant"
+
+    sing1pressubj = presentstem + 'am'
+    sing2pressubj = presentstem + 'as'
+    sing3pressubj = presentstem + 'at'
+    plur1pressubj = presentstem + 'amus'
+    plur2pressubj = presentstem + 'atis'
+    plur3pressubj = presentstem + 'ant'
+    
+    sing1prespass = presentstem + 'or'    
+    sing2prespass = presentstem + 'ris'
+    sing3prespass = presentstem + 'tur'
+    plur1prespass = presentstem + 'imur'
+    plur2prespass = presentstem + 'imini'
+    plur3prespass = presentstem + 'untur'
+    
+    sing1futpass = presentstem + "ar"
+    sing2futpass = presentstem + "eris"
+    sing3futpass = presentstem + "etur"
+    plur1futpass = presentstem + "emur"
+    plur2futpass = presentstem + "emini"
+    plur3futpass = presentstem + "entur"
+
+    sing1impfpass = presentstem + "ebar"
+    sing2impfpass = presentstem + "ebaris"
+    sing3impfpass = presentstem + "ebatur"
+    plur1impfpass = presentstem + "ebamur"
+    plur2impfpass = presentstem + "ebamini"
+    plur3impfpass = presentstem + "ebantur"
+
+    sing1pressubjpass = presentstem + 'ar'
+    sing2pressubjpass = presentstem + 'aris'
+    sing3pressubjpass = presentstem + 'atur'
+    plur1pressubjpass = presentstem + 'amur'
+    plur2pressubjpass = presentstem + 'amini'
+    plur3pressubjpass = presentstem + 'antur'
+
+    prespplstem = presentstem + 'en'
+    gerstem = prespplstem + 'd'
+
+    imperativesing = presentstem
+    imperativeplur = imperativesing + 'te'
+  }
+  if(conjugation == '4'){
+    presentstem = pps[0].substr(0,pps[0].length-2)
+    perfstem = pps[2].substr(0,pps[2].length-1)
+    ppstem = pps[3].substr(0,pps[3].length-2)
+    sing2pres = presentstem + 'is'
+    sing3pres = presentstem + 'it'
+    plur1pres = presentstem + 'imus'
+    plur2pres = presentstem + 'itis'
+    plur3pres = presentstem + 'iunt'
+
+    presinfpass = presentstem + 'iri'
+    
+    sing1fut = presentstem + "iam"
+    sing2fut = presentstem + "ies"
+    sing3fut = presentstem + "iet"
+    plur1fut = presentstem + "iemus"
+    plur2fut = presentstem + "ietis"
+    plur3fut = presentstem + "ient"
+
+    sing1impf = presentstem + "iebam"
+    sing2impf = presentstem + "iebas"
+    sing3impf = presentstem + "iebat"
+    plur1impf = presentstem + "iebamus"
+    plur2impf = presentstem + "iebatis"
+    plur3impf = presentstem + "iebant"
+
+    sing1pressubj = presentstem + 'iam'
+    sing2pressubj = presentstem + 'ias'
+    sing3pressubj = presentstem + 'iat'
+    plur1pressubj = presentstem + 'iamus'
+    plur2pressubj = presentstem + 'iatis'
+    plur3pressubj = presentstem + 'iant'
+    
+    sing1prespass = presentstem + 'ior'    
+    sing2prespass = presentstem + 'ieris'
+    sing3prespass = presentstem + 'itur'
+    plur1prespass = presentstem + 'imur'
+    plur2prespass = presentstem + 'imini'
+    plur3prespass = presentstem + 'untur'
+    
+    sing1futpass = presentstem + "iar"
+    sing2futpass = presentstem + "ieris"
+    sing3futpass = presentstem + "ietur"
+    plur1futpass = presentstem + "iemur"
+    plur2futpass = presentstem + "iemini"
+    plur3futpass = presentstem + "ientur"
+
+    sing1impfpass = presentstem + "iebar"
+    sing2impfpass = presentstem + "iebaris"
+    sing3impfpass = presentstem + "iebatur"
+    plur1impfpass = presentstem + "iebamur"
+    plur2impfpass = presentstem + "iebamini"
+    plur3impfpass = presentstem + "iebantur"
+
+    sing1pressubjpass = presentstem + 'iar'
+    sing2pressubjpass = presentstem + 'iaris'
+    sing3pressubjpass = presentstem + 'iatur'
+    plur1pressubjpass = presentstem + 'iamur'
+    plur2pressubjpass = presentstem + 'iamini'
+    plur3pressubjpass = presentstem + 'iantur'
+
+    prespplstem = presentstem + 'ien'
+    gerstem = prespplstem + 'd'
+
+    imperativesing = presentstem + 'i'
+    imperativeplur = imperativesing + 'te'
+  }
+  if(conjugation == '5'){
+    presentstem = pps[0].substr(0,pps[0].length-2)
+    perfstem = pps[2].substr(0,pps[2].length-1)
+    ppstem = pps[3].substr(0,pps[3].length-2)
+    sing2pres = presentstem + 'is'
+    sing3pres = presentstem + 'it'
+    plur1pres = presentstem + 'imus'
+    plur2pres = presentstem + 'itis'
+    plur3pres = presentstem + 'iunt'
+
+    presinfpass = presentstem + 'iri'
+    
+    sing1fut = presentstem + "iam"
+    sing2fut = presentstem + "ies"
+    sing3fut = presentstem + "iet"
+    plur1fut = presentstem + "iemus"
+    plur2fut = presentstem + "ietis"
+    plur3fut = presentstem + "ient"
+
+    sing1impf = presentstem + "iebam"
+    sing2impf = presentstem + "iebas"
+    sing3impf = presentstem + "iebat"
+    plur1impf = presentstem + "iebamus"
+    plur2impf = presentstem + "iebatis"
+    plur3impf = presentstem + "iebant"
+
+    sing1pressubj = presentstem + 'iam'
+    sing2pressubj = presentstem + 'ias'
+    sing3pressubj = presentstem + 'iat'
+    plur1pressubj = presentstem + 'iamus'
+    plur2pressubj = presentstem + 'iatis'
+    plur3pressubj = presentstem + 'iant'
+    
+    sing1prespass = presentstem + 'ior'
+    if(sing1prespass == 'facior'){
+      sing1prespass = 'fio'
+    }
+    sing2prespass = presentstem + 'ieris'
+    if(sing2prespass == 'facieris'){
+      sing2prespass == 'fis'
+    }
+    sing3prespass = presentstem + 'itur'
+    if(sing3prespass = 'facitur'){
+      sing2prespass = 'fit'
+    }
+    plur1prespass = presentstem + 'imur'
+    if(plur1prespass == 'facimur'){
+      plur1prespass = 'fimus'
+    }
+    plur2prespass = presentstem + 'imini'
+    if(plur2prespass == 'facimini'){
+      plur2prespass = 'fitis'
+    }
+    plur3prespass = presentstem + 'untur'
+    if(plur3prespass == 'faciuntur'){
+      plur3prespass = 'fiunt'
+    }
+    
+    sing1futpass = presentstem + "iar"
+    if(sing1futpass == 'faciar'){
+      sing1futpass = 'fiam'
+    }
+    sing2futpass = presentstem + "ieris"
+    if(sing2futpass == 'facieris'){
+      sing2futpass = 'fies'
+    }
+    sing3futpass = presentstem + "ietur"
+    if(sing3futpass == 'facietur'){
+      sing3futpass = 'fiet'
+    }
+    plur1futpass = presentstem + "iemur"
+    if(plur1futpass == 'faciemur'){
+      plur1futpass = 'fiemus'
+    }
+    plur2futpass = presentstem + "iemini"
+    if(plur2futpass == 'faciemini'){
+      plur2futpass = 'fietis'
+    }
+    plur3futpass = presentstem + "ientur"
+    if(plur3futpass == 'facientur'){
+      plur3futpass = 'fient'
+    }
+
+    sing1impfpass = presentstem + "iebar"
+    if(sing1impfpass == 'faciebar'){
+      sing1impfpass = 'fiebam'
+    }
+    sing2impfpass = presentstem + "iebaris"
+    if(sing2impfpass == 'faciebaris'){
+      sing2impfpass = 'fiebas'
+    }
+    sing3impfpass = presentstem + "iebatur"
+    if(sing3impfpass == 'faciebatur'){
+      sing3impfpass = 'fiebat'
+    }
+    plur1impfpass = presentstem + "iebamur"
+    if(plur1impfpass == 'faciebamur'){
+      plur1impfpass = 'fiebamus'
+    }
+    plur2impfpass = presentstem + "iebamini"
+    if(plur2impfpass == 'faciebamini'){
+      plur2impfpass = 'fiebatis'
+    }
+    plur3impfpass = presentstem + "iebantur"
+    if(plur3impfpass == 'faciebantur'){
+      plur3impfpass = 'fiebant'
+    }
+
+    sing1pressubjpass = presentstem + 'iar'
+    if(sing1pressubjpass == 'faciar'){
+      sing1pressubjpass = 'fiam'
+    }
+    sing2pressubjpass = presentstem + 'iaris'
+    if(sing2pressubjpass == 'faciaris'){
+      sing2pressubjpass = 'fias'
+    }
+    sing3pressubjpass = presentstem + 'iatur'
+    if(sing3pressubjpass == 'faciatur'){
+      sing3pressubjpass = 'fiat'
+    }
+    plur1pressubjpass = presentstem + 'iamur'
+    if(plur1pressubjpass == 'faciamur'){
+      plur1pressubjpass = 'fiamus'
+    }
+    plur2pressubjpass = presentstem + 'iamini'
+    if(plur2pressubjpass == 'faciamini'){
+      plur2pressubjpass = 'fiatis'
+    }
+    plur3pressubjpass = presentstem + 'iantur'
+    if(sing1impfpass == 'faciantur'){
+      sing1impfpass = 'fiant'
+    }
+
+    prespplstem = presentstem + 'ien'
+    gerstem = prespplstem + 'd'
+
+    imperativesing = presentstem + 'i'
+    if(imperativesing == 'faci'){imperativesing = 'fac'}
+    imperativeplur = imperativesing + 'te'
+  }
+  if(semidep == true){
+    ppstem = pps[2].substr(0,pps[2].length-2)
+    perfstem = ''
+  }
+  if(conjugation == '1d'){
+    presentstem = pps[0].substr(0,pps[0].length-2)
+    ppstem = pps[2].substr(0,pps[2].length-2)
+    sing2pres = presentstem + 'aris'
+    sing3pres = presentstem + 'atur'
+    plur1pres = presentstem + 'amur'
+    plur2pres = presentstem + 'amini'
+    plur3pres = presentstem + 'antur'
+    
+    sing1fut = presentstem + "abor"
+    sing2fut = presentstem + "aberis"
+    sing3fut = presentstem + "abitur"
+    plur1fut = presentstem + "abimur"
+    plur2fut = presentstem + "abimini"
+    plur3fut = presentstem + "abuntur"
+
+    sing1impf = presentstem + "abar"
+    sing2impf = presentstem + "abaris"
+    sing3impf = presentstem + "abatur"
+    plur1impf = presentstem + "abamur"
+    plur2impf = presentstem + "abamini"
+    plur3impf = presentstem + "abantur"
+
+    sing1pressubj = presentstem + 'er'
+    sing2pressubj = presentstem + 'eris'
+    sing3pressubj = presentstem + 'etur'
+    plur1pressubj = presentstem + 'emur'
+    plur2pressubj = presentstem + 'emini'
+    plur3pressubj = presentstem + 'entur'
+
+    prespplstem = presentstem + 'an'
+    gerstem = prespplstem + 'd'
+
+    imperativesing = presentstem + 'are'
+    imperativeplur = plur2pres
+  }
+  if(conjugation == '2d'){
+    presentstem = pps[0].substr(0,pps[0].length-3)
+    ppstem = pps[2].substr(0,pps[2].length-2)
+    sing2pres = presentstem + 'eris'
+    sing3pres = presentstem + 'etur'
+    plur1pres = presentstem + 'emur'
+    plur2pres = presentstem + 'emini'
+    plur3pres = presentstem + 'entur'
+    
+    sing1fut = presentstem + "ebor"
+    sing2fut = presentstem + "eberis"
+    sing3fut = presentstem + "ebitur"
+    plur1fut = presentstem + "ebimur"
+    plur2fut = presentstem + "ebimini"
+    plur3fut = presentstem + "ebuntur"
+
+    sing1impf = presentstem + "ebar"
+    sing2impf = presentstem + "ebaris"
+    sing3impf = presentstem + "ebatur"
+    plur1impf = presentstem + "ebamur"
+    plur2impf = presentstem + "ebamini"
+    plur3impf = presentstem + "ebantur"
+
+    sing1pressubj = presentstem + 'ear'
+    sing2pressubj = presentstem + 'earis'
+    sing3pressubj = presentstem + 'eatur'
+    plur1pressubj = presentstem + 'eamur'
+    plur2pressubj = presentstem + 'eamini'
+    plur3pressubj = presentstem + 'eantur'
+
+    prespplstem = presentstem + 'en'
+    gerstem = prespplstem + 'd'
+
+    imperativesing = presentstem + 'ere'
+    imperativeplur = plur2pres
+  }
+  if(conjugation == '3d'){
+    presentstem = pps[0].substr(0,pps[0].length-2)
+    ppstem = pps[2].substr(0,pps[2].length-2)
+    sing2pres = presentstem + 'eris'
+    sing3pres = presentstem + 'itur'
+    plur1pres = presentstem + 'imur'
+    plur2pres = presentstem + 'imini'
+    plur3pres = presentstem + 'untur'
+    
+    sing1fut = presentstem + "ar"
+    sing2fut = presentstem + "eris"
+    sing3fut = presentstem + "etur"
+    plur1fut = presentstem + "emur"
+    plur2fut = presentstem + "emini"
+    plur3fut = presentstem + "entur"
+
+    sing1impf = presentstem + "ebar"
+    sing2impf = presentstem + "ebaris"
+    sing3impf = presentstem + "ebatur"
+    plur1impf = presentstem + "ebamur"
+    plur2impf = presentstem + "ebamini"
+    plur3impf = presentstem + "ebantur"
+
+    sing1pressubj = presentstem + 'ar'
+    sing2pressubj = presentstem + 'aris'
+    sing3pressubj = presentstem + 'atur'
+    plur1pressubj = presentstem + 'amur'
+    plur2pressubj = presentstem + 'amini'
+    plur3pressubj = presentstem + 'antur'
+
+    prespplstem = presentstem + 'en'
+    gerstem = prespplstem + 'd'
+
+    imperativesing = presentstem + 'ere'
+    imperativeplur = plur2pres
+  }
+  if(conjugation == '4d'){
+    presentstem = pps[0].substr(0,pps[0].length-3)
+    ppstem = pps[2].substr(0,pps[2].length-2)
+    sing2pres = presentstem + 'ieris'
+    sing3pres = presentstem + 'itur'
+    plur1pres = presentstem + 'imur'
+    plur2pres = presentstem + 'imini'
+    plur3pres = presentstem + 'iuntur'
+    
+    sing1fut = presentstem + "ar"
+    sing2fut = presentstem + "eris"
+    sing3fut = presentstem + "etur"
+    plur1fut = presentstem + "emur"
+    plur2fut = presentstem + "emini"
+    plur3fut = presentstem + "entur"
+
+    sing1impf = presentstem + "iebar"
+    sing2impf = presentstem + "iebaris"
+    sing3impf = presentstem + "iebatur"
+    plur1impf = presentstem + "iebamur"
+    plur2impf = presentstem + "iebamini"
+    plur3impf = presentstem + "iebantur"
+
+    sing1pressubj = presentstem + 'iar'
+    sing2pressubj = presentstem + 'iaris'
+    sing3pressubj = presentstem + 'iatur'
+    plur1pressubj = presentstem + 'iamur'
+    plur2pressubj = presentstem + 'iamini'
+    plur3pressubj = presentstem + 'iantur'
+
+    prespplstem = presentstem + 'ien'
+    gerstem = prespplstem + 'd'
+
+    imperativesing = presentstem + 'ire'
+    imperativeplur = plur2pres
+  }
+  if(conjugation == '5d'){
+    presentstem = pps[0].substr(0,pps[0].length-3)
+    ppstem = pps[2].substr(0,pps[2].length-2)
+    sing2pres = presentstem + 'ieris'
+    sing3pres = presentstem + 'itur'
+    plur1pres = presentstem + 'imur'
+    plur2pres = presentstem + 'imini'
+    plur3pres = presentstem + 'iuntur'
+    
+    sing1fut = presentstem + "ar"
+    sing2fut = presentstem + "eris"
+    sing3fut = presentstem + "etur"
+    plur1fut = presentstem + "emur"
+    plur2fut = presentstem + "emini"
+    plur3fut = presentstem + "entur"
+
+    sing1impf = presentstem + "iebar"
+    sing2impf = presentstem + "iebaris"
+    sing3impf = presentstem + "iebatur"
+    plur1impf = presentstem + "iebamur"
+    plur2impf = presentstem + "iebamini"
+    plur3impf = presentstem + "iebantur"
+
+    sing1pressubj = presentstem + 'iar'
+    sing2pressubj = presentstem + 'iaris'
+    sing3pressubj = presentstem + 'iatur'
+    plur1pressubj = presentstem + 'iamur'
+    plur2pressubj = presentstem + 'iamini'
+    plur3pressubj = presentstem + 'iantur'
+
+    prespplstem = presentstem + 'ien'
+    gerstem = prespplstem + 'd'
+
+    imperativesing = presentstem + 'ire'
+    imperativeplur = plur2pres
+  }
+  if(conjugation == 'sum'){
+    presentstem = pps[0].substr(0,pps[0].length-3)
+    if(presentstem == 'pos'){presentstem = 'pot'}
+    perfstem = pps[2].substr(0,pps[2].length-1)
+    sing2pres = presentstem + 'es'
+    sing3pres = presentstem + 'est'
+    plur1pres = presentstem + 'sumus'
+    if(plur1pres == 'potsumus'){plur1pres = 'possumus'}
+    plur2pres = presentstem + 'estis'
+    plur3pres = presentstem + 'sunt'
+    if(plur3pres == 'potsunt'){plur3pres = 'possunt'}    
+    sing1fut = presentstem + "ero"
+    sing2fut = presentstem + "eris"
+    sing3fut = presentstem + "erit"
+    plur1fut = presentstem + "erimus"
+    plur2fut = presentstem + "eritis"
+    plur3fut = presentstem + "erunt"
+
+    sing1impf = presentstem + "eram"
+    sing2impf = presentstem + "eras"
+    sing3impf = presentstem + "erat"
+    plur1impf = presentstem + "eramus"
+    plur2impf = presentstem + "eratis"
+    plur3impf = presentstem + "erant"
+
+    sing1pressubj = presentstem + 'sim'
+    if(sing1pressubj == 'potsim'){sing1pressubj = 'possim'}
+    sing2pressubj = presentstem + 'sis'
+    if(sing2pressubj == 'potsis'){sing2pressubj = 'possis'}
+    sing3pressubj = presentstem + 'sit'
+    if(sing3pressubj == 'potsit'){sing3pressubj = 'possit'}
+    plur1pressubj = presentstem + 'simus'
+    if(plur1pressubj == 'potsimus'){plur1pressubj = 'possimus'}
+    plur2pressubj = presentstem + 'sitis'
+    if(plur2pressubj == 'potsitis'){plur2pressubj = 'possitis'}
+    plur3pressubj = presentstem + 'sint'
+    if(plur3pressubj == 'potsint'){plur3pressubj = 'possint'}
+
+    imperativesing = sing2pres
+    imperativeplur = sing2pres + 'te'
+  }  
+  if(conjugation == 'fio'){
+    presentstem = 'fi'
+    perfstem = pps[2].substr(0,pps[2].length-1)
+    sing2pres = presentstem + 's'
+    sing3pres = presentstem + 't'
+    plur1pres = presentstem + 'mus'
+    plur2pres = presentstem + 'tis'
+    plur3pres = presentstem + 'unt'
+
+    sing1fut = presentstem + "am"
+    sing2fut = presentstem + "es"
+    sing3fut = presentstem + "et"
+    plur1fut = presentstem + "emus"
+    plur2fut = presentstem + "etis"
+    plur3fut = presentstem + "ent"
+
+    sing1impf = presentstem + "ebam"
+    sing2impf = presentstem + "ebas"
+    sing3impf = presentstem + "ebat"
+    plur1impf = presentstem + "ebamus"
+    plur2impf = presentstem + "ebatis"
+    plur3impf = presentstem + "ebant"
+
+    sing1pressubj = presentstem + 'am'
+    sing2pressubj = presentstem + 'as'
+    sing3pressubj = presentstem + 'at'
+    plur1pressubj = presentstem + 'amus'
+    plur2pressubj = presentstem + 'atis'
+    plur3pressubj = presentstem + 'ant'
+    
+    prespplstem = presentstem + 'en'
+    gerstem = 'faciend'
+
+    imperativesing = presentstem
+    imperativeplur = imperativesing + 'te'
+  }
+  if(conjugation == 'volo'){
+    presentstem = pps[0].substr(0,pps[0].length-1)
+    perfstem = pps[2].substr(0,pps[2].length-1)
+    sing2pres = presentstem + 'is'
+    if(sing2pres == 'nolis'){sing2pres = 'non vis'}
+    if(sing2pres == 'malis'){sing2pres = 'mavis'}
+    if(sing2pres == 'volis'){sing2pres = 'vis'}
+    sing3pres = presentstem + 'it'
+    if(sing3pres == 'nolit'){sing3pres = 'non vult'}
+    if(sing3pres == 'malit'){sing3pres = 'mavult'}
+    if(sing3pres == 'volit'){sing3pres = 'vult'}
+    plur1pres = presentstem + 'imus'
+    if(plur1pres == 'nolimus'){plur1pres = 'nolumus'}
+    if(plur1pres == 'malimus'){plur1pres = 'malumus'}
+    if(plur1pres == 'volimus'){plur1pres = 'volumus'}
+    plur2pres = presentstem + 'itis'
+    if(plur2pres == 'nolitis'){plur2pres = 'non vultis'}
+    if(plur2pres == 'malitis'){plur2pres = 'mavultis'}
+    if(plur2pres == 'volitis'){plur2pres = 'vultis'}
+    plur3pres = presentstem + 'unt'
+
+    sing1fut = presentstem + "am"
+    sing2fut = presentstem + "es"
+    sing3fut = presentstem + "et"
+    plur1fut = presentstem + "emus"
+    plur2fut = presentstem + "etis"
+    plur3fut = presentstem + "ent"
+
+    sing1impf = presentstem + "ebam"
+    sing2impf = presentstem + "ebas"
+    sing3impf = presentstem + "ebat"
+    plur1impf = presentstem + "ebamus"
+    plur2impf = presentstem + "ebatis"
+    plur3impf = presentstem + "ebant"
+var subjstem = presentstem
+if(pps[0] == 'volo'){subjstem = 'vel'}
+if(pps[0] == 'malo'){subjstem = 'mall'}
+    sing1pressubj = presentstem + 'im'
+    sing2pressubj = presentstem + 'is'
+    sing3pressubj = presentstem + 'it'
+    plur1pressubj = presentstem + 'imus'
+    plur2pressubj = presentstem + 'itis'
+    plur3pressubj = presentstem + 'int'
+
+    prespplstem = presentstem + 'en'
+
+    imperativesing = presentstem + 'i'
+    imperativeplur = imperativesing + 'te'
+  }
+  if(conjugation == 'eo'){
+    presentstem = pps[0].substr(0,pps[0].length-2)
+    perfstem = pps[2].substr(0,pps[2].length-1)
+    ppstem = pps[3].substr(0,pps[3].length-2)
+    sing2pres = presentstem + 'is'
+    sing3pres = presentstem + 'it'
+    plur1pres = presentstem + 'imus'
+    plur2pres = presentstem + 'itis'
+    plur3pres = presentstem + 'iunt'
+
+    sing1fut = presentstem + "ibo"
+    sing2fut = presentstem + "ibis"
+    sing3fut = presentstem + "ibit"
+    plur1fut = presentstem + "ibimus"
+    plur2fut = presentstem + "ibitis"
+    plur3fut = presentstem + "ibunt"
+
+    sing1impf = presentstem + "ibam"
+    sing2impf = presentstem + "ibas"
+    sing3impf = presentstem + "ibat"
+    plur1impf = presentstem + "ibamus"
+    plur2impf = presentstem + "ibatis"
+    plur3impf = presentstem + "ibant"
+
+    sing1pressubj = presentstem + 'eam'
+    sing2pressubj = presentstem + 'eas'
+    sing3pressubj = presentstem + 'eat'
+    plur1pressubj = presentstem + 'eamus'
+    plur2pressubj = presentstem + 'eatis'
+    plur3pressubj = presentstem + 'eant'
+
+    prespplstem = presentstem + 'ien'
+    gerstem = prespplstem + 'd'
+
+    imperativesing = presentstem + 'i'
+    imperativeplur = imperativesing + 'te'
+  }
+  if(conjugation=='defective'){
+    perfstem = pps[0].substr(0,pps[0].length-1)
+    sing2pres = perfstem + 'isti'
+    sing3pres = perfstem + 'it'
+    plur1pres = perfstem + 'imus'
+    plur2pres = perfstem + 'istis'
+    plur3pres = perfstem + 'erunt'
+
+    sing1fut = perfstem + "ero"
+    sing2fut = perfstem + "eris"
+    sing3fut = perfstem + "erit"
+    plur1fut = perfstem + "erimus"
+    plur2fut = perfstem + "eritis"
+    plur3fut = perfstem + "erunt"
+
+    sing1perf = perfstem + "eram"
+    sing2perf = perfstem + "eras"
+    sing3perf = perfstem + "erat"
+    plur1perf = perfstem + "eramus"
+    plur2perf = perfstem + "eratis"
+    plur3perf = perfstem + "erant"
+
+    sing1pressubj = perfstem + 'erim'
+    sing2pressubj = perfstem + 'eris'
+    sing3pressubj = perfstem + 'erit'
+    plur1pressubj = perfstem + 'erimus'
+    plur2pressubj = perfstem + 'eritis'
+    plur3pressubj = perfstem + 'erint'
+
+    sing1perfsubj = perfstem + 'issem'
+    sing2perfsubj = perfstem + 'isses'
+    sing3perfsubj = perfstem + 'isset'
+    plur1perfsubj = perfstem + 'issemus'
+    plur2perfsubj = perfstem + 'issetis'
+    plur3perfsubj = perfstem + 'issent'
+    delcol([10,11,12,13,14,15,16,17,18])
+for(qqqqq = 0; qqqqq <4; qqqqq ++){
+    document.getElementById('tablecontainervisible').children[0].children[0].getElementsByTagName('tr')[6].remove()
+}
+for(qqqqq = 0; qqqqq <9; qqqqq ++){
+  document.getElementById('tablecontainervisible').children[0].children[0].getElementsByTagName('tr')[14].remove()
+}
+for(qqqqq = 0; qqqqq <4; qqqqq ++){
+  document.getElementById('tablecontainervisible').children[0].children[0].getElementsByTagName('tr')[20].remove()
+}
+for(qqqqq = 0; qqqqq <4; qqqqq ++){
+  document.getElementById('tablecontainervisible').children[0].children[0].getElementsByTagName('tr')[24].remove()
+}
+document.getElementById('tablecontainervisible').children[0].children[0].getElementsByTagName('tr')[30].remove()
+if(pps[0]=='memini'){
+  
+  imperativesing = 'memento'
+  imperativeplur = 'mementote'
+} else {
+  for(qqqqq = 0; qqqqq <4; qqqqq ++){
+    document.getElementById('tablecontainervisible').children[0].children[0].getElementsByTagName('tr')[24].remove()
+  }
+}
+
+  }
+  var sing1impfsubj
+  var sing2impfsubj
+  var sing3impfsubj
+  var plur1impfsubj
+  var plur2impfsubj
+  var plur3impfsubj
+
+  var sing1perf
+  var sing2perf
+  var sing3perf
+  var plur1perf
+  var plur2perf
+  var plur3perf
+
+  var sing1plup
+  var sing2plup
+  var sing3plup
+  var plur1plup
+  var plur2plup
+  var plur3plup
+
+  var sing1futp
+  var sing2futp
+  var sing3futp
+  var plur1futp
+  var plur2futp
+  var plur3futp
+
+  var sing1perfsubj
+  var sing2perfsubj
+  var sing3perfsubj
+  var plur1perfsubj
+  var plur2perfsubj
+  var plur3perfsubj
+
+  var sing1plupsubj
+  var sing2plupsubj
+  var sing3plupsubj
+  var plur1plupsubj
+  var plur2plupsubj
+  var plur3plupsubj
+
+  var futinf
+  var futpplstem
+  var supine
+  if(ppstem != '' & (conjugation=='1'||conjugation=='2'||conjugation=='3'||conjugation=='4'||conjugation=='5'||conjugation=='1d'||conjugation=='2d'||conjugation=='3d'||conjugation=='4d'||conjugation=='5d'||conjugation=="eo")){
+    futinf = ppstem + 'urus, -a, -um esse'
+    if(conjugation == 'fio'){futinf = 'fore/factum iri'}
+    futpplstem = ppstem + 'ur'
+    supine = ppstem + 'um, -u'
+  }
+if(conjugation=='sum'&&pps[3]!="-"){
+  futinf = presentstem + 'futurus, -a, -um esse'
+  futpplstem = presentstem + 'futur'
+}
+if(conjugation == 'fio'){
+  futpplstem = 'futur'
+}
+
+var perfinf
+var perfinfpass
+  if(conjugation == '1'||conjugation == '2'||conjugation == '3'||conjugation == '4'||conjugation == '5'||conjugation == 'sum'||conjugation == 'eo'||conjugation == 'volo'||conjugation == 'fio'||conjugation == 'ferro'){
+    sing1impfsubj = pps[1].substr(0,pps[1].length-1) + 'em'
+    sing2impfsubj = pps[1].substr(0,pps[1].length-1) + 'es'
+    sing3impfsubj = pps[1].substr(0,pps[1].length-1) + 'et'
+    plur1impfsubj = pps[1].substr(0,pps[1].length-1) + 'emus'
+    plur2impfsubj = pps[1].substr(0,pps[1].length-1) + 'etis'
+    plur3impfsubj = pps[1].substr(0,pps[1].length-1) + 'ent'
+
+    sing1perf = perfstem + 'i'
+    sing2perf = perfstem + 'isti'
+    sing3perf = perfstem + 'it'
+    plur1perf = perfstem + 'imus'
+    plur2perf = perfstem + 'istis'
+    plur3perf = perfstem + 'erunt'
+
+    sing1plup = perfstem + 'eram'
+    sing2plup = perfstem + 'eras'
+    sing3plup = perfstem + 'erat'
+    plur1plup = perfstem + 'eramus'
+    plur2plup = perfstem + 'eratis'
+    plur3plup = perfstem + 'erant'
+
+    sing1futp = perfstem + 'ero'
+    sing2futp = perfstem + 'eris'
+    sing3futp = perfstem + 'erit'
+    plur1futp = perfstem + 'erimus'
+    plur2futp = perfstem + 'eritis'
+    plur3futp = perfstem + 'erint'
+
+    sing1perfsubj = perfstem + 'erim'
+    sing2perfsubj = perfstem + 'eris'
+    sing3perfsubj = perfstem + 'erit'
+    plur1perfsubj = perfstem + 'erimus'
+    plur2perfsubj = perfstem + 'eritis'
+    plur3perfsubj = perfstem + 'erint'
+
+    sing1plupsubj = perfstem + 'issem'
+    sing2plupsubj = perfstem + 'isses'
+    sing3plupsubj = perfstem + 'isset'
+    plur1plupsubj = perfstem + 'issemus'
+    plur2plupsubj = perfstem + 'issetis'
+    plur3plupsubj = perfstem + 'issent'
+
+    perfinf = perfstem + 'isse'
+    
+  }
+  var sing1impfsubjpass
+  var sing2impfsubjpass
+  var sing3impfsubjpass
+  var plur1impfsubjpass 
+  var plur2impfsubjpass
+  var plur3impfsubjpass
+
+  if(conjugation == '1'||conjugation == '2'||conjugation == '3'||conjugation == '4'||conjugation == '5'||conjugation == 'ferro'){
+    sing1impfsubjpass = pps[1].substr(0,pps[1].length-1) + 'er'
+    if(sing1impfsubjpass == 'facerer'){
+      sing1impfsubjpass = 'fierem'
+    }
+    sing2impfsubjpass = pps[1].substr(0,pps[1].length-1) + 'eris'
+    if(sing2impfsubjpass == 'facereris'){
+      sing2impfsubjpass = 'fieres'
+    }
+    sing3impfsubjpass = pps[1].substr(0,pps[1].length-1) + 'etur'
+    if(sing3impfsubjpass == 'faceretur'){
+      sing3impfsubjpass = 'fieret'
+    }
+    plur1impfsubjpass = pps[1].substr(0,pps[1].length-1) + 'emur'
+    if(plur1impfsubjpass == 'faceremur'){
+      plur1impfsubjpass = 'fieremus'
+    }
+    plur2impfsubjpass = pps[1].substr(0,pps[1].length-1) + 'emini'
+    if(plur2impfsubjpass == 'faceremini'){
+      plur2impfsubjpass = 'fieretis'
+    }
+    plur3impfsubjpass = pps[1].substr(0,pps[1].length-1) + 'entur'
+    if(plur3impfsubjpass == 'facerentur'){
+      plur3impfsubjpass = 'fierent'
+    }
+  }
+
+  
+    if(conjugation == '1d'||conjugation == '2d'||conjugation == '3d'||conjugation == '4d'||conjugation == '5d'){
+    sing1impfsubj = pps[1].substr(0,pps[1].length-1) + 'er'
+    sing2impfsubj = pps[1].substr(0,pps[1].length-1) + 'eris'
+    sing3impfsubj = pps[1].substr(0,pps[1].length-1) + 'etur'
+    plur1impfsubj = pps[1].substr(0,pps[1].length-1) + 'emur'
+    plur2impfsubj = pps[1].substr(0,pps[1].length-1) + 'emini'
+    plur3impfsubj = pps[1].substr(0,pps[1].length-1) + 'entur'
+  }
+
+  var sing1perfpass
+  var sing2perfpass
+  var sing3perfpass
+  var plur1perfpass
+  var plur2perfpass
+  var plur3perfpass
+
+  var sing1pluppass
+  var sing2pluppass
+  var sing3pluppass
+  var plur1pluppass
+  var plur2pluppass
+  var plur3pluppass
+
+  var sing1futppass
+  var sing2futppass
+  var sing3futppass
+  var plur1futppass
+  var plur2futppass
+  var plur3futppass
+
+  var sing1perfsubjpass
+  var sing2perfsubjpass
+  var sing3perfsubjpass
+  var plur1perfsubjpass
+  var plur2perfsubjpass
+  var plur3perfsubjpass
+
+  var sing1plupsubjpass
+  var sing2plupsubjpass
+  var sing3plupsubjpass
+  var plur1plupsubjpass
+  var plur2plupsubjpass
+  var plur3plupsubjpass
+
+  var futinfpass
+    if(ppstem != '' && semidep==false&&(conjugation=='1'||conjugation=='2'||conjugation=='3'||conjugation=='4'||conjugation=='5'||conjugation == 'ferro')){
+
+      
+    sing1perfpass = ppstem + 'us, -a, -um sum'
+    sing2perfpass = ppstem + 'us, -a, -um es'
+    sing3perfpass = ppstem + 'us, -a, -um est'
+    plur1perfpass = ppstem + 'i, -ae, -a sumus'
+    plur2perfpass = ppstem + 'i, -ae, -a estis'
+    plur3perfpass = ppstem + 'i, -ae, -a sunt'
+
+    sing1pluppass = ppstem + 'us, -a, -um eram'
+    sing2pluppass = ppstem + 'us, -a, -um eras'
+    sing3pluppass = ppstem + 'us, -a, -um erat'
+    plur1pluppass = ppstem + 'i, -ae, -a eramus'
+    plur2pluppass = ppstem + 'i, -ae, -a eratis'
+    plur3pluppass = ppstem + 'i, -ae, -a erant'
+
+    sing1futppass = ppstem + 'us, -a, -um ero'
+    sing2futppass = ppstem + 'us, -a, -um eris'
+    sing3futppass = ppstem + 'us, -a, -um erit'
+    plur1futppass = ppstem + 'i, -ae, -a erimus'
+    plur2futppass = ppstem + 'i, -ae, -a eritis'
+    plur3futppass = ppstem + 'i, -ae, -a erunt'
+
+    sing1perfsubjpass = ppstem + 'us, -a, -um sim'
+    sing2perfsubjpass = ppstem + 'us, -a, -um sis'
+    sing3perfsubjpass = ppstem + 'us, -a, -um sit'
+    plur1perfsubjpass = ppstem + 'i, -ae, -a simus'
+    plur2perfsubjpass = ppstem + 'i, -ae, -a sitis'
+    plur3perfsubjpass = ppstem + 'i, -ae, -a sint'
+
+    sing1plupsubjpass = ppstem + 'us, -a, -um essem'
+    sing2plupsubjpass = ppstem + 'us, -a, -um esses'
+    sing3plupsubjpass = ppstem + 'us, -a, -um esset'
+    plur1plupsubjpass = ppstem + 'i, -ae, -a essemus'
+    plur2plupsubjpass = ppstem + 'i, -ae, -a essetis'
+    plur3plupsubjpass = ppstem + 'i, -ae, -a essent'
+
+    futinfpass = ppstem + 'um iri'
+    perfinfpass = ppstem + 'us, -a, -um esse'
+
+    imperativesingpass = pps[1]
+    if(imperativesingpass == 'facere'){
+      imperativesingpass = 'fi'
+    }
+
+    imperativeplurpass = plur2prespass
+
+    }
+    if(conjugation!='defective'&&(semidep==true||deponent==true)){
+
+      
+      sing1perf = ppstem + 'us, -a, -um sum'
+      sing2perf = ppstem + 'us, -a, -um es'
+      sing3perf = ppstem + 'us, -a, -um est'
+      plur1perf = ppstem + 'i, -ae, -a sumus'
+      plur2perf = ppstem + 'i, -ae, -a estis'
+      plur3perf = ppstem + 'i, -ae, -a sunt'
+  
+      sing1plup = ppstem + 'us, -a, -um eram'
+      sing2plup = ppstem + 'us, -a, -um eras'
+      sing3plup = ppstem + 'us, -a, -um erat'
+      plur1plup = ppstem + 'i, -ae, -a eramus'
+      plur2plup = ppstem + 'i, -ae, -a eratis'
+      plur3plup = ppstem + 'i, -ae, -a erant'
+  
+      sing1futp = ppstem + 'us, -a, -um ero'
+      sing2futp = ppstem + 'us, -a, -um eris'
+      sing3futp = ppstem + 'us, -a, -um erit'
+      plur1futp = ppstem + 'i, -ae, -a erimus'
+      plur2futp = ppstem + 'i, -ae, -a eritis'
+      plur3futp = ppstem + 'i, -ae, -a erunt'
+  
+      sing1perfsubj = ppstem + 'us, -a, -um sim'
+      sing2perfsubj = ppstem + 'us, -a, -um sis'
+      sing3perfsubj = ppstem + 'us, -a, -um sit'
+      plur1perfsubj = ppstem + 'i, -ae, -a simus'
+      plur2perfsubj = ppstem + 'i, -ae, -a sitis'
+      plur3perfsubj = ppstem + 'i, -ae, -a sint'
+  
+      sing1plupsubj = ppstem + 'us, -a, -um essem'
+      sing2plupsubj = ppstem + 'us, -a, -um esses'
+      sing3plupsubj = ppstem + 'us, -a, -um esset'
+      plur1plupsubj = ppstem + 'i, -ae, -a essemus'
+      plur2plupsubj = ppstem + 'i, -ae, -a essetis'
+      plur3plupsubj = ppstem + 'i, -ae, -a essent'
+
+      perfinf = ppstem + 'us, -a, -um esse'
+      }
+    var prespplmsn
+    var prespplfsn
+    var prespplnsn
+    var prespplmsv
+    var prespplfsv
+    var prespplnsv
+    var prespplmsa
+    var prespplfsa
+    var prespplnsa
+    var prespplmsg
+    var prespplfsg
+    var prespplnsg
+    var prespplmsd
+    var prespplfsd
+    var prespplnsd
+    var prespplmsab
+    var prespplfsab
+    var prespplnsab
+    var prespplmpn
+    var prespplfpn
+    var prespplnpn
+    var prespplmpv
+    var prespplfpv
+    var prespplnpv
+    var prespplmpa
+    var prespplfpa
+    var prespplnpa
+    var prespplmpg
+    var prespplfpg
+    var prespplnpg
+    var prespplmpd
+    var prespplfpd
+    var prespplnpd
+    var prespplmpab
+    var prespplfpab
+    var prespplnpab
+if(typeof prespplstem != 'undefined'){
+  prespplmsn = prespplstem + 's' 
+  prespplfsn = prespplstem + 's'
+  prespplnsn = prespplstem + 's'
+  prespplmsv = prespplstem + 's'
+  prespplfsv = prespplstem + 's'
+  prespplnsv = prespplstem + 's'
+  prespplmsa = prespplstem + 'tem'
+  prespplfsa = prespplstem + 'tem' 
+  prespplnsa = prespplstem + 's'
+  prespplmsg = prespplstem + 'tis' 
+  prespplfsg = prespplstem + 'tis'
+  prespplnsg = prespplstem + 'tis'
+  prespplmsd = prespplstem + 'ti' 
+  prespplfsd = prespplstem + 'ti'
+  prespplnsd = prespplstem + 'ti'
+  prespplmsab = prespplstem + 'te/-i' 
+  prespplfsab = prespplstem + 'te/-i'
+  prespplnsab = prespplstem + 'te/-i'
+
+  prespplmpn = prespplstem + 'tes' 
+  prespplfpn = prespplstem + 'tes'
+  prespplnpn = prespplstem + 'tia'
+  prespplmpv = prespplstem + 'tes'
+  prespplfpv = prespplstem + 'tes'
+  prespplnpv = prespplstem + 'tia'
+  prespplmpa = prespplstem + 'tes' 
+  prespplfpa = prespplstem + 'tes'
+  prespplnpa = prespplstem + 'tia'
+  prespplmpg = prespplstem + 'tium' 
+  prespplfpg = prespplstem + 'tium'
+  prespplnpg = prespplstem + 'tium'
+  prespplmpd = prespplstem + 'tibus' 
+  prespplfpd = prespplstem + 'tibus'
+  prespplnpd = prespplstem + 'tibus'
+  prespplmpab = prespplstem + 'tibus' 
+  prespplfpab = prespplstem + 'tibus'
+  prespplnpab = prespplstem + 'tibus'
+
+}
+var ppmsn
+var ppfsn
+var ppnsn
+var ppmsv
+var ppfsv
+var ppnsv
+var ppmsa
+var ppfsa
+var ppnsa
+var ppmsg
+var ppfsg
+var ppnsg
+var ppmsd
+var ppfsd
+var ppnsd
+var ppmsab
+var ppfsab
+var ppnsab
+var ppmpn
+var ppfpn
+var ppnpn
+var ppmpv
+var ppfpv
+var ppnpv
+var ppmpa
+var ppfpa
+var ppnpa
+var ppmpg
+var ppfpg
+var ppnpg
+var ppmpd
+var ppfpd
+var ppnpd
+var ppmpab
+var ppfpab
+var ppnpab
+if(typeof ppstem != 'undefined' &&semidep==false && ppstem != ''){
+  ppmsn = ppstem + 'us' 
+  ppfsn = ppstem + 'a'
+  ppnsn = ppstem + 'um'
+  ppmsv = ppstem + 'e'
+  ppfsv = ppstem + 'a'
+  ppnsv = ppstem + 'um'
+  ppmsa = ppstem + 'um'
+  ppfsa = ppstem + 'am' 
+  ppnsa = ppstem + 'um'
+  ppmsg = ppstem + 'i' 
+  ppfsg = ppstem + 'ae'
+  ppnsg = ppstem + 'i'
+  ppmsd = ppstem + 'o' 
+  ppfsd = ppstem + 'ae'
+  ppnsd = ppstem + 'o'
+  ppmsab = ppstem + 'o' 
+  ppfsab = ppstem + 'a'
+  ppnsab = ppstem + 'o'
+
+  ppmpn = ppstem + 'i' 
+  ppfpn = ppstem + 'ae'
+  ppnpn = ppstem + 'a'
+  ppmpv = ppstem + 'i'
+  ppfpv = ppstem + 'ae'
+  ppnpv = ppstem + 'a'
+  ppmpa = ppstem + 'os' 
+  ppfpa = ppstem + 'as'
+  ppnpa = ppstem + 'a'
+  ppmpg = ppstem + 'orum' 
+  ppfpg = ppstem + 'arum'
+  ppnpg = ppstem + 'orum'
+  ppmpd = ppstem + 'is' 
+  ppfpd = ppstem + 'is'
+  ppnpd = ppstem + 'is'
+  ppmpab = ppstem + 'is' 
+  ppfpab = ppstem + 'is'
+  ppnpab = ppstem + 'is'
+
+}
+
+var futpmsn
+var futpfsn
+var futpnsn
+var futpmsv
+var futpfsv
+var futpnsv
+var futpmsa
+var futpfsa
+var futpnsa
+var futpmsg
+var futpfsg
+var futpnsg
+var futpmsd
+var futpfsd
+var futpnsd
+var futpmsab
+var futpfsab
+var futpnsab
+var futpmpn
+var futpfpn
+var futpnpn
+var futpmpv
+var futpfpv
+var futpnpv
+var futpmpa
+var futpfpa
+var futpnpa
+var futpmpg
+var futpfpg
+var futpnpg
+var futpmpd
+var futpfpd
+var futpnpd
+var futpmpab
+var futpfpab
+var futpnpab
+
+if(futpplstem!=='undefined' && futpplstem!= 'ur'){
+  futpmsn = futpplstem + 'us' 
+  futpfsn = futpplstem + 'a'
+  futpnsn = futpplstem + 'um'
+  futpmsv = futpplstem + 'e'
+  futpfsv = futpplstem + 'a'
+  futpnsv = futpplstem + 'um'
+  futpmsa = futpplstem + 'um'
+  futpfsa = futpplstem + 'am' 
+  futpnsa = futpplstem + 'um'
+  futpmsg = futpplstem + 'i' 
+  futpfsg = futpplstem + 'ae'
+  futpnsg = futpplstem + 'i'
+  futpmsd = futpplstem + 'o' 
+  futpfsd = futpplstem + 'ae'
+  futpnsd = futpplstem + 'o'
+  futpmsab = futpplstem + 'o' 
+  futpfsab = futpplstem + 'a'
+  futpnsab = futpplstem + 'o'
+
+  futpmpn = futpplstem + 'i' 
+  futpfpn = futpplstem + 'ae'
+  futpnpn = futpplstem + 'a'
+  futpmpv = futpplstem + 'i'
+  futpfpv = futpplstem + 'ae'
+  futpnpv = futpplstem + 'a'
+  futpmpa = futpplstem + 'os' 
+  futpfpa = futpplstem + 'as'
+  futpnpa = futpplstem + 'a'
+  futpmpg = futpplstem + 'orum' 
+  futpfpg = futpplstem + 'arum'
+  futpnpg = futpplstem + 'orum'
+  futpmpd = futpplstem + 'is' 
+  futpfpd = futpplstem + 'is'
+  futpnpd = futpplstem + 'is'
+  futpmpab = futpplstem + 'is' 
+  futpfpab = futpplstem + 'is'
+  futpnpab = futpplstem + 'is'
+
+}
+
+var germsn
+var gerfsn
+var gernsn
+var germsv
+var gerfsv
+var gernsv
+var germsa
+var gerfsa
+var gernsa
+var germsg
+var gerfsg
+var gernsg
+var germsd
+var gerfsd
+var gernsd
+var germsab
+var gerfsab
+var gernsab
+var germpn
+var gerfpn
+var gernpn
+var germpv
+var gerfpv
+var gernpv
+var germpa
+var gerfpa
+var gernpa
+var germpg
+var gerfpg
+var gernpg
+var germpd
+var gerfpd
+var gernpd
+var germpab
+var gerfpab
+var gernpab
+if(typeof gerstem != 'undefined'){
+  germsn = gerstem + 'us' 
+  gerfsn = gerstem + 'a'
+  gernsn = gerstem + 'um'
+  germsv = gerstem + 'e'
+  gerfsv = gerstem + 'a'
+  gernsv = gerstem + 'um'
+  germsa = gerstem + 'um'
+  gerfsa = gerstem + 'am' 
+  gernsa = gerstem + 'um'
+  germsg = gerstem + 'i' 
+  gerfsg = gerstem + 'ae'
+  gernsg = gerstem + 'i'
+  germsd = gerstem + 'o' 
+  gerfsd = gerstem + 'ae'
+  gernsd = gerstem + 'o'
+  germsab = gerstem + 'o' 
+  gerfsab = gerstem + 'a'
+  gernsab = gerstem + 'o'
+
+  germpn = gerstem + 'i' 
+  gerfpn = gerstem + 'ae'
+  gernpn = gerstem + 'a'
+  germpv = gerstem + 'i'
+  gerfpv = gerstem + 'ae'
+  gernpv = gerstem + 'a'
+  germpa = gerstem + 'os' 
+  gerfpa = gerstem + 'as'
+  gernpa = gerstem + 'a'
+  germpg = gerstem + 'orum' 
+  gerfpg = gerstem + 'arum'
+  gernpg = gerstem + 'orum'
+  germpd = gerstem + 'is' 
+  gerfpd = gerstem + 'is'
+  gernpd = gerstem + 'is'
+  germpab = gerstem + 'is' 
+  gerfpab = gerstem + 'is'
+  gernpab = gerstem + 'is'
+
+}
+
+var pamsn
+var pafsn
+var pansn
+var pamsv
+var pafsv
+var pansv
+var pamsa
+var pafsa
+var pansa
+var pamsg
+var pafsg
+var pansg
+var pamsd
+var pafsd
+var pansd
+var pamsab
+var pafsab
+var pansab
+var pampn
+var pafpn
+var panpn
+var pampv
+var pafpv
+var panpv
+var pampa
+var pafpa
+var panpa
+var pampg
+var pafpg
+var panpg
+var pampd
+var pafpd
+var panpd
+var pampab
+var pafpab
+var panpab
+
+var pastem = ppstem
+
+if(deponent==true||semidep==true){
+  pamsn = pastem + 'us' 
+  pafsn = pastem + 'a'
+  pansn = pastem + 'um'
+  pamsv = pastem + 'e'
+  pafsv = pastem + 'a'
+  pansv = pastem + 'um'
+  pamsa = pastem + 'um'
+  pafsa = pastem + 'am' 
+  pansa = pastem + 'um'
+  pamsg = pastem + 'i' 
+  pafsg = pastem + 'ae'
+  pansg = pastem + 'i'
+  pamsd = pastem + 'o' 
+  pafsd = pastem + 'ae'
+  pansd = pastem + 'o'
+  pamsab = pastem + 'o' 
+  pafsab = pastem + 'a'
+  pansab = pastem + 'o'
+
+  pampn = pastem + 'i' 
+  pafpn = pastem + 'ae'
+  panpn = pastem + 'a'
+  pampv = pastem + 'i'
+  pafpv = pastem + 'ae'
+  panpv = pastem + 'a'
+  pampa = pastem + 'os' 
+  pafpa = pastem + 'as'
+  panpa = pastem + 'a'
+  pampg = pastem + 'orum' 
+  pafpg = pastem + 'arum'
+  panpg = pastem + 'orum'
+  pampd = pastem + 'is' 
+  pafpd = pastem + 'is'
+  panpd = pastem + 'is'
+  pampab = pastem + 'is' 
+  pafpab = pastem + 'is'
+  panpab = pastem + 'is'
+document.getElementById('tablecontainervisible').getElementsByClassName('ppptable')[0].parentElement.innerHTML=document.getElementById('tablecontainervisible').getElementsByClassName('ppptable')[0].parentElement.innerHTML.replace(/Perfect passive participle/g,'Perfect active participle')
+document.getElementById('tablecontainervisible').getElementsByClassName('ppptable')[0].parentElement.innerHTML=document.getElementById('tablecontainervisible').getElementsByClassName('ppptable')[0].parentElement.innerHTML.replace(/having been/g,'having')
+document.getElementById('tablecontainervisible').getElementsByClassName('ppptable')[0].parentElement.innerHTML=document.getElementById('tablecontainervisible').getElementsByClassName('ppptable')[0].parentElement.innerHTML.replace(/>pp/g,'>pa')
+
+}
+var gerund
+if(typeof gernsa != 'undefined'){
+  gerund = gernsa + ', -i' 
+}
+if(pps[pps.length-1]=='SEMIDEP'){
+  delcol([10,11,12,13,14,15,16,17,18],[19,20,21,22,23,24,25,26,41,42,43,44,45,46,47,48,51,53])
+  document.getElementById('tablecontainervisible').children[0].children[0].getElementsByTagName('tr')[19].innerHTML = document.getElementById('tablecontainervisible').children[0].children[0].getElementsByTagName('tr')[19].innerHTML + '<td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td>'
+  document.getElementById('tablecontainervisible').children[0].children[0].getElementsByTagName('tr')[41].innerHTML = document.getElementById('tablecontainervisible').children[0].children[0].getElementsByTagName('tr')[41].innerHTML + '<td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td>'
+  document.getElementById('tablecontainervisible').children[0].children[0].getElementsByTagName('tr')[51].innerHTML = document.getElementById('tablecontainervisible').children[0].children[0].getElementsByTagName('tr')[51].innerHTML + '<td class="xl7816351">&nbsp;</td><td class="xl7916351">&nbsp;</td><td class="xl7916351">&nbsp;</td><td class="xl7916351">&nbsp;</td><td class="xl7916351">&nbsp;</td><td class="xl7916351">&nbsp;</td><td class="xl7916351">&nbsp;</td><td class="xl7816351">&nbsp;</td>'
+  document.getElementById('tablecontainervisible').children[0].children[0].getElementsByTagName('tr')[53].innerHTML = document.getElementById('tablecontainervisible').children[0].children[0].getElementsByTagName('tr')[53].innerHTML + '<td class="xl7816351">&nbsp;</td><td class="xl7916351">&nbsp;</td><td class="xl7916351">&nbsp;</td><td class="xl7916351">&nbsp;</td><td class="xl7916351">&nbsp;</td><td class="xl7916351">&nbsp;</td><td class="xl7916351">&nbsp;</td><td class="xl7816351">&nbsp;</td>'
+}
+if(pps[pps.length-1]=='DEP'||pps[pps.length-1]=='INTRANS'||conjugation == 'eo'||conjugation=='volo'||conjugation=='sum'||conjugation=='fio'||impers == true){
+  delcol([10,11,12,13,14,15,16,17,18])
+}
+if(impers == true){
+  delcol([5,6])
+}
+
+
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing1pres</g,'>' + sing1pres + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>presinf</g,'>' + presinf + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing2pres</g,'>' + sing2pres + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing3pres</g,'>' + sing3pres + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur1pres</g,'>' + plur1pres + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur2pres</g,'>' + plur2pres + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur3pres</g,'>' + plur3pres + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing1fut</g,'>' + sing1fut + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing2fut</g,'>' + sing2fut + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing3fut</g,'>' + sing3fut + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur1fut</g,'>' + plur1fut + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur2fut</g,'>' + plur2fut + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur3fut</g,'>' + plur3fut + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing1impf</g,'>' + sing1impf + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing2impf</g,'>' + sing2impf + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing3impf</g,'>' + sing3impf + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur1impf</g,'>' + plur1impf + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur2impf</g,'>' + plur2impf + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur3impf</g,'>' + plur3impf + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing1pressubj</g,'>' + sing1pressubj + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing2pressubj</g,'>' + sing2pressubj + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing3pressubj</g,'>' + sing3pressubj + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur1pressubj</g,'>' + plur1pressubj + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur2pressubj</g,'>' + plur2pressubj + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur3pressubj</g,'>' + plur3pressubj + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing1prespass</g,'>' + sing1prespass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing2prespass</g,'>' + sing2prespass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing3prespass</g,'>' + sing3prespass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur1prespass</g,'>' + plur1prespass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur2prespass</g,'>' + plur2prespass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur3prespass</g,'>' + plur3prespass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing1futpass</g,'>' + sing1futpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing2futpass</g,'>' + sing2futpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing3futpass</g,'>' + sing3futpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur1futpass</g,'>' + plur1futpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur2futpass</g,'>' + plur2futpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur3futpass</g,'>' + plur3futpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing1impfpass</g,'>' + sing1impfpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing2impfpass</g,'>' + sing2impfpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing3impfpass</g,'>' + sing3impfpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur1impfpass</g,'>' + plur1impfpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur2impfpass</g,'>' + plur2impfpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur3impfpass</g,'>' + plur3impfpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing1pressubjpass</g,'>' + sing1pressubjpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing2pressubjpass</g,'>' + sing2pressubjpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing3pressubjpass</g,'>' + sing3pressubjpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur1pressubjpass</g,'>' + plur1pressubjpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur2pressubjpass</g,'>' + plur2pressubjpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur3pressubjpass</g,'>' + plur3pressubjpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>presinfpass</g,'>' + presinfpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>prespplstem</g,'>' + prespplstem + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>gerstem</g,'>' + gerstem + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>imperativesing</g,'>' + imperativesing + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>imperativeplur</g,'>' + imperativeplur + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>imperativesingpass</g,'>' + imperativesingpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>imperativeplurpass</g,'>' + imperativeplurpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing1impfsubj</g,'>' + sing1impfsubj + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing2impfsubj</g,'>' + sing2impfsubj + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing3impfsubj</g,'>' + sing3impfsubj + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur1impfsubj</g,'>' + plur1impfsubj + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur2impfsubj</g,'>' + plur2impfsubj + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur3impfsubj</g,'>' + plur3impfsubj + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing1perf</g,'>' + sing1perf + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing2perf</g,'>' + sing2perf + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing3perf</g,'>' + sing3perf + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur1perf</g,'>' + plur1perf + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur2perf</g,'>' + plur2perf + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur3perf</g,'>' + plur3perf + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing1plup</g,'>' + sing1plup + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing2plup</g,'>' + sing2plup + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing3plup</g,'>' + sing3plup + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur1plup</g,'>' + plur1plup + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur2plup</g,'>' + plur2plup + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur3plup</g,'>' + plur3plup + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing1futp</g,'>' + sing1futp + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing2futp</g,'>' + sing2futp + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing3futp</g,'>' + sing3futp + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur1futp</g,'>' + plur1futp + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur2futp</g,'>' + plur2futp + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur3futp</g,'>' + plur3futp + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing1perfsubj</g,'>' + sing1perfsubj + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing2perfsubj</g,'>' + sing2perfsubj + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing3perfsubj</g,'>' + sing3perfsubj + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur1perfsubj</g,'>' + plur1perfsubj + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur2perfsubj</g,'>' + plur2perfsubj + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur3perfsubj</g,'>' + plur3perfsubj + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing1plupsubj</g,'>' + sing1plupsubj + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing2plupsubj</g,'>' + sing2plupsubj + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing3plupsubj</g,'>' + sing3plupsubj + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur1plupsubj</g,'>' + plur1plupsubj + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur2plupsubj</g,'>' + plur2plupsubj + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur3plupsubj</g,'>' + plur3plupsubj + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futinf</g,'>' + futinf + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futpplstem</g,'>' + futpplstem + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>supine</g,'>' + supine + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>perfinf</g,'>' + perfinf + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>perfinfpass</g,'>' + perfinfpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing1perfpass</g,'>' + sing1perfpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing2perfpass</g,'>' + sing2perfpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing3perfpass</g,'>' + sing3perfpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur1perfpass</g,'>' + plur1perfpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur2perfpass</g,'>' + plur2perfpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur3perfpass</g,'>' + plur3perfpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing1pluppass</g,'>' + sing1pluppass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing2pluppass</g,'>' + sing2pluppass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing3pluppass</g,'>' + sing3pluppass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur1pluppass</g,'>' + plur1pluppass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur2pluppass</g,'>' + plur2pluppass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur3pluppass</g,'>' + plur3pluppass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing1futppass</g,'>' + sing1futppass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing2futppass</g,'>' + sing2futppass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing3futppass</g,'>' + sing3futppass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur1futppass</g,'>' + plur1futppass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur2futppass</g,'>' + plur2futppass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur3futppass</g,'>' + plur3futppass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing1perfsubjpass</g,'>' + sing1perfsubjpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing2perfsubjpass</g,'>' + sing2perfsubjpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing3perfsubjpass</g,'>' + sing3perfsubjpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur1perfsubjpass</g,'>' + plur1perfsubjpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur2perfsubjpass</g,'>' + plur2perfsubjpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur3perfsubjpass</g,'>' + plur3perfsubjpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing1plupsubjpass</g,'>' + sing1plupsubjpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing2plupsubjpass</g,'>' + sing2plupsubjpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing3plupsubjpass</g,'>' + sing3plupsubjpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur1plupsubjpass</g,'>' + plur1plupsubjpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur2plupsubjpass</g,'>' + plur2plupsubjpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur3plupsubjpass</g,'>' + plur3plupsubjpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futinfpass</g,'>' + futinfpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>prespplmsn</g,'>' + prespplmsn + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>prespplfsn</g,'>' + prespplfsn + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>prespplnsn</g,'>' + prespplnsn + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>prespplmsv</g,'>' + prespplmsv + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>prespplfsv</g,'>' + prespplfsv + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>prespplnsv</g,'>' + prespplnsv + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>prespplmsa</g,'>' + prespplmsa + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>prespplfsa</g,'>' + prespplfsa + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>prespplnsa</g,'>' + prespplnsa + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>prespplmsg</g,'>' + prespplmsg + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>prespplfsg</g,'>' + prespplfsg + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>prespplnsg</g,'>' + prespplnsg + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>prespplmsd</g,'>' + prespplmsd + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>prespplfsd</g,'>' + prespplfsd + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>prespplnsd</g,'>' + prespplnsd + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>prespplmsab</g,'>' + prespplmsab + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>prespplfsab</g,'>' + prespplfsab + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>prespplnsab</g,'>' + prespplnsab + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>prespplmpn</g,'>' + prespplmpn + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>prespplfpn</g,'>' + prespplfpn + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>prespplnpn</g,'>' + prespplnpn + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>prespplmpv</g,'>' + prespplmpv + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>prespplfpv</g,'>' + prespplfpv + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>prespplnpv</g,'>' + prespplnpv + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>prespplmpa</g,'>' + prespplmpa + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>prespplfpa</g,'>' + prespplfpa + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>prespplnpa</g,'>' + prespplnpa + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>prespplmpg</g,'>' + prespplmpg + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>prespplfpg</g,'>' + prespplfpg + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>prespplnpg</g,'>' + prespplnpg + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>prespplmpd</g,'>' + prespplmpd + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>prespplfpd</g,'>' + prespplfpd + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>prespplnpd</g,'>' + prespplnpd + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>prespplmpab</g,'>' + prespplmpab + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>prespplfpab</g,'>' + prespplfpab + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>prespplnpab</g,'>' + prespplnpab + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ppmsn</g,'>' + ppmsn + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ppfsn</g,'>' + ppfsn + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ppnsn</g,'>' + ppnsn + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ppmsv</g,'>' + ppmsv + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ppfsv</g,'>' + ppfsv + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ppnsv</g,'>' + ppnsv + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ppmsa</g,'>' + ppmsa + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ppfsa</g,'>' + ppfsa + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ppnsa</g,'>' + ppnsa + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ppmsg</g,'>' + ppmsg + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ppfsg</g,'>' + ppfsg + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ppnsg</g,'>' + ppnsg + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ppmsd</g,'>' + ppmsd + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ppfsd</g,'>' + ppfsd + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ppnsd</g,'>' + ppnsd + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ppmsab</g,'>' + ppmsab + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ppfsab</g,'>' + ppfsab + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ppnsab</g,'>' + ppnsab + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ppmpn</g,'>' + ppmpn + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ppfpn</g,'>' + ppfpn + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ppnpn</g,'>' + ppnpn + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ppmpv</g,'>' + ppmpv + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ppfpv</g,'>' + ppfpv + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ppnpv</g,'>' + ppnpv + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ppmpa</g,'>' + ppmpa + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ppfpa</g,'>' + ppfpa + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ppnpa</g,'>' + ppnpa + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ppmpg</g,'>' + ppmpg + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ppfpg</g,'>' + ppfpg + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ppnpg</g,'>' + ppnpg + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ppmpd</g,'>' + ppmpd + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ppfpd</g,'>' + ppfpd + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ppnpd</g,'>' + ppnpd + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ppmpab</g,'>' + ppmpab + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ppfpab</g,'>' + ppfpab + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>ppnpab</g,'>' + ppnpab + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futpmsn</g,'>' + futpmsn + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futpfsn</g,'>' + futpfsn + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futpnsn</g,'>' + futpnsn + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futpmsv</g,'>' + futpmsv + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futpfsv</g,'>' + futpfsv + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futpnsv</g,'>' + futpnsv + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futpmsa</g,'>' + futpmsa + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futpfsa</g,'>' + futpfsa + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futpnsa</g,'>' + futpnsa + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futpmsg</g,'>' + futpmsg + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futpfsg</g,'>' + futpfsg + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futpnsg</g,'>' + futpnsg + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futpmsd</g,'>' + futpmsd + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futpfsd</g,'>' + futpfsd + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futpnsd</g,'>' + futpnsd + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futpmsab</g,'>' + futpmsab + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futpfsab</g,'>' + futpfsab + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futpnsab</g,'>' + futpnsab + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futpmpn</g,'>' + futpmpn + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futpfpn</g,'>' + futpfpn + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futpnpn</g,'>' + futpnpn + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futpmpv</g,'>' + futpmpv + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futpfpv</g,'>' + futpfpv + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futpnpv</g,'>' + futpnpv + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futpmpa</g,'>' + futpmpa + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futpfpa</g,'>' + futpfpa + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futpnpa</g,'>' + futpnpa + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futpmpg</g,'>' + futpmpg + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futpfpg</g,'>' + futpfpg + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futpnpg</g,'>' + futpnpg + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futpmpd</g,'>' + futpmpd + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futpfpd</g,'>' + futpfpd + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futpnpd</g,'>' + futpnpd + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futpmpab</g,'>' + futpmpab + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futpfpab</g,'>' + futpfpab + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>futpnpab</g,'>' + futpnpab + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>germsn</g,'>' + germsn + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>gerfsn</g,'>' + gerfsn + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>gernsn</g,'>' + gernsn + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>germsv</g,'>' + germsv + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>gerfsv</g,'>' + gerfsv + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>gernsv</g,'>' + gernsv + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>germsa</g,'>' + germsa + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>gerfsa</g,'>' + gerfsa + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>gernsa</g,'>' + gernsa + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>germsg</g,'>' + germsg + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>gerfsg</g,'>' + gerfsg + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>gernsg</g,'>' + gernsg + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>germsd</g,'>' + germsd + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>gerfsd</g,'>' + gerfsd + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>gernsd</g,'>' + gernsd + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>germsab</g,'>' + germsab + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>gerfsab</g,'>' + gerfsab + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>gernsab</g,'>' + gernsab + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>germpn</g,'>' + germpn + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>gerfpn</g,'>' + gerfpn + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>gernpn</g,'>' + gernpn + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>germpv</g,'>' + germpv + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>gerfpv</g,'>' + gerfpv + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>gernpv</g,'>' + gernpv + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>germpa</g,'>' + germpa + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>gerfpa</g,'>' + gerfpa + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>gernpa</g,'>' + gernpa + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>germpg</g,'>' + germpg + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>gerfpg</g,'>' + gerfpg + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>gernpg</g,'>' + gernpg + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>germpd</g,'>' + germpd + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>gerfpd</g,'>' + gerfpd + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>gernpd</g,'>' + gernpd + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>germpab</g,'>' + germpab + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>gerfpab</g,'>' + gerfpab + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>gernpab</g,'>' + gernpab + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>pamsn</g,'>' + pamsn + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>pafsn</g,'>' + pafsn + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>pansn</g,'>' + pansn + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>pamsv</g,'>' + pamsv + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>pafsv</g,'>' + pafsv + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>pansv</g,'>' + pansv + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>pamsa</g,'>' + pamsa + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>pafsa</g,'>' + pafsa + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>pansa</g,'>' + pansa + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>pamsg</g,'>' + pamsg + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>pafsg</g,'>' + pafsg + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>pansg</g,'>' + pansg + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>pamsd</g,'>' + pamsd + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>pafsd</g,'>' + pafsd + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>pansd</g,'>' + pansd + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>pamsab</g,'>' + pamsab + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>pafsab</g,'>' + pafsab + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>pansab</g,'>' + pansab + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>pampn</g,'>' + pampn + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>pafpn</g,'>' + pafpn + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>panpn</g,'>' + panpn + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>pampv</g,'>' + pampv + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>pafpv</g,'>' + pafpv + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>panpv</g,'>' + panpv + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>pampa</g,'>' + pampa + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>pafpa</g,'>' + pafpa + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>panpa</g,'>' + panpa + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>pampg</g,'>' + pampg + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>pafpg</g,'>' + pafpg + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>panpg</g,'>' + panpg + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>pampd</g,'>' + pampd + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>pafpd</g,'>' + pafpd + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>panpd</g,'>' + panpd + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>pampab</g,'>' + pampab + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>pafpab</g,'>' + pafpab + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>panpab</g,'>' + panpab + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>gerund</g,'>' + gerund + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing1impfsubjpass</g,'>' + sing1impfsubjpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing2impfsubjpass</g,'>' + sing2impfsubjpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>sing3impfsubjpass</g,'>' + sing3impfsubjpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur1impfsubjpass</g,'>' + plur1impfsubjpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur2impfsubjpass</g,'>' + plur2impfsubjpass + '<')
+document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>plur3impfsubjpass</g,'>' + plur3impfsubjpass + '<')
+
+if(document.getElementById('tablecontainervisible').getElementsByClassName('gertable')[0].innerText.indexOf("undefined") != -1){document.getElementById('tablecontainervisible').getElementsByClassName('gertable')[0].parentElement.remove()}
+if(document.getElementById('tablecontainervisible').getElementsByClassName('presppltable')[0].innerText.indexOf("undefined") != -1){document.getElementById('tablecontainervisible').getElementsByClassName('presppltable')[0].parentElement.remove()}
+if(document.getElementById('tablecontainervisible').getElementsByClassName('ppptable')[0].innerText.indexOf("undefined") != -1){document.getElementById('tablecontainervisible').getElementsByClassName('ppptable')[0].parentElement.remove()}
+if(document.getElementById('tablecontainervisible').getElementsByClassName('futptable')[0].innerText.indexOf("undefined") != -1){document.getElementById('tablecontainervisible').getElementsByClassName('futptable')[0].parentElement.remove()}
+
+if(document.getElementById('tablecontainervisible').getElementsByClassName('gerundcell')[0].innerText == 'undefined' && document.getElementById('tablecontainervisible').getElementsByClassName('supinecell')[0].innerText == 'undefined' ){
+  document.getElementById('tablecontainervisible').getElementsByClassName('gerundcell')[0].parentElement.parentElement.previousSibling.remove()
+  document.getElementById('tablecontainervisible').getElementsByClassName('gerundcell')[0].parentElement.parentElement.previousSibling.remove()
+  document.getElementById('tablecontainervisible').getElementsByClassName('gerundcell')[0].parentElement.parentElement.previousSibling.remove()
+  document.getElementById('tablecontainervisible').getElementsByClassName('gerundcell')[0].parentElement.parentElement.previousSibling.remove()
+  document.getElementById('tablecontainervisible').getElementsByClassName('gerundcell')[0].parentElement.parentElement.remove()
+  document.getElementById('tablecontainervisible').getElementsByClassName('supinecell')[0].parentElement.parentElement.previousSibling.remove()
+  document.getElementById('tablecontainervisible').getElementsByClassName('supinecell')[0].parentElement.parentElement.previousSibling.remove()
+  document.getElementById('tablecontainervisible').getElementsByClassName('supinecell')[0].parentElement.parentElement.previousSibling.remove()
+  document.getElementById('tablecontainervisible').getElementsByClassName('supinecell')[0].parentElement.parentElement.previousSibling.remove()
+  document.getElementById('tablecontainervisible').getElementsByClassName('supinecell')[0].parentElement.parentElement.previousSibling.remove()
+  document.getElementById('tablecontainervisible').getElementsByClassName('supinecell')[0].parentElement.parentElement.previousSibling.remove()
+  document.getElementById('tablecontainervisible').getElementsByClassName('supinecell')[0].parentElement.parentElement.remove()
+}
+else if(document.getElementById('tablecontainervisible').getElementsByClassName('gerundcell')[0].innerText  == 'undefined'){
+  document.getElementById('tablecontainervisible').getElementsByClassName('gerundcell')[0].parentElement.parentElement.remove()
+}
+else if(document.getElementById('tablecontainervisible').getElementsByClassName('supinecell')[0].innerText  == 'undefined'){
+  document.getElementById('tablecontainervisible').getElementsByClassName('supinecell')[0].parentElement.parentElement.remove()
+}
+if(document.getElementById('tablecontainervisible').getElementsByClassName('futinfcell')[0].innerText  == 'undefined'){
+  document.getElementById('tablecontainervisible').getElementsByClassName('futinfcell')[0].parentElement.parentElement.remove()
+}
+
+}
+
+function meaning(meanings){
+  var v0 =getverbparts(meanings[0],0)
+  var v1 =getverbparts(meanings[0],1)
+  var v2 =getverbparts(meanings[0],2)
+  var v3 =getverbparts(meanings[0],3)
+  var v4 =getverbparts(meanings[0],4)
+  var v5 =getverbparts(meanings[0],5)
+  var v6 =getverbparts(meanings[0],6)
+  var v7 =getverbparts(meanings[0],7)
+  var word = meanings[0]
+  var pl = pluralize(word)
+  var comp = gradation(word,0)
+  var sup = gradation(word,1)
+  
+  
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/%0%/g,'<span class = "v0">' + v0 + '</span>')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/%1%/g,'<span class = "v1">' + v1 + '</span>')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/%2%/g,'<span class = "v2">' + v2 + '</span>')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/%3%/g,'<span class = "v3">' + v3 + '</span>')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/%4%/g,'<span class = "v4">' + v4 + '</span>')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/%5%/g,'<span class = "v5">' + v5 + '</span>')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/%6%/g,'<span class = "v6">' + v6 + '</span>')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/%7%/g,'<span class = "v7">' + v7 + '</span>')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/%comp%/g,'<span class = "comp">' + comp + '</span>')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/%superlative%/g,'<span class = "sup">' + sup + '</span>')
+  
+  document.getElementById('tabletitle').innerText = word
+  var meaningsstring = '#£' + meanings.join('#')
+  document.getElementById('tabletitle').setAttribute('meanings',meaningsstring.replace(/\#\s/g,'#'))
+
+  try{
+  var capstart = word.match(/^[A-Z]/g).length}
+  catch(err){
+    var capstart = 0 
+  }
+  if(capstart>0){document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/(^|\s)(the\s)/g,'$1')}
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/%word%/g,'<span class = "word">' + word + '</span>')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/%pl%/g,'<span class = "pl">' + pl + '</span>')
+  }
+
+  
+function adj(pps){
+  var declension = ''
+  var amsn, afsn, ansn, amsv, afsv, ansv, amsa, afsa, ansa, amsg, afsg, ansg, amsd, afsd, ansd, amsab, afsab, ansab 
+  var ampn, afpn, anpn, ampv, afpv, anpv, ampa, afpa, anpa, ampg, afpg, anpg, ampd, afpd, anpd, ampab, afpab, anpab 
+  var astem
+  var posendings
+  if(pps.length < 5){
+    astem = pps[2].substr(0,pps[2].length - 1)
+    declension = '3'
+    if(astem.substr(astem.length-1,1)=='u'){
+      astem = astem.substr(0,astem.length - 1)
+      declension = '2'
+      posendings = ['us','a','um','e','a','um','um','am','um','i','ae','i','o','ae','o','o','a','o','i','ae','a','i','ae','a','os','as','a','orum','arum','orum','is','is','is','is','is','is']
+
+    } else {
+      posendings = ['','','','','','','em','em','','is','is','is','i','i','i','e','e','e','es','es','a','es','es','a','es','es','a','um','um','um','ibus','ibus','ibus','ibus','ibus','ibus']
+    }
+    amsn = pps[0]
+    afsn = pps[1]
+    ansn = pps[2]
+    if(declension == '3'){amsv = amsn}
+    else {amsv = astem + 'e'}
+    afsv = afsn
+    ansv = ansn
+    ansa = pps[2]
+
+    
+  }
+  else if (pps[2]== '(gen.)'){
+    astem = pps[1].substr(0,pps[1].length - 2)
+    declension = '3'
+    posendings = ['','','','','','','em','em','','is','is','is','i','i','i','e','e','e','es','es','a','es','es','a','es','es','a','um','um','um','ibus','ibus','ibus','ibus','ibus','ibus']
+    amsn = pps[0]
+    afsn = amsn
+    ansn = amsn
+    amsv = amsn
+    afsv = afsn
+    ansv = ansn
+    ansa = ansn
+  }
+  else {
+    declension = '2'
+    astem = pps[0].substr(0,pps[0].length - 2)
+    posendings = ['us','a','um','e','a','um','um','am','um','i','ae','i','o','ae','o','o','a','o','i','ae','a','i','ae','a','os','as','a','orum','arum','orum','is','is','is','is','is','is']
+    amsn = pps[0]
+    afsn = astem + 'a'
+    ansn = astem + 'um'
+    amsv = astem + 'e'
+    afsv = astem + 'a'
+    ansv = astem + 'um'
+    ansa = astem + 'um'
+    if(amsv.substr(amsv.length - 2,2)=='ie'){amsv =  astem}
+  }
+
+  amsa = astem + posendings[6] 
+  afsa = astem + posendings[7]
+  amsg = astem + posendings[9] 
+  afsg = astem + posendings[10]
+  ansg = astem + posendings[11]
+  amsd = astem + posendings[12] 
+  afsd = astem + posendings[13]
+  ansd = astem + posendings[14]
+  amsab = astem + posendings[15] 
+  afsab = astem + posendings[16]
+  ansab = astem + posendings[17]
+  ampn = astem + posendings[18] 
+  afpn = astem + posendings[19]
+  anpn = astem + posendings[20]
+  ampv = astem + posendings[21] 
+  afpv = astem + posendings[22]
+  anpv = astem + posendings[23]
+  ampa = astem + posendings[24] 
+  afpa = astem + posendings[25]
+  anpa = astem + posendings[26]
+  ampg = astem + posendings[27] 
+  afpg = astem + posendings[28]
+  anpg = astem + posendings[29]
+  ampd = astem + posendings[30] 
+  afpd = astem + posendings[31]
+  anpd = astem + posendings[32]
+  ampab = astem + posendings[33] 
+  afpab = astem + posendings[34]
+  anpab = astem + posendings[35]
+  if(declension=='3'&& (ansn.substr(ansn.length-1,1)=='i'||pps[0].substr(pps[0].length-2,2)=='is'||pps[0].substr(pps[0].length-2,2)=='es')){
+    anpn = astem + 'i' + posendings[20]
+    anpv = astem + 'i' + posendings[23]
+    anpa = astem + 'i' + posendings[26]
+    ampg = astem + 'ium'
+    afpg = astem + 'ium'
+    anpg = astem + 'ium'
+  }
+
+  var compstem 
+  var compmsn, compfsn, compnsn, compmsv, compfsv, compnsv, compmsa, compfsa, compnsa, compmsg, compfsg, compnsg, compmsd, compfsd, compnsd, compmsab, compfsab, compnsab 
+  var compmpn, compfpn, compnpn, compmpv, compfpv, compnpv, compmpa, compfpa, compnpa, compmpg, compfpg, compnpg, compmpd, compfpd, compnpd, compmpab, compfpab, compnpab 
+  if(pps[3].substr(pps[3].length-2,2)=='or'){
+    var compstem = pps[3].substr(0,pps[3].length-2).replace(/j/g,'i')
+    compendings = ['or','or','us','or','or','us','orem','orem','us','oris','oris','oris','ori','ori','ori','ore','ore','ore','ores','ores','ora','ores','ores','ora','ores','ores','ora','orum','orum','orum','oribus','oribus','oribus','oribus','oribus','oribus']
+  
+  compmsn = compstem + compendings[0] 
+  compfsn = compstem + compendings[1]
+  compnsn = compstem + compendings[2]
+  compmsv = compstem + compendings[3] 
+  compfsv = compstem + compendings[4]
+  compnsv = compstem + compendings[5]
+  compmsa = compstem + compendings[6] 
+  compfsa = compstem + compendings[7]
+  compnsa = compstem + compendings[8]
+  compmsg = compstem + compendings[9] 
+  compfsg = compstem + compendings[10]
+  compnsg = compstem + compendings[11]
+  compmsd = compstem + compendings[12] 
+  compfsd = compstem + compendings[13]
+  compnsd = compstem + compendings[14]
+  compmsab = compstem + compendings[15] 
+  compfsab = compstem + compendings[16]
+  compnsab = compstem + compendings[17]
+  compmpn = compstem + compendings[18] 
+  compfpn = compstem + compendings[19]
+  compnpn = compstem + compendings[20]
+  compmpv = compstem + compendings[21] 
+  compfpv = compstem + compendings[22]
+  compnpv = compstem + compendings[23]
+  compmpa = compstem + compendings[24] 
+  compfpa = compstem + compendings[25]
+  compnpa = compstem + compendings[26]
+  compmpg = compstem + compendings[27] 
+  compfpg = compstem + compendings[28]
+  compnpg = compstem + compendings[29]
+  compmpd = compstem + compendings[30] 
+  compfpd = compstem + compendings[31]
+  compnpd = compstem + compendings[32]
+  compmpab = compstem + compendings[33] 
+  compfpab = compstem + compendings[34]
+  compnpab = compstem + compendings[35]
+  }
+  else {
+    document.getElementById('tablecontainervisible').getElementsByClassName('comptable')[0].parentElement.parentElement.remove()
+  }
+
+  var supstem 
+  var supmsn, supfsn, supnsn, supmsv, supfsv, supnsv, supmsa, supfsa, supnsa, supmsg, supfsg, supnsg, supmsd, supfsd, supnsd, supmsab, supfsab, supnsab 
+  var supmpn, supfpn, supnpn, supmpv, supfpv, supnpv, supmpa, supfpa, supnpa, supmpg, supfpg, supnpg, supmpd, supfpd, supnpd, supmpab, supfpab, supnpab 
+  if(pps.length>6){
+  if(pps[6].substr(pps[6].length-4,4)=='imus'){
+    var supstem = pps[6].substr(0,pps[6].length-2).replace(/j/g,'i')
+    supendings = ['us','a','um','e','a','um','um','am','um','i','ae','i','o','ae','o','o','a','o','i','ae','a','i','ae','a','os','as','a','orum','arum','orum','is','is','is','is','is','is']
+  
+  supmsn = supstem + supendings[0] 
+  supfsn = supstem + supendings[1]
+  supnsn = supstem + supendings[2]
+  supmsv = supstem + supendings[3] 
+  supfsv = supstem + supendings[4]
+  supnsv = supstem + supendings[5]
+  supmsa = supstem + supendings[6] 
+  supfsa = supstem + supendings[7]
+  supnsa = supstem + supendings[8]
+  supmsg = supstem + supendings[9] 
+  supfsg = supstem + supendings[10]
+  supnsg = supstem + supendings[11]
+  supmsd = supstem + supendings[12] 
+  supfsd = supstem + supendings[13]
+  supnsd = supstem + supendings[14]
+  supmsab = supstem + supendings[15] 
+  supfsab = supstem + supendings[16]
+  supnsab = supstem + supendings[17]
+  supmpn = supstem + supendings[18] 
+  supfpn = supstem + supendings[19]
+  supnpn = supstem + supendings[20]
+  supmpv = supstem + supendings[21] 
+  supfpv = supstem + supendings[22]
+  supnpv = supstem + supendings[23]
+  supmpa = supstem + supendings[24] 
+  supfpa = supstem + supendings[25]
+  supnpa = supstem + supendings[26]
+  supmpg = supstem + supendings[27] 
+  supfpg = supstem + supendings[28]
+  supnpg = supstem + supendings[29]
+  supmpd = supstem + supendings[30] 
+  supfpd = supstem + supendings[31]
+  supnpd = supstem + supendings[32]
+  supmpab = supstem + supendings[33] 
+  supfpab = supstem + supendings[34]
+  supnpab = supstem + supendings[35]
+  }
+
+
+}  else {
+  document.getElementById('tablecontainervisible').getElementsByClassName('suptable')[0].parentElement.parentElement.remove()
+}
+
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*amsn</g,'>' + amsn + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*afsn</g,'>' + afsn + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*ansn</g,'>' + ansn + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*amsv</g,'>' + amsv + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*afsv</g,'>' + afsv + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*ansv</g,'>' + ansv + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*amsa</g,'>' + amsa + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*afsa</g,'>' + afsa + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*ansa</g,'>' + ansa + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*amsg</g,'>' + amsg + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*afsg</g,'>' + afsg + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*ansg</g,'>' + ansg + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*amsd</g,'>' + amsd + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*afsd</g,'>' + afsd + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*ansd</g,'>' + ansd + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*amsab</g,'>' + amsab + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*afsab</g,'>' + afsab + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*ansab</g,'>' + ansab + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*ampn</g,'>' + ampn + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*afpn</g,'>' + afpn + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*anpn</g,'>' + anpn + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*ampv</g,'>' + ampv + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*afpv</g,'>' + afpv + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*anpv</g,'>' + anpv + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*ampa</g,'>' + ampa + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*afpa</g,'>' + afpa + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*anpa</g,'>' + anpa + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*ampg</g,'>' + ampg + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*afpg</g,'>' + afpg + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*anpg</g,'>' + anpg + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*ampd</g,'>' + ampd + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*afpd</g,'>' + afpd + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*anpd</g,'>' + anpd + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*ampab</g,'>' + ampab + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*afpab</g,'>' + afpab + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*anpab</g,'>' + anpab + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*compmsn</g,'>' + compmsn + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*compfsn</g,'>' + compfsn + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*compnsn</g,'>' + compnsn + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*compmsv</g,'>' + compmsv + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*compfsv</g,'>' + compfsv + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*compnsv</g,'>' + compnsv + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*compmsa</g,'>' + compmsa + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*compfsa</g,'>' + compfsa + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*compnsa</g,'>' + compnsa + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*compmsg</g,'>' + compmsg + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*compfsg</g,'>' + compfsg + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*compnsg</g,'>' + compnsg + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*compmsd</g,'>' + compmsd + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*compfsd</g,'>' + compfsd + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*compnsd</g,'>' + compnsd + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*compmsab</g,'>' + compmsab + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*compfsab</g,'>' + compfsab + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*compnsab</g,'>' + compnsab + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*compmpn</g,'>' + compmpn + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*compfpn</g,'>' + compfpn + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*compnpn</g,'>' + compnpn + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*compmpv</g,'>' + compmpv + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*compfpv</g,'>' + compfpv + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*compnpv</g,'>' + compnpv + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*compmpa</g,'>' + compmpa + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*compfpa</g,'>' + compfpa + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*compnpa</g,'>' + compnpa + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*compmpg</g,'>' + compmpg + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*compfpg</g,'>' + compfpg + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*compnpg</g,'>' + compnpg + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*compmpd</g,'>' + compmpd + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*compfpd</g,'>' + compfpd + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*compnpd</g,'>' + compnpd + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*compmpab</g,'>' + compmpab + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*compfpab</g,'>' + compfpab + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*compnpab</g,'>' + compnpab + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*supmsn</g,'>' + supmsn + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*supfsn</g,'>' + supfsn + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*supnsn</g,'>' + supnsn + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*supmsv</g,'>' + supmsv + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*supfsv</g,'>' + supfsv + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*supnsv</g,'>' + supnsv + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*supmsa</g,'>' + supmsa + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*supfsa</g,'>' + supfsa + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*supnsa</g,'>' + supnsa + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*supmsg</g,'>' + supmsg + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*supfsg</g,'>' + supfsg + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*supnsg</g,'>' + supnsg + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*supmsd</g,'>' + supmsd + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*supfsd</g,'>' + supfsd + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*supnsd</g,'>' + supnsd + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*supmsab</g,'>' + supmsab + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*supfsab</g,'>' + supfsab + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*supnsab</g,'>' + supnsab + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*supmpn</g,'>' + supmpn + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*supfpn</g,'>' + supfpn + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*supnpn</g,'>' + supnpn + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*supmpv</g,'>' + supmpv + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*supfpv</g,'>' + supfpv + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*supnpv</g,'>' + supnpv + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*supmpa</g,'>' + supmpa + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*supfpa</g,'>' + supfpa + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*supnpa</g,'>' + supnpa + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*supmpg</g,'>' + supmpg + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*supfpg</g,'>' + supfpg + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*supnpg</g,'>' + supnpg + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*supmpd</g,'>' + supmpd + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*supfpd</g,'>' + supfpd + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*supnpd</g,'>' + supnpd + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*supmpab</g,'>' + supmpab + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*supfpab</g,'>' + supfpab + '<')
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*supnpab</g,'>' + supnpab + '<')
+  
+  document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').children[2].outerHTML 
+
+  document.getElementById('tablecontainervisible').children[0].style.width = document.getElementById('tablecontainervisible').children[0].children[0].style.width
+}
+
+function pron(pps){
+  
+  document.getElementById('tabletitle').innerText = ''
+  if(pps.length<3){
+    var pronoun = pps[0].replace(/\./g,'')
+    var ppronstr
+    var pprons
+    if(pronoun=='ego'||pronoun=='me'||pronoun=='mei'||pronoun=='mihi'){
+      pprons = ['ego','me','mei','mihi','me']
+      ppronstr = ['I','me','of me','to/for me','by/with me']
+    }
+    if(pronoun=='tu'||pronoun=='te'||pronoun=='tui'||pronoun=='tibi'){
+      pprons = ['tu','te','tui','tibi','te']
+      ppronstr = ['you','you','of you','to/for you','by/with you']
+    }
+    if(pronoun=='se'||pronoun=='sui'||pronoun=='sibi'){
+      pprons = ['N/A','se','sui','sibi','se']
+      ppronstr = ['','him-/her-/itself/themselves','of himself etc.','to/for himself etc','by/with himself etc.']
+    }
+    if(pronoun=='nos'||pronoun=='nostrum'||pronoun=='nostri'||pronoun=='nobis'){
+      pprons = ['nos','nos','nostrum/-i','nobis','nobis']
+      ppronstr = ['we','us','of us','to/for us','by/with us']
+    }
+    if(pronoun=='vos'||pronoun=='vestrum'||pronoun=='vestri'||pronoun=='vobis'){
+      pprons = ['vos','vos','vestrum/-i','vobis','vobis']
+      ppronstr = ['you','you','of you','to/for you','by/with you']
+  
+    }
+
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*prn</g,'>' + pprons[0] + '<')   
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pra</g,'>' + pprons[1] + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*prg</g,'>' + pprons[2] + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*prd</g,'>' + pprons[3] + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*prab</g,'>' + pprons[4] + '<')
+    
+  
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*prntr</g,'>' + ppronstr[0] + '<')   
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pratr</g,'>' + ppronstr[1] + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*prgtr</g,'>' + ppronstr[2] + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*prdtr</g,'>' + ppronstr[3] + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*prabtr</g,'>' + ppronstr[4] + '<')
+    
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').children[4].outerHTML
+  } else {
+    var pronoun = pps[0].replace(/\./g,'')
+    var prons
+    var pronstr
+    if(pronoun == 'qui'){
+      prons = ['qui','quae','quod','quem','quam','quod','cuius','cuius','cuius','cui','cui','cui','quo','qua','quo','qui','quae','quae','quos','quas','quae','quorum','quarum','quorum','quibus','quibus','quibus','quibus','quibus','quibus']
+      pronstr = ['who','whom','whose/of whom','to/for whom','by/with whom','who','whom','whose/of whom','to/for whom','by/with whom']
+      
+    }
+    if(pronoun == 'quis'){
+      prons = ['quis','qua','quid','quem','quam','quid','cuius','cuius','cuius','cui','cui','cui','quo','qua','quo','qui','qua/quae','qua/quae','quos','quas','quae','quorum','quarum','quorum','quibus','quibus','quibus','quibus','quibus','quibus']
+      pronstr = ['who?','whom?','whose/of whom?','to/for whom?','by/with whom?','who?','whom?','whose/of whom?','to/for whom?','by/with whom?']
+      
+    }
+    if(pronoun == 'quidam'){
+      prons = ['quidam','quaedam','quoddam/quiddam','quendam','quandam','quoddam/quiddam','cuiusdam','cuiusdam','cuiusdam','cuidam','cuidam','cuidam','quodam','quadam','quodam','quidam','quaedam','quaedam','quosdam','quasdam','quaedam','quorundam','quarundam','quorundam','quibusdam','quibusdam','quibusdam','quibusdam','quibusdam','quibusdam']
+      pronstr = ['','','','','','','','','','']
+      document.getElementById('pronountitle').innerText = 'a certain'
+      
+    }
+    if(pronoun == 'hic'){
+      prons = ['hic','haec','hoc','hunc','hanc','hoc','huius','huius','huius','huic','huic','huic','hoc','hac','hoc','hi','hae','haec','hos','has','haec','horum','harum','horum','his','his','his','his','his','his']
+      pronstr = ['this','this','of this','to/for this','by/with this','these','these','of these','to/for these','by/with these']
+      
+    }
+    if(pronoun == 'ille'){
+      prons = ['ille','illa','illud','illum','illam','illud','illius','illius','illius','illi','illi','illi','illo','illa','illo','illi','illae','illa','illos','illas','illa','illorum','illarum','illorum','illis','illis','illis','illis','illis','illis']
+      pronstr = ['he, she, it, that','him, her, it that','of him; his etc.','to/for him etc','by/with him etc.','they, those','them, those','of them/those; their','to/for them/those','by/with them/those']
+    }
+    if(pronoun == 'ipse'){
+      prons = ['ipse','ipsa','ipsud','ipsum','ipsam','ipsud','ipsius','ipsius','ipsius','ipsi','ipsi','ipsi','ipso','ipsa','ipso','ipsi','ipsae','ipsa','ipsos','ipsas','ipsa','ipsorum','ipsarum','ipsorum','ipsis','ipsis','ipsis','ipsis','ipsis','ipsis']
+      pronstr = ['','','','','','','','','','']
+      document.getElementById('pronountitle').innerText = 'himself, themselves, myself, yourself etc.'
+    }
+    if(pronoun == 'iste'){
+      prons = ['iste','ista','istud','istum','istam','istud','istius','istius','istius','isti','isti','isti','isto','ista','isto','isti','istae','ista','istos','istas','ista','istorum','istarum','istorum','istis','istis','istis','istis','istis','istis']
+      pronstr = ['','','','','','','','','','']
+      document.getElementById('pronountitle').innerText = 'that'
+    }
+      if(pronoun == 'is'){
+        prons = ['is','ea','id','eum','eam','id','eius','eius','eius','ei','ei','ei','eo','ea','eo','ei','eae','ea','eos','eas','ea','eorum','earum','eorum','eis','eis','eis','eis','eis','eis']
+        pronstr = ['he, she, it, that','him, her, it that','of him; his etc.','to/for him etc','by/with him etc.','they, those','them, those','of them/those; their','to/for them/those','by/with them/those']
+      }
+      if(pronoun == 'idem'){
+        prons = ['idem','eadem','idem','eundem','eandem','idem','eiusdem','eiusdem','eiusdem','eidem','eidem','eidem','eodem','eadem','eodem','eidem','eaedem','eadem','eosdem','easdem','eadem','eorundem','earundem','eorundem','eisdem/isdem','eisdem/isdem','eisdem/isdem','eisdem/isdem','eisdem/isdem','eisdem/isdem']
+        pronstr = ['','','','','','','','','','']
+        document.getElementById('pronountitle').innerText = 'the same'
+      }
+      if(pronoun == 'alius'){
+        prons = ['alius','alia','aliud','alium','aliam','alium','alius','alius','alius','alii','alii','alii','alio','alia','alio','alii','aliae','alia','alios','alias','alia','aliorum','aliarum','aliorum','aliis','aliis','aliis','aliis','aliis','aliis']
+        pronstr = ['','','','','','','','','','']
+        document.getElementById('pronountitle').innerText = 'other'
+      }
+      if(pronoun == 'alius'){
+        prons = ['alter','altera','alterum','alterum','alteram','alterum','alterius','alterius','alterius','alteri','alteri','alteri','altero','altera','altero','alteri','alterae','altera','alteros','alteras','altera','alterorum','alterarum','alterorum','alteris','alteris','alteris','alteris','alteris','alteris']
+        pronstr = ['','','','','','','','','','']
+        document.getElementById('pronountitle').innerText = 'the other'
+      }
+
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pronmsn</g,'>' + prons[0] + '<')   
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pronfsn</g,'>' + prons[1] + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pronnsn</g,'>' + prons[2] + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pronmsa</g,'>' + prons[3] + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pronfsa</g,'>' + prons[4] + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pronnsa</g,'>' + prons[5] + '<')   
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pronmsg</g,'>' + prons[6] + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pronfsg</g,'>' + prons[7] + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pronnsg</g,'>' + prons[8] + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pronmsd</g,'>' + prons[9] + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pronfsd</g,'>' + prons[10] + '<')   
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pronnsd</g,'>' + prons[11] + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pronmsab</g,'>' + prons[12] + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pronfsab</g,'>' + prons[13] + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pronnsab</g,'>' + prons[14] + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pronmpn</g,'>' + prons[15] + '<')   
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pronfpn</g,'>' + prons[16] + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pronnpn</g,'>' + prons[17] + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pronmpa</g,'>' + prons[18] + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pronfpa</g,'>' + prons[19] + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pronnpa</g,'>' + prons[20] + '<')   
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pronmpg</g,'>' + prons[21] + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pronfpg</g,'>' + prons[22] + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pronnpg</g,'>' + prons[23] + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pronmpd</g,'>' + prons[24] + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pronfpd</g,'>' + prons[25] + '<')   
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pronnpd</g,'>' + prons[26] + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pronmpab</g,'>' + prons[27] + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pronfpab</g,'>' + prons[28] + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pronnpab</g,'>' + prons[29] + '<')
+
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pronnstr</g,'>' + pronstr[0] + '<')   
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pronastr</g,'>' + pronstr[1] + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*prongstr</g,'>' + pronstr[2] + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*prondstr</g,'>' + pronstr[3] + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pronabstr</g,'>' + pronstr[4] + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pronnptr</g,'>' + pronstr[5] + '<')   
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pronaptr</g,'>' + pronstr[6] + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*prongptr</g,'>' + pronstr[7] + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*prondptr</g,'>' + pronstr[8] + '<')
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').innerHTML.replace(/>\s*pronabptr</g,'>' + pronstr[9] + '<')
+
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').children[5].outerHTML
+  }
+}
+  
+function initiatetable(ppsstring,engstring) {
+  var pps = ppsstring.trim().replace(/,/g,'').split(' ')
+  var meanings = engstring.trim().split(',')
+  var pos = identifypos(pps)
+  if((pps[0] == 'alius'||pps[0] == 'alter') && pos == "ADJ"){
+    pos = "PRON"
+  }
+  meaning(meanings)
+  if(pos=='N'){noun(pps)}
+  if(pos=='V'){
+    verb(pps)
+    var rescale = document.getElementById('tablecontainervisible').offsetWidth/document.getElementById('tablecontainervisible').children[0].children[0].scrollWidth
+    document.getElementById('tablecontainervisible').style.height = document.getElementById('tablecontainervisible').children[0].scrollHeight * rescale
+    document.getElementById('tablecontainervisible').children[0].style.transform = 'scale(' + rescale + ',' + rescale +  ')'
+    document.getElementById('tablecontainervisible').innerHTML = document.getElementById('tablecontainervisible').children[0].outerHTML
+    }
+  if(pos=='ADJ'){adj(pps)}
+  if(pos=='PRON'){pron(pps)}
+}
+
+function delcol(cols,rows){
+
+var rowcount = document.getElementById('tablecontainervisible').children[0].children[0].getElementsByTagName('tr').length
+if(rows === undefined){
+  var rows = []
+  for(dd = 0; dd<rowcount;dd++){
+    rows.push(dd)
+  }}
+for(rr = rows.length-1;rr>=-1;rr--){
+  var numberofrelevantrows = document.getElementById('tablecontainervisible').children[0].children[0].getElementsByTagName('tr')
+  for(cc = cols.length-1;cc>=0;cc--){
+    try{
+    document.getElementById('tablecontainervisible').children[0].children[0].getElementsByTagName('tr')[rows[rr]].deleteCell(cols[cc])
+    }
+    catch(err){}
+  }
+}
+
+}
+
+function tablechanger(){
+  var meanings = document.getElementById('tabletitle').getAttribute('meanings').replace(/##/g,'#')
+  if(endsWith(meanings,'#')){
+    meanings = meanings.substring(0,meanings.length - 1)
+  }
+  meanings = meanings.replace(/#[^£#]*[A-Z]{2}[^£#]/g,'')
+  var premeanings = meanings
+  meanings = meanings.replace(/#£([^£#]*)#/g,'#$1#£')
+  if(premeanings == meanings){
+    meanings = meanings.replace(/£/g,'')
+    meanings = meanings.replace(/^[£#]?[£#]?/g,'')
+    meanings = "#£" + meanings
+  }
+  var word = meanings.match(/#£([^£#]*)/g)[0].replace(/#/g,'').replace(/£/g,'')
+  document.getElementById('tabletitle').innerText = word
+  var meanings = document.getElementById('tabletitle').setAttribute('meanings',meanings)
+  var wordparts = []
+  var wordparts = [getverbparts(word,0),getverbparts(word,1),getverbparts(word,2),getverbparts(word,3),getverbparts(word,4),getverbparts(word,5),getverbparts(word,6),getverbparts(word,7),gradation(word,0),gradation(word,1),word,pluralize(word)]
+  var tags = ['v0','v1','v2','v3','v4','v5','v6','v7','comp','sup','word','pl']
+
+  for(aaa = 0; aaa<12; aaa++){
+    var elcount = document.getElementById('tablecontainervisible').getElementsByClassName(tags[aaa]).length
+    for(aaaa = 0; aaaa< elcount; aaaa++){
+      try{
+      document.getElementById('tablecontainervisible').getElementsByClassName(tags[aaa])[aaaa].innerText = wordparts[aaa]
+      }
+      catch(err){}
+    }
+
+  }
+}
+
+function tableprinter(){
+  var test = document.getElementById('tablecontainervisible').innerHTML
+
+  var mywindow = window.open('', 'Test', 'height=400,width=600');
+  mywindow.document.write('<html><link rel="stylesheet" href="excelstyles.css"><style src="print.css">@media print{@page {size: landscape}}</style><head><title>Test</title>');
+  mywindow.document.write('</head><body class="Landscape">');
+  mywindow.document.write(test);
+  mywindow.document.write('</body></html>');
+  //mywindow.focus();
+  //print(mywindow);
+  mywindow.print();
+  //mywindow.close();
+
+  return true;
+
 }
