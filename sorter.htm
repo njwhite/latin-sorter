@@ -3069,7 +3069,8 @@ Use
 	
 						<!-- Modal content -->
 						<div class="modal-content" id="modal-content" style="text-align: left;">
-						<table>
+						<span>
+							<table>
 							<tr>
 								<td>
 								<div class="close" id="close" style="display: inline;" onclick="closer()">&times;</div>
@@ -3084,8 +3085,10 @@ Use
 								</td>
 							</tr>
 						</table>
-						<div class="pronountitle" id="pronountitle" style="position: absolute; top:1em; right: 1em; display: inline; cursor:pointer;"><button onclick="tableprinter()">&#128438;</button></div>
-						<div id="website" style="overflow-y:scroll; overflow-x:hidden"></div>
+					</span>
+						<span id="website" style="overflow-y:scroll; overflow-x:hidden; position:static; top:80px;"></span>
+						<div style="position: absolute; top:1em; right: 1em; display: inline; cursor:pointer;"><button onclick="tableprinter()">&#128438;</button></div>
+						
 					</div>
 </div>
 
