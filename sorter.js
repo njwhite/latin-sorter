@@ -3451,6 +3451,7 @@ function noun(pps){
     else if (pps[1].substr(pps[1].length-1,1) == 'i'){
       declension = 2
       stem = pps[1].substr(0,pps[1].length-1)
+      if(endsWith(pps[0],'ius')){stem = pps[0].substr(0,pps[0].length-2)}
     }
     else if (pps[1].substr(pps[1].length-2,2) == 'ae'){
       declension = 1
@@ -3461,7 +3462,7 @@ function noun(pps){
     var vs = pps[0]
     if(declension==2 && pps[0].substr(pps[0].length-3,3) == 'ius'){
       vs = stem
-    } else if (declension==2 && pps[0].substr(pps[0].length-2,2) == 'us'){
+    } else if (declension==2 && pps[0].substr(pps[0].length-2,2) == 'us' && ! (endsWith(stem,'e'))){
       vs = stem + 'e'
     }
     var as = stem + nounendings[declension-1][2]
@@ -3471,6 +3472,8 @@ function noun(pps){
     var ds = stem + nounendings[declension-1][4]
     var abs = stem + nounendings[declension-1][5]
     var np = stem + nounendings[declension-1][6]
+    if(np == 'dei'){np='di'}
+    if(np == 'Dei'){np='Di'}
     if (gender == 'N'){np = stem + 'a'}
     if (istem == true && gender == 'N'){np = stem + 'ia'}
     if (gender == 'N' && declension == 4){np = stem + 'ua'}
@@ -5631,13 +5634,14 @@ function adj(pps){
 
     
   }
-  else if (pps[2]== '(gen.)'){
+  else if (pps[2]== '(gen.)'||endsWith(pps[1],'is')||endsWith(pps[1],'e') ){
     astem = pps[1].substr(0,pps[1].length - 2)
     declension = '3'
     posendings = ['','','','','','','em','em','','is','is','is','i','i','i','e','e','e','es','es','a','es','es','a','es','es','a','um','um','um','ibus','ibus','ibus','ibus','ibus','ibus']
     amsn = pps[0]
     afsn = amsn
     ansn = amsn
+    if(endsWith(pps[1],'e')){ansn = pps[1]; astem = pps[1].substr(0,pps[1].length - 1)}
     amsv = amsn
     afsv = afsn
     ansv = ansn
@@ -5700,6 +5704,7 @@ function adj(pps){
   var compmpn, compfpn, compnpn, compmpv, compfpv, compnpv, compmpa, compfpa, compnpa, compmpg, compfpg, compnpg, compmpd, compfpd, compnpd, compmpab, compfpab, compnpab 
   if(pps[3].substr(pps[3].length-2,2)=='or'){
     var compstem = pps[3].substr(0,pps[3].length-2).replace(/j/g,'i')
+    if(compstem.length == 1){compstem = pps[2].substr(0,pps[2].length-2).replace(/j/g,'i')}
     compendings = ['or','or','us','or','or','us','orem','orem','us','oris','oris','oris','ori','ori','ori','ore','ore','ore','ores','ores','ora','ores','ores','ora','ores','ores','ora','orum','orum','orum','oribus','oribus','oribus','oribus','oribus','oribus']
   
   compmsn = compstem + compendings[0] 
@@ -5747,8 +5752,15 @@ function adj(pps){
   var supmsn, supfsn, supnsn, supmsv, supfsv, supnsv, supmsa, supfsa, supnsa, supmsg, supfsg, supnsg, supmsd, supfsd, supnsd, supmsab, supfsab, supnsab 
   var supmpn, supfpn, supnpn, supmpv, supfpv, supnpv, supmpa, supfpa, supnpa, supmpg, supfpg, supnpg, supmpd, supfpd, supnpd, supmpab, supfpab, supnpab 
   if(pps.length>6){
-  if(pps[6].substr(pps[6].length-4,4)=='imus'){
+  if(pps[6].substr(pps[6].length-4,4)=='imus'||pps[5].substr(pps[5].length-4,4)=='imus'){
     var supstem = pps[6].substr(0,pps[6].length-2).replace(/j/g,'i')
+    if(supstem==='undefined'||supstem==''){
+      var ppses = pps.join(',')
+      try{
+      supstem = ppses.match(/[a-z]*issim[a-z]*/)[0].substr(0,ppses.match(/[a-z]*issim[a-z]*/)[0].length-2)
+      }
+      catch(err){}
+    }
     supendings = ['us','a','um','e','a','um','um','am','um','i','ae','i','o','ae','o','o','a','o','i','ae','a','i','ae','a','os','as','a','orum','arum','orum','is','is','is','is','is','is']
   
   supmsn = supstem + supendings[0] 
