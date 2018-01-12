@@ -4399,7 +4399,7 @@ if(endsWith(pps[0],'t')){
     if(sing3pres == 'malit'){sing3pres = 'mavult'}
     if(sing3pres == 'volit'){sing3pres = 'vult'}
     plur1pres = presentstem + 'imus'
-    if(plur1pres == 'nolimus'){plur1pres = 'nolumus'}
+    if(plur1pres == 'nolimus'){plur1pres = 'nolumus'}//////
     if(plur1pres == 'malimus'){plur1pres = 'malumus'}
     if(plur1pres == 'volimus'){plur1pres = 'volumus'}
     plur2pres = presentstem + 'itis'
@@ -4424,12 +4424,12 @@ if(endsWith(pps[0],'t')){
 var subjstem = presentstem
 if(pps[0] == 'volo'){subjstem = 'vel'}
 if(pps[0] == 'malo'){subjstem = 'mall'}
-    sing1pressubj = presentstem + 'im'
-    sing2pressubj = presentstem + 'is'
-    sing3pressubj = presentstem + 'it'
-    plur1pressubj = presentstem + 'imus'
-    plur2pressubj = presentstem + 'itis'
-    plur3pressubj = presentstem + 'int'
+    sing1pressubj = subjstem + 'im'
+    sing2pressubj = subjstem + 'is'
+    sing3pressubj = subjstem + 'it'
+    plur1pressubj = subjstem + 'imus'
+    plur2pressubj = subjstem + 'itis'
+    plur3pressubj = subjstem + 'int'
 
     prespplstem = presentstem + 'en'
 
