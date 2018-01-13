@@ -2307,9 +2307,15 @@ function getverbparts(word,pnumber){
 if(word=="to be"){
 word = "be"
 }
+if(word=="it ought"){
+  word = "ought"
+  }
+
+word = word.replace(/^it\sis\s/g,'be ')
 
 var preword = word
 word = word.replace(/^it\s([a-zA-Z]*)s/g,'$1')
+
 if(preword != word && endsWith(word,'ie')){
   word=word.substr(0,world.length - 2)
 }
@@ -2424,6 +2430,7 @@ var partscollection = {"lines":[{"val0":"arise","val1":"arise","val2":"arise","v
 {"val0":"have to","val1":"have to","val2":"have to","val3":"ought","val4":"had to","val5":"had to","val6":"had to","val7":"having to"},
 {"val0":"pay","val1":"pay","val2":"pay","val3":"pays","val4":"paid","val5":"paid","val6":"paid","val7":"paying"},
 {"val0":"plead","val1":"plead","val2":"plead","val3":"pleads","val4":"pleaded","val5":"pleaded","val6":"pleaded","val7":"pleading"},
+{"val0":"ought","val1":"ought","val2":"ought","val3":"ought","val4":"needed to","val5":"needed to","val6":"needed to","val7":"needing to"},
 {"val0":"prove","val1":"prove","val2":"prove","val3":"proves","val4":"proved","val5":"proved","val6":"proved","val7":"proving"},
 {"val0":"put","val1":"put","val2":"put","val3":"puts","val4":"put","val5":"put","val6":"put","val7":"putting"},
 {"val0":"quit","val1":"quit","val2":"quit","val3":"quits","val4":"quit","val5":"quit","val6":"quit","val7":"quitting"},
@@ -2583,6 +2590,9 @@ addprefix = true
 }
 if(partscollection.lines[verblinenumber].val0 == 'can'){
   partscollection.lines[verblinenumber].val0 = 'be able'
+}
+if(partscollection.lines[verblinenumber].val0 == 'ought'){
+  partscollection.lines[verblinenumber].val0 = 'need to'
 }
 if(prefix == 'de'){
 if(partscollection.lines[verblinenumber].val4 == 'lit'){
