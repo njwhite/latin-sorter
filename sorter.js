@@ -3050,7 +3050,7 @@ document.getElementById("finalsentence").innerText = document.getElementById("fi
 function gradation(word,grade){
 var comp = ""
 var sup = ""
-if(syllablecount(word)>2||(endsWith(word,'ing')&&syllablecount(word)>1)||(endsWith(word,'ired'))||(endsWith(word,'ed')&&syllablecount(word)>1)||(endsWith(word,'ent'))||(endsWith(word,'ous'))||(endsWith(word,'ile')&&syllablecount(word)>1)||(endsWith(word,'er'))||(endsWith(word,'ic')&&syllablecount(word)>1)){
+if(syllablecount(word)>2||(endsWith(word,'ing')&&syllablecount(word)>1)||(endsWith(word,'ired'))||(endsWith(word,'ed')&&syllablecount(word)>1)||(endsWith(word,'ent'))||(endsWith(word,'ous'))||(endsWith(word,'ile')&&syllablecount(word)>1)||(endsWith(word,'er'))||(endsWith(word,'ic')&&syllablecount(word)>1||word.split(' ').length>1)){
 comp = "more " + word
 sup = "most " + word
 } else {
@@ -4845,7 +4845,7 @@ var perfinfpass
     var prespplmpab
     var prespplfpab
     var prespplnpab
-if(typeof prespplstem != 'undefined'){
+if(typeof prespplstem != 'undefined' && conjugation!='eo'){
   prespplmsn = prespplstem + 's' 
   prespplfsn = prespplstem + 's'
   prespplnsn = prespplstem + 's'
@@ -4883,8 +4883,49 @@ if(typeof prespplstem != 'undefined'){
   prespplmpab = prespplstem + 'tibus' 
   prespplfpab = prespplstem + 'tibus'
   prespplnpab = prespplstem + 'tibus'
+} else if (typeof prespplstem != 'undefined' && conjugation =='eo'){
+prespplstem = presentstem
+  prespplmsn = prespplstem + 'iens' 
+  prespplfsn = prespplstem + 'iens'
+  prespplnsn = prespplstem + 'iens'
+  prespplmsv = prespplstem + 'iens'
+  prespplfsv = prespplstem + 'iens'
+  prespplnsv = prespplstem + 'iens'
+  prespplmsa = prespplstem + 'euntem'
+  prespplfsa = prespplstem + 'eutem' 
+  prespplnsa = prespplstem + 'iens'
+  prespplmsg = prespplstem + 'euntis' 
+  prespplfsg = prespplstem + 'euntis'
+  prespplnsg = prespplstem + 'euntis'
+  prespplmsd = prespplstem + 'eunti' 
+  prespplfsd = prespplstem + 'eunti'
+  prespplnsd = prespplstem + 'eunti'
+  prespplmsab = prespplstem + 'eunte/-i' 
+  prespplfsab = prespplstem + 'eunte/-i'
+  prespplnsab = prespplstem + 'eunte/-i'
 
+  prespplmpn = prespplstem + 'euntes' 
+  prespplfpn = prespplstem + 'euntes'
+  prespplnpn = prespplstem + 'euntia'
+  prespplmpv = prespplstem + 'euntes'
+  prespplfpv = prespplstem + 'euntes'
+  prespplnpv = prespplstem + 'euntia'
+  prespplmpa = prespplstem + 'euntes' 
+  prespplfpa = prespplstem + 'euntes'
+  prespplnpa = prespplstem + 'euntia'
+  prespplmpg = prespplstem + 'euntium' 
+  prespplfpg = prespplstem + 'euntium'
+  prespplnpg = prespplstem + 'euntium'
+  prespplmpd = prespplstem + 'euntibus' 
+  prespplfpd = prespplstem + 'euntibus'
+  prespplnpd = prespplstem + 'euntibus'
+  prespplmpab = prespplstem + 'euntibus' 
+  prespplfpab = prespplstem + 'euntibus'
+  prespplnpab = prespplstem + 'euntibus'
 }
+
+
+
 var ppmsn
 var ppfsn
 var ppnsn
