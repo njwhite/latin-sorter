@@ -238,24 +238,7 @@ var wlines = xx.split(/\r?\n/);
 
 var arrayLength = wlines.length;
 for (var i = 0; i < arrayLength; i++) {
-wlines[i]=wlines[i].replace('Medieval','');
-wlines[i]=wlines[i].replace('Later','');
-wlines[i]=wlines[i].replace('Late','');
-wlines[i]=wlines[i].replace('veryrare','');
-wlines[i]=wlines[i].replace('Archaic',''); 
-wlines[i]=wlines[i].replace('Pliny',''); 
-
-//Later veryrare
-wlines[i]=wlines[i].replace('NeoLatin','')
-wlines[i]=wlines[i].replace('rare','')
-wlines[i]=wlines[i].replace('uncommon','')
-wlines[i]=wlines[i].replace('lesser','')
-wlines[i]=wlines[i].replace('Classic','')
-wlines[i]=wlines[i].replace('Early','')
-wlines[i]=wlines[i].replace('  ',' ')
-wlines[i]=wlines[i].replace('  ',' ')
-wlines[i]=wlines[i].replace('  ',' ')
-wlines[i] = wlines[i].trim()
+wlines[i]=wlines[i].replace(/(\[[A-Z]{5}\])\s*(NeoLatin\s*|uncommon\s*|Medieval\s*|Later\s*|Late\s*|veryrare\s*|Archaic\s*|Pliny\s*|rare\s*|uncommon\s*|lesser\s*|Classic\s*|Early\s*)*/g,'$1\n').replace('  ',' ').replace('  ',' ').replace('  ',' ').trim()
 
 }
 
@@ -3963,7 +3946,7 @@ if(endsWith(pps[0],'t')){
     plur3pressubj = presentstem + 'iant'
     
     sing1prespass = presentstem + 'ior'    
-    sing2prespass = presentstem + 'ieris'
+    sing2prespass = presentstem + 'iris'
     sing3prespass = presentstem + 'itur'
     plur1prespass = presentstem + 'imur'
     plur2prespass = presentstem + 'imini'
@@ -4033,8 +4016,8 @@ if(endsWith(pps[0],'t')){
     if(sing1prespass == 'facior'){
       sing1prespass = 'fio'
     }
-    sing2prespass = presentstem + 'ieris'
-    if(sing2prespass == 'facieris'){
+    sing2prespass = presentstem + 'iris'
+    if(sing2prespass == 'faciris'){
       sing2prespass == 'fis'
     }
     sing3prespass = presentstem + 'itur'
