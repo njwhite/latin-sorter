@@ -3477,6 +3477,7 @@ function noun(pps){
     var abs = stem + nounendings[declension-1][5]
     var np = stem + nounendings[declension-1][6]
     if(pps[0] == 'Paris' && gs == 'Paridis'){gs = 'Paridis/os';ds = 'Parida/im/in'; vs='Pari/is'}
+    if(pps[0] == 'Achilles' && gs == 'Achillis'){ns = 'Achillem/ea/en';ns = 'Achilles/eus';gs = 'Achillis/ei/i/eos'; vs='Achilles/e/eu'; abs='Achille/i'; }
 
     if(np == 'dei'){np='di'}
     if(np == 'Dei'){np='Di'}
@@ -5364,6 +5365,7 @@ function adj(pps){
   var posendings
   if(pps.length < 5){
     astem = pps[2].substr(0,pps[2].length - 1)
+    if(astem == 'AD'){astem = pps[1].substr(0,pps[1].length - 2)}
     declension = '3'
     if(astem.substr(astem.length-1,1)=='u'){
       astem = astem.substr(0,astem.length - 1)
@@ -5376,11 +5378,15 @@ function adj(pps){
     amsn = pps[0]
     afsn = pps[1]
     ansn = pps[2]
+    if(pps.length<4){
+      afsn = amsn
+      ansn = amsn + 'e'
+    }
     if(declension == '3'){amsv = amsn}
     else {amsv = astem + 'e'}
     afsv = afsn
     ansv = ansn
-    ansa = pps[2]
+    ansa = ansn
 
     
   }
@@ -5399,7 +5405,12 @@ function adj(pps){
   }
   else {
     declension = '2'
-    astem = pps[0].substr(0,pps[0].length - 2)
+    if(pps[0].substr(pps[0].length - 2,2)=='us'){
+      astem = pps[0].substr(0,pps[0].length - 2)      
+    } else{
+      astem = pps[1].substr(0,pps[1].length - 1)
+    }
+    
     posendings = ['us','a','um','e','a','um','um','am','um','i','ae','i','o','ae','o','o','a','o','i','ae','a','i','ae','a','os','as','a','orum','arum','orum','is','is','is','is','is','is']
     amsn = pps[0]
     afsn = astem + 'a'
@@ -5452,7 +5463,16 @@ function adj(pps){
   var compstem 
   var compmsn, compfsn, compnsn, compmsv, compfsv, compnsv, compmsa, compfsa, compnsa, compmsg, compfsg, compnsg, compmsd, compfsd, compnsd, compmsab, compfsab, compnsab 
   var compmpn, compfpn, compnpn, compmpv, compfpv, compnpv, compmpa, compfpa, compnpa, compmpg, compfpg, compnpg, compmpd, compfpd, compnpd, compmpab, compfpab, compnpab 
+  var docompar = false
+  if(pps.length>3){docompar = true}
+try{
   if(pps[3].substr(pps[3].length-2,2)=='or'){
+    docompar = true
+  } else{
+    docompar = false
+  }
+} catch(err){docompar = false}
+  if(docompar==true){
     var compstem = pps[3].substr(0,pps[3].length-2).replace(/j/g,'i')
     if(compstem.length == 1){compstem = pps[2].substr(0,pps[2].length-2).replace(/j/g,'i')}
     compendings = ['or','or','us','or','or','us','orem','orem','us','oris','oris','oris','ori','ori','ori','ore','ore','ore','ores','ores','ora','ores','ores','ora','ores','ores','ora','orum','orum','orum','oribus','oribus','oribus','oribus','oribus','oribus']
@@ -5507,11 +5527,11 @@ function adj(pps){
     if(supstem==='undefined'||supstem==''){
       var ppses = pps.join(',')
       try{
-      supstem = ppses.match(/[a-z]*issim[a-z]*/)[0].substr(0,ppses.match(/[a-z]*issim[a-z]*/)[0].length-2)
+      supstem = ppses.match(/[a-z]*(issim|illim|errim)[a-z]*/)[0].substr(0,ppses.match(/[a-z]*(issim|illim|errim)[a-z]*/)[0].length-2)
       }
       catch(err){}
     }
-    supendings = ['us','a','um','e','a','um','um','am','um','i','ae','i','o','ae','o','o','a','o','i','ae','a','i','ae','a','os','as','a','orum','arum','orum','is','is','is','is','is','is']
+        supendings = ['us','a','um','e','a','um','um','am','um','i','ae','i','o','ae','o','o','a','o','i','ae','a','i','ae','a','os','as','a','orum','arum','orum','is','is','is','is','is','is']
   
   supmsn = supstem + supendings[0] 
   supfsn = supstem + supendings[1]
@@ -5551,6 +5571,7 @@ function adj(pps){
   supnpab = supstem + supendings[35]
   }
 
+  if(supstem===undefined||supstem==''){document.getElementById('tablecontainervisible').getElementsByClassName('suptable')[0].parentElement.parentElement.remove()}
 
 }  else {
   document.getElementById('tablecontainervisible').getElementsByClassName('suptable')[0].parentElement.parentElement.remove()
