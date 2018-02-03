@@ -928,6 +928,9 @@ for (iii=0;iii<entrycount;iii++){
   if(pps.split('abb.').length==1 &&pps.split(' ').length>2 && pps.split(', -, - ').length==1 && (entrytype=='V'||entrytype=='C'||entrytype=='X'||entrytype=='M'||entrytype=='F'||entrytype=='N'||entrytype=='V'||entrytype=='ADJ'||entrytype=='PRON'||entrytype=='INTRANS'||entrytype=='TRANS'||entrytype=='DEP'||entrytype=='SEMIDEP'||entrytype=='PERFDEF'||entrytype=='IMPERS')){
   document.getElementsByClassName('entry')[iii].innerHTML = document.getElementsByClassName('entry')[iii].innerHTML + '<button onclick="javascript:popout(&quot;' + pps + '&quot;,&quot;' + eng + '&quot;)"><img alt="Vector toolbar insert table button.png" src="/Vector_toolbar_insert_table_button.png" width="28" height="28" data-file-width="28" data-file-height="28"></button>'
   }
+  if(pps=='eodem X'||pps=='qu.a PRON'){
+    document.getElementsByClassName('entry')[iii].innerHTML = document.getElementsByClassName('entry')[iii].innerHTML + '<button onclick="javascript:popout(&quot;' + pps + '&quot;,&quot;' + eng + '&quot;)"><img alt="Vector toolbar insert table button.png" src="/Vector_toolbar_insert_table_button.png" width="28" height="28" data-file-width="28" data-file-height="28"></button>'
+  }
 }
 
 }
@@ -2293,6 +2296,9 @@ word = "be"
 if(word=="it ought"){
   word = "ought"
   }
+  if(word=="happens"){
+    word = "happen"
+    }
 
 word = word.replace(/^it\sis\s/g,'be ')
 
@@ -3461,10 +3467,17 @@ function noun(pps){
     var as = stem + nounendings[declension-1][2]
     if (gender == 'N'){as = pps[0]}
     if(pps[0] == 'sitis' && as == 'sitem'){as = 'sitim'}
+    if(pps[0] == 'turris' && as == 'turrem'){as = 'turrim/em'}
+    if(pps[0] == 'aer' && as == 'aerem'){as = 'aera/em'}
+    if(pps[0] == 'heros' && as == 'heroem'){as = 'heroa/em'}
+    if(pps[0].toLowerCase() == 'atlas' && as.toLowerCase() == 'atlantem'){as = as + '/a'}
+
     var gs = stem + nounendings[declension-1][3]
     var ds = stem + nounendings[declension-1][4]
     var abs = stem + nounendings[declension-1][5]
     var np = stem + nounendings[declension-1][6]
+    if(pps[0] == 'Paris' && gs == 'Paridis'){gs = 'Paridis/os';ds = 'Parida/im/in'; vs='Pari/is'}
+
     if(np == 'dei'){np='di'}
     if(np == 'Dei'){np='Di'}
     if (gender == 'N'){np = stem + 'a'}
@@ -5244,7 +5257,14 @@ if(pps[pps.length-1]=='SEMIDEP'){
   document.getElementById('tablecontainervisible').children[0].children[0].getElementsByTagName('tr')[51].innerHTML = document.getElementById('tablecontainervisible').children[0].children[0].getElementsByTagName('tr')[51].innerHTML + '<td class="xl7816351">&nbsp;</td><td class="xl7916351">&nbsp;</td><td class="xl7916351">&nbsp;</td><td class="xl7916351">&nbsp;</td><td class="xl7916351">&nbsp;</td><td class="xl7916351">&nbsp;</td><td class="xl7916351">&nbsp;</td><td class="xl7816351">&nbsp;</td>'
   document.getElementById('tablecontainervisible').children[0].children[0].getElementsByTagName('tr')[53].innerHTML = document.getElementById('tablecontainervisible').children[0].children[0].getElementsByTagName('tr')[53].innerHTML + '<td class="xl7816351">&nbsp;</td><td class="xl7916351">&nbsp;</td><td class="xl7916351">&nbsp;</td><td class="xl7916351">&nbsp;</td><td class="xl7916351">&nbsp;</td><td class="xl7916351">&nbsp;</td><td class="xl7916351">&nbsp;</td><td class="xl7816351">&nbsp;</td>'
 }
-if(pps[pps.length-1]=='DEP'||pps[pps.length-1]=='INTRANS'||conjugation == 'eo'||conjugation=='volo'||conjugation=='sum'||conjugation=='fio'||impers == true){
+var intrans = false
+if(pps.length>3){
+  if(pps[3]=='-'){
+    intrans = true
+  }
+}
+
+if(pps[pps.length-1]=='DEP'||pps[pps.length-1]=='INTRANS'||conjugation == 'eo'||conjugation=='volo'||conjugation=='sum'||conjugation=='fio'||impers == true||intrans == true){
   delcol([10,11,12,13,14,15,16,17,18])
 }
 if(impers == true){
@@ -5653,7 +5673,7 @@ function adj(pps){
 function pron(pps){
   
   document.getElementById('tabletitle').innerText = ''
-  if(pps.length<3){
+  if(pps.length<3 && pps[0] != 'eodem' && pps[0] != 'qu.a'  ){
     var pronoun = pps[0].replace(/\./g,'')
     var ppronstr
     var pprons
@@ -5697,7 +5717,7 @@ function pron(pps){
     var pronoun = pps[0].replace(/\./g,'')
     var prons
     var pronstr
-    if(pronoun == 'qui'){
+    if(pronoun == 'qui'||pronoun == 'qua'){
       prons = ['qui','quae','quod','quem','quam','quod','cuius','cuius','cuius','cui','cui','cui','quo','qua','quo','qui','quae','quae','quos','quas','quae','quorum','quarum','quorum','quibus','quibus','quibus','quibus','quibus','quibus']
       pronstr = ['who','whom','whose/of whom','to/for whom','by/with whom','who','whom','whose/of whom','to/for whom','by/with whom']
       
@@ -5736,7 +5756,7 @@ function pron(pps){
         prons = ['is','ea','id','eum','eam','id','eius','eius','eius','ei','ei','ei','eo','ea','eo','ei','eae','ea','eos','eas','ea','eorum','earum','eorum','eis','eis','eis','eis','eis','eis']
         pronstr = ['he, she, it, that','him, her, it that','of him; his etc.','to/for him etc','by/with him etc.','they, those','them, those','of them/those; their','to/for them/those','by/with them/those']
       }
-      if(pronoun == 'idem'){
+      if(pronoun == 'idem'||pronoun == 'eodem'){
         prons = ['idem','eadem','idem','eundem','eandem','idem','eiusdem','eiusdem','eiusdem','eidem','eidem','eidem','eodem','eadem','eodem','eidem','eaedem','eadem','eosdem','easdem','eadem','eorundem','earundem','eorundem','eisdem/isdem','eisdem/isdem','eisdem/isdem','eisdem/isdem','eisdem/isdem','eisdem/isdem']
         pronstr = ['','','','','','','','','','']
         document.getElementById('pronountitle').innerText = 'the same'
@@ -5805,6 +5825,10 @@ function initiatetable(ppsstring,engstring) {
   if((pps[0] == 'alius'||pps[0] == 'alter') && pos == "ADJ"){
     pos = "PRON"
   }
+if(pos=="eodem"){
+  pos = "PRON"  
+}
+
   meaning(meanings)
   if(pos=='N'){noun(pps)}
   if(pos=='V'){
