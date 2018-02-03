@@ -140,6 +140,7 @@ document.getElementById("inputtextbox").value = document.getElementById("inputte
            }
 
           document.getElementById("linkedtext").innerHTML = textofinal
+          picker(document.getElementById('sentences0'))
 
           };
           function picker(element) {
