@@ -4476,7 +4476,7 @@ if(pps[0] == 'malo'){subjstem = 'mall'}
     plur3pressubj = presentstem + 'eant'
 
     prespplstem = presentstem + 'ien'
-    gerstem = 'eund'
+    gerstem = presentstem + 'eund'
 
     imperativesing = presentstem + 'i'
     imperativeplur = imperativesing + 'te'
