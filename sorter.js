@@ -4452,7 +4452,7 @@ if(pps[0] == 'malo'){subjstem = 'mall'}
     sing3pres = presentstem + 'it'
     plur1pres = presentstem + 'imus'
     plur2pres = presentstem + 'itis'
-    plur3pres = presentstem + 'iunt'
+    plur3pres = presentstem + 'eunt'
 
     sing1fut = presentstem + "ibo"
     sing2fut = presentstem + "ibis"
@@ -4476,7 +4476,7 @@ if(pps[0] == 'malo'){subjstem = 'mall'}
     plur3pressubj = presentstem + 'eant'
 
     prespplstem = presentstem + 'ien'
-    gerstem = prespplstem + 'd'
+    gerstem = 'eund'
 
     imperativesing = presentstem + 'i'
     imperativeplur = imperativesing + 'te'
