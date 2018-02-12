@@ -2551,7 +2551,7 @@ partscollection.lines[b-1].val7 = word + 'king'
 
 partscollection.lines[b-1].val7 = word + word.substr(word.length-1,1) + 'ing'
 }
-if(word == word.replace(/[dlt]ie/g,'')){} else {
+if(word == word.replace(/[dlt]ie$/g,'')){} else {
 partscollection.lines[b-1].val7 = word.substr(0,1) + 'ying'
 }
 var addprefix = false
@@ -2911,6 +2911,9 @@ if(originalword == "que"){
 text = text.replace("and", "and, both")
 }
 text = text.replace("laugh aloud or boisterously", "laugh, cackle, jeer")
+text = text.replace("fighter with wild beasts at public shows","bestiarius, beast-fighter")
+text = text.replace("gladiator who wore Gallic armor and fish-topped helmet","murmillo,	gladiator who wore Gallic armor and fish-topped helmet")
+text = text.replace("net-fighter in the arena","net-fighter")
 if(originalword == "sicut"){
 text = text.replace("sicut ADV POS \r\nsicut ADV [XXXAX] \r\n", '')
 }
@@ -3024,11 +3027,17 @@ if(originalword == 'quodnam'){text="quod.nam ADV ecquis PRON [XXXXX] \r\nwhat pr
 if(originalword == 'quidam'){text="qui.dam N 1 1 NOM S M \r\nquidam, quaedam, quoddam PRON [XXXXX] \r\ncertain; some; \r\n"}
 if(originalword == 'quaedam'){text="quae.dam N 1 1 NOM S F \r\nquidam, quaedam, quoddam PRON [XXXXX] \r\ncertain; some; \r\n"}
 if(originalword == 'quoddam'){text="quod.dam ADJ 1 1 NOM S N \r\nquidam, quaedam, quoddam PRON [XXXXX] \r\ncertain; some; \r\n"}
-if(originalword == 'quendam'){text="quem.dam ADJ 1 1 ACC S M \r\nquidam, quaedam, quoddam PRON [XXXXX] \r\ncertain; some; \r\n"}
+if(originalword == 'quendam'){text="quen.dam ADJ 1 1 ACC S M \r\nquidam, quaedam, quoddam PRON [XXXXX] \r\ncertain; some; \r\n"}
+if(originalword == 'quosdam'){text="quos.dam ADJ 1 1 ACC P M \r\nquidam, quaedam, quoddam PRON [XXXXX] \r\ncertain; some; \r\n"}
+if(originalword == 'quadam'){text="qua.dam ADJ 1 1 ABL S F \r\nquidam, quaedam, quoddam PRON [XXXXX] \r\ncertain; some; \r\n"}
+if(originalword == 'quasdam'){text="quas.dam ADJ 1 1 ACC P F \r\nquidam, quaedam, quoddam PRON [XXXXX] \r\ncertain; some; \r\n"}
+if(originalword == 'quarundam'){text="quarun.dam ADJ 1 1 GEN P F \r\nquidam, quaedam, quoddam PRON [XXXXX] \r\ncertain; some; \r\n"}
 if(originalword == 'quandam'){text="quam.dam ADJ 1 1 ACC S F \r\nquidam, quaedam, quoddam PRON [XXXXX] \r\ncertain; some; \r\n"}
 if(originalword == 'cuiusdam'){text="cuius.dam ADJ 1 1 GEN S X \r\nquidam, quaedam, quoddam PRON [XXXXX] \r\ncertain; some; \r\n"}
+if(originalword == 'quibusdam'){text="quibus.dam ADJ 1 1 DAT P X \r\nquibus.dam ADJ 1 1 ABL P X \r\nquidam, quaedam, quoddam PRON [XXXXX] \r\ncertain; some; \r\n"}
 if(originalword == 'cuidam'){text="cui.dam ADJ 1 1 DAT S X \r\nquidam, quaedam, quoddam PRON [XXXXX] \r\ncertain; some; \r\n"}
 if(originalword == 'quodam'){text="quo.dam ADJ 1 1 ABL S M \r\n quo.dam ADJ 1 1 ABL S N \r\nquidam, quaedam, quoddam PRON [XXXXX] \r\ncertain; some; \r\n"}
+if(originalword == 'quorundam'){text="quorum.dam ADJ 1 1 GEN P M \r\n quorun.dam ADJ 1 1 GEN P N \r\nquidam, quaedam, quoddam PRON [XXXXX] \r\ncertain; some; \r\n"}
 
 
 text = text.replace(/NUM(.{1,20})ORD/g,'ADJ$1')
@@ -5253,9 +5262,9 @@ if(typeof gernsa != 'undefined'){
   gerund = gernsa + ', -i' 
 }
 if(pps[pps.length-1]=='SEMIDEP'){
-  delcol([10,11,12,13,14,15,16,17,18],[19,20,21,22,23,24,25,26,41,42,43,44,45,46,47,48,51,53])
-  document.getElementById('tablecontainervisible').children[0].children[0].getElementsByTagName('tr')[19].innerHTML = document.getElementById('tablecontainervisible').children[0].children[0].getElementsByTagName('tr')[19].innerHTML + '<td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td>'
-  document.getElementById('tablecontainervisible').children[0].children[0].getElementsByTagName('tr')[41].innerHTML = document.getElementById('tablecontainervisible').children[0].children[0].getElementsByTagName('tr')[41].innerHTML + '<td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td>'
+  delcol([10,11,12,13,14,15,16,17,18],[15,16,17,18,19,20,21,22,23,24,25,26,37,38,39,40,41,42,43,44,45,46,47,48,51,53])
+  document.getElementById('tablecontainervisible').children[0].children[0].getElementsByTagName('tr')[15].innerHTML = document.getElementById('tablecontainervisible').children[0].children[0].getElementsByTagName('tr')[19].innerHTML + '<td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td>'
+  document.getElementById('tablecontainervisible').children[0].children[0].getElementsByTagName('tr')[37].innerHTML = document.getElementById('tablecontainervisible').children[0].children[0].getElementsByTagName('tr')[41].innerHTML + '<td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td><td class="xl7816351">&nbsp;</td>'
   document.getElementById('tablecontainervisible').children[0].children[0].getElementsByTagName('tr')[51].innerHTML = document.getElementById('tablecontainervisible').children[0].children[0].getElementsByTagName('tr')[51].innerHTML + '<td class="xl7816351">&nbsp;</td><td class="xl7916351">&nbsp;</td><td class="xl7916351">&nbsp;</td><td class="xl7916351">&nbsp;</td><td class="xl7916351">&nbsp;</td><td class="xl7916351">&nbsp;</td><td class="xl7916351">&nbsp;</td><td class="xl7816351">&nbsp;</td>'
   document.getElementById('tablecontainervisible').children[0].children[0].getElementsByTagName('tr')[53].innerHTML = document.getElementById('tablecontainervisible').children[0].children[0].getElementsByTagName('tr')[53].innerHTML + '<td class="xl7816351">&nbsp;</td><td class="xl7916351">&nbsp;</td><td class="xl7916351">&nbsp;</td><td class="xl7916351">&nbsp;</td><td class="xl7916351">&nbsp;</td><td class="xl7916351">&nbsp;</td><td class="xl7916351">&nbsp;</td><td class="xl7816351">&nbsp;</td>'
 }
