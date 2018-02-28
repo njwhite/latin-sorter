@@ -1,3 +1,7 @@
+var timer
+var remtimer
+var optionselement
+
 $(function() {
   $( "#sortable" ).sortable(); 
   $( "#sortable" ).disableSelection();
@@ -135,7 +139,7 @@ document.getElementById("inputtextbox").value = document.getElementById("inputte
                 // The original text is printed to preserve capitalization and punctuation, and the sanitized version is used to build the link
           for (var m = 0; m < size; m++) 
                 {
-            textofinal = textofinal + '<a formerhtml="" id="sentences' + m + '"onclick="picker(this)" style="cursor:pointer;" class="lsentence">' + original_textArr[m] + '</a> ';
+            textofinal = textofinal + '<a formerhtml="" id="sentences' + m + '" onclick="picker(this)" style="cursor:pointer;" class="lsentence">' + original_textArr[m] + '</a> ';
                 
            }
 
@@ -161,22 +165,20 @@ input2()
                 
                 var original_textArr = original_string.split(" ");
 
-                // Create a sanitized version that removes all punctuation, allowing for each word to be included in an HTML tag
             var sanitized_string = original_string.replace(/[\u2018\u2019\.,\/#!$%\^&\*;:{}=\-_`~()"'\?]/g,"").replace(/^\s/g,'').replace(/^\s/g,'').replace(/\s\s/g,' ')
-            //sanitized_string = sanitized_string.toLowerCase();
+    
             var sanitized_textArr = sanitized_string.split(" ");
   
             var textofinal = '';
             var size = sanitized_textArr.length;
 
-                // Print every word of the original text with a link around it that points to the glossary page for that word
-                // The original text is printed to preserve capitalization and punctuation, and the sanitized version is used to build the link
+                
           for (var m = 0; m < size; m++) 
                 {
               if (original_textArr[m] == "") {
                   
             } else {
-             textofinal = textofinal + '<li onmouseup="updatetranslation()" id="word' + m + '" class="ui-state-default ui-sortable-handle"><a style="cursor:pointer;" onclick="getww(this)" parentid="word' + m + '">' + sanitized_textArr[m] + '</a></li> ';
+             textofinal = textofinal + '<li onmouseup="updatetranslation()" id="word' + m + '" class="ui-state-default ui-sortable-handle"><a id="titleword' + m + '" style="cursor:pointer;" onmouseover="showoptions(event.srcElement)" onclick="getww(this)" parentid="word' + m + '">' + sanitized_textArr[m] + '</a></li> ';
                   
           }
                }
@@ -190,6 +192,12 @@ input2()
     };
   
 function getww(element) {
+  if(element.tagName.toLowerCase() == 'a' && element.children.length!=1){
+    try{
+      document.getElementById('selectorbox').outerHTML = ''
+      optionselement = ''}
+      catch(err){}
+      
   document.getElementById("ww").setAttribute('selectedbox',element.getAttribute('parentid'))
   word = document.getElementById(document.getElementById("ww").getAttribute('selectedbox')).getElementsByTagName('a')[0].innerText
   var word2 =word
@@ -227,13 +235,20 @@ xhr.send(null);
   }
 document.getElementById("ww").innerText = sanitise(word)
 document.getElementById("ww").innerHTML = document.getElementById("ww").innerHTML.replace(/\<br\>.?\<br\>/g,'<br>')
-interpretww()
+try{
+  document.getElementById('selectorbox').outerHTML = ''
+  optionselement = ''
+  }
+  catch(err){}
+interpretww()}
+
 }
 
 
 function interpretww() {
 try{
 var xx = document.getElementById("ww").innerText
+xx = xx.replace(/^PACKON.*?;\s*$/gm,'PRON')
 document.getElementById("ww").setAttribute("tackon","no")
 var wlines = xx.split(/\r?\n/);
 
@@ -359,7 +374,7 @@ if (endsWith(wlinetext[i],']')){
 wlinetext[i] = wlinetext[i].substr(0,wlinetext[i].length-7)
 }
 
-document.getElementById("menutable").innerHTML = document.getElementById("menutable").innerHTML +'<tr><td>' + '</td><td style="color:blue"><button onclick="selectform(this)" style="background-color:#ffd000; -moz-border-radius:28px; -webkit-border-radius:28px; border-radius:28px; border:1px solid #faaf00; display:inline-block; cursor:pointer; color:#008800; font-family:Arial; font-size:17px; padding:10px 10px; width:160px;	text-decoration:none; text-shadow:0px 1px 0px #00FF00"><wline wtype = "form">' + wlinetext[i] + '</wline></button></td></tr>'
+document.getElementById("menutable").innerHTML = document.getElementById("menutable").innerHTML +'<tr><td></td><td style="color:blue"><button onclick="selectform(this)" style="background-color:#ffd000; -moz-border-radius:28px; -webkit-border-radius:28px; border-radius:28px; border:1px solid #faaf00; display:inline-block; cursor:pointer; color:#008800; font-family:Arial; font-size:17px; padding:10px 10px; width:160px;	text-decoration:none; text-shadow:0px 1px 0px #00FF00"><wline wtype = "form">' + wlinetext[i] + '</wline></button></td></tr>'
 
 } 
 
@@ -944,12 +959,44 @@ document.getElementById(targetid).innerHTML = document.getElementById(targetid).
 document.getElementById('meaning' + targetid).innerText = document.getElementById("unknownword").value
 document.getElementById('meaning' + targetid).setAttribute('style','color:DarkOrange; font-size:70%; large;')
 updatetranslation()
-
+try{document.getElementById('selectorbox').outerHTML = ''
+optionselement = ''
+  clearTimeout(timer)
+  clearTimeout(remtimer)
+}
+catch(err){}
 
 }
+function adder2(){
+  var newvalue =  document.getElementById("unknownword2").value
+  var targetid = document.getElementById("selectorbox").parentElement.parentElement.id
+  var qq = document.getElementById(targetid).getElementsByTagName('A')[0].outerHTML
+  document.getElementById(targetid).innerHTML = qq
+  document.getElementById(targetid).innerHTML = document.getElementById(targetid).innerHTML + '<br><meaning id="meaning' + targetid + '"></meaning>'
+  
+  document.getElementById('meaning' + targetid).innerText =newvalue
+  document.getElementById('meaning' + targetid).setAttribute('style','color:DarkOrange; font-size:70%; large;')
+  updatetranslation()
+  try{document.getElementById('selectorbox').outerHTML = ''
+  optionselement = ''
+    clearTimeout(timer)
+    clearTimeout(remtimer)
+  }
+  catch(err){}
+  
+  }
+
 
 
 function selectform(element){
+
+  try{document.getElementById('selectorbox').outerHTML = ''
+optionselement = ''
+  clearTimeout(timer)
+  clearTimeout(remtimer)
+}
+catch(err){}
+
 
 var targetid = document.getElementById("ww").getAttribute("selectedbox")
 
@@ -958,7 +1005,8 @@ var rr = document.getElementById(targetid).getElementsByTagName('recreate')
 for(var ss=0; ss<rr.length; ss++){
 var newelement = document.createElement("li")
 newelement.setAttribute('id',rr[ss].getAttribute('formerid'))
-newelement.innerHTML = '<a onclick="getww(this)" style="cursor:pointer;" parentid="' + rr[ss].getAttribute('formerid') + '">' + rr[ss].innerHTML + '</a>'
+//newelement.setAttribute('onmouseover','selboxdel()')
+newelement.innerHTML = '<a id="titleword' + rr[ss].getAttribute('formerid') + ' onclick="getww(this)" onmouseover="showoptions(event.srcElement)" style="cursor:pointer;" parentid="' + rr[ss].getAttribute('formerid') + '">' + rr[ss].innerHTML + '</a>'
 newelement.setAttribute('class','ui-state-default ui-sortable-handle')
 document.getElementById(targetid).parentElement.insertBefore(newelement,document.getElementById(targetid))
 
@@ -974,6 +1022,7 @@ var defs = '%' + element.firstChild.getAttribute('definition').split(', ').join(
 document.getElementById('def' + targetid).innerText = selecteddef
 document.getElementById(targetid).setAttribute('def',defs)
 document.getElementById('def' + targetid).setAttribute('onclick','chooser(event.srcElement); build(' + '"' + targetid + '"' + ')')
+document.getElementById('def' + targetid).setAttribute('onmouseover','selector(event.srcElement);')
 document.getElementById('def' + targetid).setAttribute('parentid',targetid)
 var grammar = element.firstChild
 grammar.id = 'gramm' + targetid
@@ -998,6 +1047,7 @@ meaning = meaning.substr(0,meaning.length-1)
 document.getElementById(targetid).setAttribute('meaning',meaning)
 document.getElementById('meaning' + targetid).setAttribute('style','color:DarkOrange; font-size:70%; large;')
 document.getElementById('meaning' + targetid).setAttribute('onclick','chooser(event.srcElement); build(' + '"' + targetid + '"' + ')')
+document.getElementById('meaning' + targetid).setAttribute('onmouseover','selector(event.srcElement);')
 document.getElementById('meaning' + targetid).setAttribute('parentid',targetid)
 document.getElementById(targetid).setAttribute('sart',"%the$a$&#11034;$his$her$its$your$my$their$our$")
 if(/^[A-Z]/g.test(document.getElementById(targetid).getElementsByTagName('a')[0].innerText)){document.getElementById(targetid).setAttribute('sart',"%&#11034;$the$a$his$her$its$your$my$their$our$")}
@@ -1099,9 +1149,12 @@ document.getElementById(targetid).setAttribute('style','background:#e5ffff')
 
 // refpron perspron perspron SDEM INTENS RELAT FDEM
 
+try{document.getElementById('selectorbox').outerHTML = ''}
+catch(err){}
 }
 
 function chooser(element){
+  try{
 var q = document.getElementById(element.getAttribute('parentid')).getAttribute(element.tagName.toLowerCase()) + '$'
 q=q.replace(/\$\$/g,'$')
 q=q.replace(/\$\$/g,'$')
@@ -1121,6 +1174,8 @@ changed = 1
 }
 
 }
+  }
+  catch(err){}
 }
 
 function getparts(){
@@ -1816,6 +1871,7 @@ for(var c=0; c<document.getElementById('meaning' + targetid).childElementCount; 
 document.getElementById('meaning' + targetid).children[c].setAttribute('onclick','chooser(event.srcElement); build(' + '"' +  targetid + '");)' )
 document.getElementById('meaning' + targetid).children[c].setAttribute("style","cursor:pointer;")
 document.getElementById('meaning' + targetid).children[c].setAttribute('parentid', targetid)
+document.getElementById('meaning' + targetid).children[c].setAttribute('onmouseover', 'selector(event.srcElement);')
 }
 document.getElementById('meaning' + targetid).setAttribute('style','cursor:pointer; color:DarkOrange; font-size:70%;')
 updatetranslation()
@@ -2660,6 +2716,7 @@ return sc
 }
 function sanitise(originalword) {
 var text = document.getElementById("ww").getAttribute('returnedtext')
+text = text.replace(/  +Late *$/gm,'')
 text = text.replace(/(^)(\s*)(\[[A-Z]{5}\]\s*\nwho)/gm,'qui, quae, quod PRON $3')
 text = text.replace(/([\.a-z]*)(\s*PRON[A-Z0-9\s]*\s*^)(\s*\[[A-Z]{5}\])/gm,'$1$2$1 PRON$3')
 text= text.replace('drive/urge/conduct/act;', 'drive, act, do, spend;')
@@ -3048,11 +3105,12 @@ return text
 function updatetranslation(){
 document.getElementById("finalsentence").innerText = ""  
 var meanings = document.getElementsByTagName("meaning")
+var textstring = ''
 for(var a = 0; a<meanings.length; a++){
-document.getElementById("finalsentence").innerText = document.getElementById("finalsentence").innerText + meanings[a].innerText + '$'
+textstring = textstring + meanings[a].innerHTML.replace(/\<div.*?\>.*?\<\/div\>/g,'').replace(/\<.*?\>/g,'') + ' '
 }
-document.getElementById("finalsentence").innerText = document.getElementById("finalsentence").innerText.replace(/[\u2B1a]/g,' ').replace(/\$\$/g,'$').replace(/\$\$/g,'$').replace(/\$\$/g,'$').replace(/\$/g,' ')
-document.getElementById("finalsentence").innerText = document.getElementById("finalsentence").innerText.replace(/\s\s/g,' ').replace(/\s\s/g,' ')
+textstring = textstring.replace(/[\u2B1a]/g,' ').replace(/ +/g,' ').replace(/^\ /g,'')
+document.getElementById("finalsentence").innerText = textstring
 
 }
 
@@ -3139,7 +3197,7 @@ if(endsWith(word,'ue')||endsWith(word,'ve')){
 var newelement = document.createElement("li") 
 newelement.innerText = tackon
 element.parentElement.parentElement.parentElement.insertBefore(newelement,element.parentElement.parentElement)
-newelement.innerHTML = '<a onclick="getww(this)" style="cursor:pointer;"  parentid="' + element.getAttribute('parentid') + 'a">' +  tackon + '</a>'
+newelement.innerHTML = '<a  id="titleword' + element.getAttribute('parentid') + 'a" onclick="getww(this)" onmouseover="showoptions(event.srcElement)" style="cursor:pointer;"  parentid="' + element.getAttribute('parentid') + 'a">' +  tackon + '</a>'
 newelement.setAttribute('onmouseup', 'updatetranslation()')
 newelement.setAttribute('id',element.getAttribute('parentid')+'a')
 newelement.setAttribute('class','ui-state-default ui-sortable-handle')
@@ -5940,4 +5998,149 @@ function tableprinter(){
 
   return true;
 
+}
+
+function offset(div) {
+  el=document.getElementById(div)
+  var rect = el.getBoundingClientRect(),
+  scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
+  scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+  scrollTop = scrollTop - document.getElementById('sortable').scrollTop
+  return { top: rect.top + scrollTop, left: rect.left + scrollLeft }
+}
+
+function selboxdel(element){
+  remtimer =  setTimeout(function(){
+  try{
+    document.getElementById('selectorbox').outerHTML = ''
+    optionselement = ''
+  }
+  catch(err){}
+  },500)
+}
+
+function selector(e){
+  if(optionselement==e.id && optionselement!=''){
+    clearTimeout(remtimer)
+   }
+   else{
+    timer =  setTimeout(function(){
+  if(e.id!='selectorbox' && e.tagName.toLowerCase() != 'a'){
+    try{
+      document.getElementById('selectorbox').outerHTML = ''
+      optionselement = ''
+    } catch(err){
+
+    }
+    try{
+    optionselement = e.id
+e.innerHTML = e.innerHTML + '<div onmouseleave="selboxdel(event.srcElement)"  onmouseover="resettimers(event.srcElement)" style="text-align:left; position:absolute; box-shadow: rgb(159, 180, 242) 0px 1px 0px 0px inset; background: linear-gradient(rgb(120, 146, 194) 5%, rgb(71, 110, 158) 100%) rgb(120, 146, 194); border-radius: 3px; border: 1px solid rgb(0, 49, 196); display: inline-block; cursor: pointer; color: rgb(255, 255, 255); font-family: Arial; font-size: 13px; padding: 6px 24px; text-decoration: none; text-shadow: rgb(40, 57, 102) 0px 1px 0px;" id="selectorbox"></div>'
+    var div = document.getElementById('selectorbox');
+  var left  = offset(div.id).left-25  + "px";
+  var top  = offset(div.id).top-25  + "px";
+
+  div.style.left = left;
+  div.style.top = top;
+
+//////
+
+
+var q = document.getElementById(e.getAttribute('parentid')).getAttribute(e.tagName.toLowerCase()) + '$'
+q=q.replace(/\$\$/g,'$')
+q=q.replace(/\$\$/g,'$')
+var choices = q.split('$')
+var currentchoice = 0
+var changed = 0
+
+for(var i=0;i<choices.length;i++){
+  document.getElementById('selectorbox').innerHTML = document.getElementById('selectorbox').innerHTML + '<a onclick="chooser2(event.srcElement)" index=' + i +'>'+ choices[i].replace(/[,;]/g,'') +'</a><br>' 
+}
+document.getElementById('selectorbox').innerHTML = document.getElementById('selectorbox').innerHTML.replace(/%/g,'')
+
+q = document.getElementById('selectorbox').innerHTML.match(/\^[a-zA-Z0-9]*/g)
+
+var replacement}
+catch(err2){}
+try{
+for(var ii = 0 ;ii<q.length;ii++){
+  var attr = q[ii].substr(1,q[ii].length-1)
+  try{
+replacement = document.getElementById('selectorbox').parentElement.parentElement.getAttribute(attr).match(/%[^$]*/)[0]}
+catch(err3){replacement =  document.getElementById('selectorbox').parentElement.parentElement.getAttribute(attr)}
+
+  try{
+    document.getElementById('selectorbox').innerHTML = document.getElementById('selectorbox').innerHTML.replace('^' + attr, replacement) 
+  } catch(err4){}
+}
+document.getElementById('selectorbox').innerHTML = document.getElementById('selectorbox').innerHTML.replace(/%/g,'')
+}
+catch(err){}
+  }
+}, 500)}
+}
+
+function chooser2(element){
+
+  var attribute = element.parentElement.parentElement.tagName.toLowerCase()
+  var ind = element.getAttribute('index')
+  var grandnodename = element.parentElement.parentElement.parentElement.id
+grandnodename = grandnodename.replace(/[^0-9]/g,'') 
+var nodename = 'word' + grandnodename
+  var attributestring = document.getElementById(nodename).getAttribute(attribute)
+    attributestring = attributestring.replace(/%/g,'')
+  var attributelist = attributestring.split('$')
+  attributelist[ind] = '%' + attributelist[ind]
+  attributestring = attributelist.join('$')
+  document.getElementById(nodename).setAttribute(attribute,attributestring)
+  build(nodename)
+  try{
+  document.getElementById('selectorbox').outerHTML = ''
+  }
+  catch(err){}
+  optionselement = ''
+}
+
+function showoptions(element){
+ if(optionselement==element.id){
+  clearTimeout(remtimer)
+ }
+ else{
+  timer =  setTimeout(function(){
+    getww(element)
+   if(element.tagName.toLowerCase() == 'a'){
+ var launchedby = ''
+
+ try{launchedby = document.getElementById('selectorbox').getAttribute('launchedby')}
+catch(err){}
+
+  if(element.parentElement.id.substr(0,4)=='word' && 'title' + element.parentElement.id != launchedby){
+try{document.getElementById('selectorbox').outerHTML=''
+optionselement = ''
+}
+catch(err){}
+  optionselement = element.id
+  element.id = 'title' + element.parentElement.id
+  element.innerHTML = element.innerHTML + '<div  onmouseleave="selboxdel(this)" onmouseover="resettimers(event.srcElement)"  launchedby="'+ element.id +'" style="text-align:left; position:absolute; box-shadow: rgb(159, 180, 242) 0px 1px 0px 0px inset; background: linear-gradient(rgb(120, 146, 194) 5%, rgb(71, 110, 158) 100%) rgb(120, 146, 194); border-radius: 3px; border: 1px solid rgb(0, 49, 196); display: inline-block; cursor: pointer; color: rgb(255, 255, 255); font-family: Arial; font-size: 13px; padding: 6px 24px; text-decoration: none; text-shadow: rgb(40, 57, 102) 0px 1px 0px;" id="selectorbox"></div>'
+  var div = document.getElementById('selectorbox')
+var left  = offset(div.id).left-25  + "px";
+var top  = offset(div.id).top-25  + "px";
+
+div.style.left = left;
+div.style.top = top;
+document.getElementById('selectorbox').innerHTML = document.getElementById('menutable').innerHTML.replace(/((\<tbody>\<tr>\<td\>\<\/td\>\<td[^\>]*\>\<button[^\>]*>.*?\<\/button\>\<\/td\>\<\/tr\>\<\/tbody\>)+)(\<tbody\>\<tr\>\<td[^\>]*\>Entry(\<button.*?\<\/button\>)?<\/td\>\<td\>?\<wline[^\>]*>(.*?)\<\/wline\>\<\/td\>\<\/tr\>\<\/tbody\>)?(\<tbody\>\<tr\>\<td\>Definition\<\/td\>\<td\>\<i\>\<wline[^\>]*\>(.*?)\<\/wline\>\<\/i\>\<\/td\>\<\/tr\>\<\/tbody\>)/g,'<tr><td>$5$7</td><td><table>$1</table></td></tr>')
+document.getElementById('selectorbox').innerHTML = document.getElementById('selectorbox').innerHTML.replace(/\sid=\"[a-zA-Z0-9]*\"/g,'')
+document.getElementById('selectorbox').innerHTML = document.getElementById('selectorbox').innerHTML.replace(/\<inddef\s.*?\>(.*?)\<\/inddef\>/g,'<i>$1</i>')
+document.getElementById('selectorbox').innerHTML = document.getElementById('selectorbox').innerHTML.replace(/\<editdef\s.*?\>(.*?)\<\/editdef\>/g,'')
+document.getElementById('selectorbox').innerHTML = document.getElementById('selectorbox').innerHTML.replace(/onclick\=\"adder\(\)\"/g,'onclick="adder2()"')
+document.getElementById('selectorbox').innerHTML = document.getElementById('selectorbox').innerHTML.replace(/\<textarea[^\>]*\>/g,'<textarea id="unknownword2">')
+
+}
+  }}, 500)}
+}
+
+function resettimers(element){
+  if(element.id == 'selectorbox'){
+    clearTimeout(remtimer)
+    clearTimeout(timer)
+  }
 }
