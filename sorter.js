@@ -1101,7 +1101,7 @@ document.getElementById(targetid).getElementsByTagName('splitjoin')[0].innerHTML
 }
 
 if(document.getElementById('gramm' + targetid).getAttribute('pos') == 'ADJ'){
-document.getElementById(targetid).getElementsByTagName('splitjoin')[0].innerHTML = document.getElementById(targetid).getElementsByTagName('splitjoin')[0].innerHTML+'<button style="background:#e5ffff"  style="cursor:pointer;" onclick="adjjoiner(this)" parentid =' + targetid + '>&#x2192;|</button>'
+document.getElementById(targetid).getElementsByTagName('splitjoin')[0].innerHTML = '<button style="background:#e5ffff"  style="cursor:pointer;" onclick="adjjoiner2(this)" parentid =' + targetid + '>|&#x2190;</button>' + document.getElementById(targetid).getElementsByTagName('splitjoin')[0].innerHTML+'<button style="background:#e5ffff"  style="cursor:pointer;" onclick="adjjoiner(this)" parentid =' + targetid + '>&#x2192;|</button>'
 }
 if(document.getElementById('gramm' + targetid).getAttribute('pos') == 'N' && document.getElementById('gramm' + targetid).getAttribute('case') == 'nom' ){
 document.getElementById(targetid).getElementsByTagName('splitjoin')[0].innerHTML = document.getElementById(targetid).getElementsByTagName('splitjoin')[0].innerHTML+'<button style="background:#e5ffff"  style="cursor:pointer;" onclick="nounjoiner(this)" parentid =' + targetid + '>&#x2192;VERB</button>'
@@ -2716,6 +2716,8 @@ return sc
 }
 function sanitise(originalword) {
 var text = document.getElementById("ww").getAttribute('returnedtext')
+if(originalword == 'diu'){
+  text = text.replace(/^(diu, diutius)/gm,'\r\ndiu ADV POS\r\n$1')}
 text = text.replace(/  +Late *$/gm,'')
 text = text.replace(/(^)(\s*)(\[[A-Z]{5}\]\s*\nwho)/gm,'qui, quae, quod PRON $3')
 text = text.replace(/([\.a-z]*)(\s*PRON[A-Z0-9\s]*\s*^)(\s*\[[A-Z]{5}\])/gm,'$1$2$1 PRON$3')
@@ -2803,7 +2805,7 @@ text = text.replace('50th -','fiftieth')
 text = text.replace('60th -','sixtieth')
 }
 text = text.replace('in the mist of','in the midst of')
-text = text.replace(/\s?\(.*?\)/g,'')
+text = text.replace(/\ ?\(.*?\)/g,'')
 text = text.replace('some ... others', 'some, others')
 text=text.replace(/(((^|\r?\n)(((?!(\[[A-Z]{5}\]|;|\r?\n))).)*(?=\r?\n))+)((\r?\n)((?!\[[A-Z]{5}\]|\r?\n).)*\[[A-Z]{5}\]((?!\r?\n).)*(?=$|\r?\n))(((\r?\n)((?!;|\r?\n).)*;((?!\r?\n).)*(?=$|\r?\n))+)((\r?\n)((?!\[[A-Z]{5}\]|\r?\n).)*\[[A-Z]{5}\]((?!\r?\n).)*(?=$|\r?\n))/g,'$1$7$11\n$1$16')
 text=text.replace(/(((^|\r?\n)(((?!(\[[A-Z]{5}\]|;|\r?\n))).)*(?=\r?\n))+)((\r?\n)((?!\[[A-Z]{5}\]|\r?\n).)*\[[A-Z]{5}\]((?!\r?\n).)*(?=$|\r?\n))(((\r?\n)((?!;|\r?\n).)*;((?!\r?\n).)*(?=$|\r?\n))+)((\r?\n)((?!\[[A-Z]{5}\]|\r?\n).)*\[[A-Z]{5}\]((?!\r?\n).)*(?=$|\r?\n))/g,'$1$7$11\n$1$16')
@@ -3284,18 +3286,41 @@ var nounboxcase = nounboxgrammar.getAttribute('case')
 var nounboxnumber = nounboxgrammar.getAttribute('number')
 var adjboxnumber = adjboxgramm.getAttribute('number')
 
-if(adjbox !== adjbox.parentElement.lastChild && document.getElementById('gramm' + adjbox.nextElementSibling.id).getAttribute('pos')=='N'&&nounboxnumber==adjboxnumber&&nounboxcase==adjboxcase){
+if(adjbox !== adjbox.parentElement.lastChild && document.getElementById('gramm' + nounbox.id).getAttribute('pos')=='N'&&nounboxnumber==adjboxnumber&&nounboxcase==adjboxcase){
 if(document.getElementById('gramm' + adjbox.id).getAttribute('gradation')=='POS'){
-adjbox.nextElementSibling.setAttribute('adj',adjbox.nextElementSibling.getAttribute('adj') + ' ' + adjbox.getAttribute('inf'))}
+nounbox.setAttribute('adj',nounbox.getAttribute('adj') + ' ' + adjbox.getAttribute('inf'))}
 if(document.getElementById('gramm' + adjbox.id).getAttribute('gradation')=='COMP'){
-adjbox.nextElementSibling.setAttribute('adj',adjbox.nextElementSibling.getAttribute('adj') + ' ' + adjbox.getAttribute('comp'))}
+nounbox.setAttribute('adj',nounbox.getAttribute('adj') + ' ' + adjbox.getAttribute('comp'))}
 if(document.getElementById('gramm' + adjbox.id).getAttribute('gradation')=='SUPER'){
-adjbox.nextElementSibling.setAttribute('adj',adjbox.nextElementSibling.getAttribute('adj') + ' ' + adjbox.getAttribute('sup'))}
-adjbox.nextElementSibling.innerHTML = '<recreate formerid="' + adjbox.id +'">' + adjbox.getElementsByTagName('a')[0].innerText + '</recreate> ' + adjbox.nextElementSibling.innerHTML 
-build(adjbox.nextElementSibling.id)
+nounbox.setAttribute('adj',nounbox.getAttribute('adj') + ' ' + adjbox.getAttribute('sup'))}
+nounbox.innerHTML = '<recreate formerid="' + adjbox.id +'">' + adjbox.getElementsByTagName('a')[0].innerText + '</recreate> ' + nounbox.innerHTML 
+build(nounbox.id)
 adjbox.parentElement.removeChild(adjbox)
 }
 }
+
+function adjjoiner2 (element){
+  var adjbox = element.parentElement.parentElement
+  var adjboxgramm = document.getElementById('gramm' + adjbox.id)
+  var nounbox = adjbox.previousElementSibling
+  var nounboxgrammar = document.getElementById('gramm' + nounbox.id)
+  var adjboxcase = adjboxgramm.getAttribute('case')
+  var nounboxcase = nounboxgrammar.getAttribute('case')
+  var nounboxnumber = nounboxgrammar.getAttribute('number')
+  var adjboxnumber = adjboxgramm.getAttribute('number')
+  
+  if(adjbox !== adjbox.parentElement.firstChild && document.getElementById('gramm' + nounbox.id).getAttribute('pos')=='N'&&nounboxnumber==adjboxnumber&&nounboxcase==adjboxcase){
+  if(document.getElementById('gramm' + adjbox.id).getAttribute('gradation')=='POS'){
+  nounbox.setAttribute('adj',nounbox.getAttribute('adj') + ' ' + adjbox.getAttribute('inf'))}
+  if(document.getElementById('gramm' + adjbox.id).getAttribute('gradation')=='COMP'){
+  nounbox.setAttribute('adj',nounbox.getAttribute('adj') + ' ' + adjbox.getAttribute('comp'))}
+  if(document.getElementById('gramm' + adjbox.id).getAttribute('gradation')=='SUPER'){
+  nounbox.setAttribute('adj',nounbox.getAttribute('adj') + ' ' + adjbox.getAttribute('sup'))}
+  nounbox.innerHTML = '<recreate formerid="' + adjbox.id +'">' + adjbox.getElementsByTagName('a')[0].innerText + '</recreate> ' + nounbox.innerHTML 
+  build(nounbox.id)
+  adjbox.parentElement.removeChild(adjbox)
+  }
+  }
 
 function verbjoiner(element){
 var changed = false
