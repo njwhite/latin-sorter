@@ -6062,7 +6062,7 @@ function selector(e){
 e.innerHTML = e.innerHTML + '<div onmouseleave="selboxdel(event.srcElement)"  onmouseover="resettimers(event.srcElement)" style="text-align:left; position:absolute; box-shadow: rgb(159, 180, 242) 0px 1px 0px 0px inset; background: linear-gradient(rgb(120, 146, 194) 5%, rgb(71, 110, 158) 100%) rgb(120, 146, 194); border-radius: 3px; border: 1px solid rgb(0, 49, 196); display: inline-block; cursor: pointer; color: rgb(255, 255, 255); font-family: Arial; font-size: 13px; padding: 6px 24px; text-decoration: none; text-shadow: rgb(40, 57, 102) 0px 1px 0px;" id="selectorbox"></div>'
     var div = document.getElementById('selectorbox');
   var left  = offset(div.id).left-25  + "px";
-  var top  = offset(div.id).top-25  + "px";
+  var top  = offset(div.id).top-35  + "px";
 
   div.style.left = left;
   div.style.top = top;
@@ -6098,6 +6098,8 @@ catch(err3){replacement =  document.getElementById('selectorbox').parentElement.
   } catch(err4){}
 }
 document.getElementById('selectorbox').innerHTML = document.getElementById('selectorbox').innerHTML.replace(/%/g,'')
+if(document.getElementById('selectorbox').offsetWidth < 100){document.getElementById('selectorbox').style.width = 120}
+
 }
 catch(err){}
   }
