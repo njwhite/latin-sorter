@@ -2717,7 +2717,13 @@ return sc
 function sanitise(originalword) {
 var text = document.getElementById("ww").getAttribute('returnedtext')
 if(originalword == 'diu'){
-  text = text.replace(/^(diu, diutius)/gm,'\r\ndiu ADV POS\r\n$1')}
+  text = text.replace(/^(diu, diutius)/gm,'\r\ndiu ADV POS\r\n$1')
+  text = text.replace(/\(for\).*?\];/gm,'for a long time;')
+}
+if(originalword == 'diutissime'||originalword == 'diutius'){
+  text = text.replace(/\(for\).*?\];/gm,'for a long time;')
+}
+
 text = text.replace(/  +Late *$/gm,'')
 text = text.replace(/(^)(\s*)(\[[A-Z]{5}\]\s*\nwho)/gm,'qui, quae, quod PRON $3')
 text = text.replace(/([\.a-z]*)(\s*PRON[A-Z0-9\s]*\s*^)(\s*\[[A-Z]{5}\])/gm,'$1$2$1 PRON$3')
