@@ -1,0 +1,9 @@
+[Unit]
+Description=Docker Hook
+
+[Service]
+Restart=always
+ExecStart=/usr/local/bin/docker-hook -t {{ docker_hook_token }} -c systemctl restart docker.latin
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,6 @@
+[Unit]
+Description=Cleans up log files
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c '/usr/bin/docker images --filter "dangling=true" -q | /usr/bin/xargs -r /usr/bin/docker rmi'

@@ -1,0 +1,8 @@
+[Unit]
+Description=Weekly restart of latin.service
+
+[Timer]
+OnCalendar=Sun 6:0
+
+[Install]
+WantedBy=default.target

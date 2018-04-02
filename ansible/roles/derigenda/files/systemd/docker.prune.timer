@@ -1,0 +1,8 @@
+[Unit]
+Description=Run docker.prune.service every 10 minutes
+
+[Timer]
+OnCalendar=*:30
+
+[Install]
+WantedBy=default.target

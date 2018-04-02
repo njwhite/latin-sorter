@@ -1,0 +1,16 @@
+[Unit]
+Description=Latin Webapp
+After=docker.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+Restart=always
+ExecStartPre=-/bin/docker stop %n
+ExecStartPre=-/bin/docker rm %n
+ExecStartPre=-/bin/docker run --rm --name certbot -v "letsencrypt:/etc/letsencrypt" --network=host quay.io/letsencrypt/letsencrypt:latest renew
+ExecStartPre=/bin/docker pull njw45/latin-sorter
+ExecStart=/bin/docker run --rm --name %n -v "letsencrypt:/etc/letsencrypt" --network=host njw45/latin-sorter
+
+[Install]
+WantedBy=multi-user.target

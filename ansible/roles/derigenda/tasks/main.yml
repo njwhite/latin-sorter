@@ -1,0 +1,62 @@
+---
+# tasks file for derigenda
+- name: Copy Systemd Units
+  register: copysystemdunits
+  copy:
+    src: systemd/
+    dest: /etc/systemd/system
+    owner: root
+    group: root
+
+- name: Start the Server
+  when: copysystemdunits is success
+  systemd: 
+    name: docker.latin
+    state: started
+    daemon_reload: yes
+
+- name: Prune Timer
+  when: copysystemdunits is success
+  systemd:
+    name: docker.prune.timer
+    state: started
+    enabled: True
+    daemon_reload: yes
+- name: Restart Timer
+  when: copysystemdunits is success
+  systemd:
+    name: latin.restart.timer
+    state: started
+    enabled: True
+    daemon_reload: yes
+- name: Vacuum Timer
+  when: copysystemdunits is success
+  systemd:
+    name: vacuum.timer
+    state: started
+    enabled: True
+    daemon_reload: yes
+
+- name: Template Systemd Units
+  register: templatesystemdunits
+  template:
+    src: docker-hook.service.j2
+    dest: /etc/systemd/system/docker-hook.service
+    owner: root
+    group: root
+
+- name: Copy Hook Executable
+  register: copyhook
+  copy:
+    src: docker-hook
+    dest: /usr/local/bin/docker-hook
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Start the Hook
+  when: templatesystemdunits is success and copyhook is success
+  systemd: 
+    name: docker-hook
+    state: started
+    daemon_reload: yes

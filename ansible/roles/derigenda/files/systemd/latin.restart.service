@@ -1,0 +1,6 @@
+[Unit]
+Description=Weekly restart
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/systemctl restart docker.latin

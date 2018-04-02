@@ -1,0 +1,6 @@
+[Unit]
+Description=Cleans up log files
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/journalctl --vacuum-size=2G
