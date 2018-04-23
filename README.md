@@ -1,6 +1,7 @@
 # Latin Sorter
 
 Latin dictionary webapp powered by Whitaker's Words.
+<<<<<<< HEAD
 
 ## Instructions
 
@@ -19,3 +20,5 @@ In this repo:
 To install the server & related services on the VPS:
 
 - `ansible-playbook --vault-password-file ~/.vault_pass.txt --user root -i ./ansible/hosts  ./ansible/server.yml`
+=======
+>>>>>>> parent of f3b7951... Load More Resources from CDNs
