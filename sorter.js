@@ -178,7 +178,7 @@ input2()
               if (original_textArr[m] == "") {
                   
             } else {
-             textofinal = textofinal + '<li onmouseup="updatetranslation()" id="word' + m + '" class="ui-state-default ui-sortable-handle"><a id="titleword' + m + '" style="cursor:pointer;" onmouseover="showoptions(event.srcElement)" onclick="getww(this)" parentid="word' + m + '">' + sanitized_textArr[m] + '</a></li> ';
+             textofinal = textofinal + '<li onmouseup="updatetranslation()" id="word' + m + '" class="ui-state-default ui-sortable-handle"><a id="titleword' + m + '" style="cursor:pointer;" onclick="getww(this); showoptions(event.srcElement)" parentid="word' + m + '">' + sanitized_textArr[m] + '</a></li> ';
                   
           }
                }
@@ -1006,7 +1006,7 @@ for(var ss=0; ss<rr.length; ss++){
 var newelement = document.createElement("li")
 newelement.setAttribute('id',rr[ss].getAttribute('formerid'))
 //newelement.setAttribute('onmouseover','selboxdel()')
-newelement.innerHTML = '<a id="titleword' + rr[ss].getAttribute('formerid') + ' onclick="getww(this)" onmouseover="showoptions(event.srcElement)" style="cursor:pointer;" parentid="' + rr[ss].getAttribute('formerid') + '">' + rr[ss].innerHTML + '</a>'
+newelement.innerHTML = '<a id="titleword' + rr[ss].getAttribute('formerid') + ' onclick="getww(this);showoptions(event.srcElement)" style="cursor:pointer;" parentid="' + rr[ss].getAttribute('formerid') + '">' + rr[ss].innerHTML + '</a>'
 newelement.setAttribute('class','ui-state-default ui-sortable-handle')
 document.getElementById(targetid).parentElement.insertBefore(newelement,document.getElementById(targetid))
 
@@ -3205,7 +3205,7 @@ if(endsWith(word,'ue')||endsWith(word,'ve')){
 var newelement = document.createElement("li") 
 newelement.innerText = tackon
 element.parentElement.parentElement.parentElement.insertBefore(newelement,element.parentElement.parentElement)
-newelement.innerHTML = '<a  id="titleword' + element.getAttribute('parentid') + 'a" onclick="getww(this)" onmouseover="showoptions(event.srcElement)" style="cursor:pointer;"  parentid="' + element.getAttribute('parentid') + 'a">' +  tackon + '</a>'
+newelement.innerHTML = '<a  id="titleword' + element.getAttribute('parentid') + 'a" onclick="getww(this);showoptions(event.srcElement)" style="cursor:pointer;"  parentid="' + element.getAttribute('parentid') + 'a">' +  tackon + '</a>'
 newelement.setAttribute('onmouseup', 'updatetranslation()')
 newelement.setAttribute('id',element.getAttribute('parentid')+'a')
 newelement.setAttribute('class','ui-state-default ui-sortable-handle')
