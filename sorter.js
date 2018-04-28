@@ -6168,7 +6168,7 @@ document.getElementById('selectorbox').innerHTML = document.getElementById('sele
 document.getElementById('selectorbox').innerHTML = document.getElementById('selectorbox').innerHTML.replace(/\<textarea[^\>]*\>/g,'<textarea id="unknownword2">')
 
 }
-  }}, 500)}
+  }}, 5)}
 }
 
 function resettimers(element){
