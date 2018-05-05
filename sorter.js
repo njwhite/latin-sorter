@@ -1019,6 +1019,7 @@ document.getElementById(targetid).innerHTML = document.getElementById(targetid).
 document.getElementById(targetid).getElementsByTagName('splitjoin')[0].setAttribute('id','splitjoin'+ targetid)
 var selecteddef = element.firstChild.getAttribute('definition').replace(', ',',').split(',')[0]
 var defs = '%' + element.firstChild.getAttribute('definition').split(', ').join('$')
+defs = defs.replace(/\$[^\$]*[A-Z]{3,}[^\$]*/,'')
 document.getElementById('def' + targetid).innerText = selecteddef
 document.getElementById(targetid).setAttribute('def',defs)
 document.getElementById('def' + targetid).setAttribute('onclick','chooser(event.srcElement); build(' + '"' + targetid + '"' + ')')
@@ -6067,12 +6068,12 @@ function selector(e){
     optionselement = e.id
 e.innerHTML = e.innerHTML + '<div onmouseleave="selboxdel(event.srcElement)"  onmouseover="resettimers(event.srcElement)" style="text-align:left; position:absolute; box-shadow: rgb(159, 180, 242) 0px 1px 0px 0px inset; background: linear-gradient(rgb(120, 146, 194) 5%, rgb(71, 110, 158) 100%) rgb(120, 146, 194); border-radius: 3px; border: 1px solid rgb(0, 49, 196); display: inline-block; cursor: pointer; color: rgb(255, 255, 255); font-family: Arial; font-size: 13px; padding: 6px 24px; text-decoration: none; text-shadow: rgb(40, 57, 102) 0px 1px 0px;" id="selectorbox"></div>'
     var div = document.getElementById('selectorbox');
-  var left  = offset(div.id).left-25  + "px";
-  var top  = offset(div.id).top-35  + "px";
+  var left  = offset(div.id).left-100  + "px";
+  var top  = offset(div.id).top+20  + "px";
 
   div.style.left = left;
   div.style.top = top;
-
+  document.getElementById("selectorbox").addEventListener("wheel", selectorboxscroll,false);
 //////
 
 
@@ -6155,8 +6156,8 @@ catch(err){}
   element.id = 'title' + element.parentElement.id
   element.innerHTML = element.innerHTML + '<div  onmouseleave="selboxdel(this)" onmouseover="resettimers(event.srcElement)"  launchedby="'+ element.id +'" style="text-align:left; position:absolute; box-shadow: rgb(159, 180, 242) 0px 1px 0px 0px inset; background: linear-gradient(rgb(120, 146, 194) 5%, rgb(71, 110, 158) 100%) rgb(120, 146, 194); border-radius: 3px; border: 1px solid rgb(0, 49, 196); display: inline-block; cursor: pointer; color: rgb(255, 255, 255); font-family: Arial; font-size: 13px; padding: 6px 24px; text-decoration: none; text-shadow: rgb(40, 57, 102) 0px 1px 0px;" id="selectorbox"></div>'
   var div = document.getElementById('selectorbox')
-var left  = offset(div.id).left-25  + "px";
-var top  = offset(div.id).top-25  + "px";
+var left  = offset(div.id).left-100  + "px";
+var top  = offset(div.id).top+20  + "px";
 
 div.style.left = left;
 div.style.top = top;
@@ -6167,6 +6168,7 @@ document.getElementById('selectorbox').innerHTML = document.getElementById('sele
 document.getElementById('selectorbox').innerHTML = document.getElementById('selectorbox').innerHTML.replace(/onclick\=\"adder\(\)\"/g,'onclick="adder2()"')
 document.getElementById('selectorbox').innerHTML = document.getElementById('selectorbox').innerHTML.replace(/\<textarea[^\>]*\>/g,'<textarea id="unknownword2">')
 
+document.getElementById("selectorbox").addEventListener("wheel", selectorboxscroll,false);
 }
   }}, 5)}
 }
@@ -6177,3 +6179,35 @@ function resettimers(element){
     clearTimeout(timer)
   }
 }
+
+function selectorboxscroll(){
+  var q= event.deltaY
+  var box = document.getElementById('selectorbox').parentElement.getAttribute('parentid')
+  var part = document.getElementById('selectorbox').parentElement.tagName
+  var partlist = document.getElementById(box).getAttribute(part)
+  var selectorboxcode = document.getElementById('selectorbox').outerHTML
+  partlist = partlist + '$'
+  partlist = partlist.replace(/\$+/g,'\$')
+
+
+  if(q>0){
+    partlist = partlist.replace(/(\%)([^\$]*?)(\$)/g,'$2\$\%')
+    if(partlist.substr(partlist.length-1,1)=='%'){
+      partlist = '%' + partlist.substr(0,partlist.length-1)
+    }
+  }
+
+  if(q<0){
+    if(partlist.substr(0,1)=='%'){
+      partlist = partlist.substr(1,partlist.length-1)+'%'
+    }
+      partlist = partlist.replace(/([^\$]*)(\$)(\%)/g,'$3$1$2')
+      }
+
+  document.getElementById(box).setAttribute(part,partlist)
+  build(box) 
+ document.getElementById(box).getElementsByTagName(part)[0].innerHTML= document.getElementById(box).getElementsByTagName(part)[0].innerHTML + selectorboxcode
+ document.getElementById("selectorbox").addEventListener("wheel", selectorboxscroll,false);
+}
+
+
