@@ -6088,6 +6088,12 @@ for(var i=0;i<choices.length;i++){
   document.getElementById('selectorbox').innerHTML = document.getElementById('selectorbox').innerHTML + '<a onclick="chooser2(event.srcElement)" index=' + i +'>'+ choices[i].replace(/[,;]/g,'') +'</a><br>' 
 }
 document.getElementById('selectorbox').innerHTML = document.getElementById('selectorbox').innerHTML.replace(/%/g,'')
+var box = document.getElementById('selectorbox').parentElement.getAttribute('parentid')
+var part = document.getElementById('selectorbox').parentElement.tagName
+var partlist = document.getElementById(box).getAttribute(part)
+partlist = partlist.replace(/[^\$\%]/g,'')
+var selectionindex = partlist.split('%')[0].length
+document.getElementById('selectorbox').getElementsByTagName('a')[selectionindex].innerHTML = '&#x21D5;' + document.getElementById('selectorbox').getElementsByTagName('a')[selectionindex].innerHTML
 
 q = document.getElementById('selectorbox').innerHTML.match(/\^[a-zA-Z0-9]*/g)
 
@@ -6107,7 +6113,12 @@ catch(err3){replacement =  document.getElementById('selectorbox').parentElement.
 document.getElementById('selectorbox').innerHTML = document.getElementById('selectorbox').innerHTML.replace(/%/g,'')
 if(document.getElementById('selectorbox').offsetWidth < 100){document.getElementById('selectorbox').style.width = 120}
 
+
 }
+
+
+
+
 catch(err){}
   }
 }, 500)}
@@ -6208,6 +6219,13 @@ function selectorboxscroll(){
   build(box) 
  document.getElementById(box).getElementsByTagName(part)[0].innerHTML= document.getElementById(box).getElementsByTagName(part)[0].innerHTML + selectorboxcode
  document.getElementById("selectorbox").addEventListener("wheel", selectorboxscroll,false);
+var nchoices = document.getElementById("selectorbox").getElementsByTagName('a').length
+document.getElementById('selectorbox').innerHTML = document.getElementById('selectorbox').innerHTML.replace(/\u21D5/gu,'')
+partlist = partlist.replace(/[^\$\%]/g,'')
+selectionindex = partlist.split('%')[0].length
+document.getElementById('selectorbox').getElementsByTagName('a')[selectionindex].innerHTML = '&#x21D5;' + document.getElementById('selectorbox').getElementsByTagName('a')[selectionindex].innerHTML
+
+
 }
 
 
