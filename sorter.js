@@ -1,10 +1,15 @@
 var timer
 var remtimer
 var optionselement
+var tip1shown = 0
+var tip2shown = 0
+var tip3shown = 0
+var formertip
 
 $(function() {
   $( "#sortable" ).sortable(); 
   $( "#sortable" ).disableSelection();
+  showtip(1)
 });
 
 $( window ).resize(function() {
@@ -192,6 +197,7 @@ input2()
     };
   
 function getww(element) {
+  showtip(2)
   if(element.tagName.toLowerCase() == 'a' && element.children.length!=1){
     try{
       document.getElementById('selectorbox').outerHTML = ''
@@ -990,7 +996,7 @@ function adder2(){
 
 
 function selectform(element){
-
+showtip(3)
   try{document.getElementById('selectorbox').outerHTML = ''
 optionselement = ''
   clearTimeout(timer)
@@ -6229,4 +6235,31 @@ document.getElementById('selectorbox').getElementsByTagName('a')[selectionindex]
 
 }
 
+function showtip(tipnumber){
 
+  var tip
+  if (tipnumber == 1 && tip1shown == 0){
+    document.getElementById('toppane').innerHTML = document.getElementById('toppane').innerHTML+ '<div id = "tip1" class = "tip" style = "background-color:orange; position: absolute; top: 8px; right: 16px; font-size: 18px; "></div>'
+ 
+    tip = '&#x25BA;Click on a word to select a definition<br>&#x25BA;Drag a word to change the order<br>&#x25BA;Select a sentence from the pane to the left<br>&#x25BA;Enter your own text at the top left<br>'
+    tip1shown = 1
+  }
+  if (tipnumber == 2 && tip2shown == 0){
+    document.getElementById('toppane').innerHTML = document.getElementById('toppane').innerHTML+ '<div id = "tip2" class = "tip" style = "background-color:orange; position: absolute; top: 8px; right: 16px; font-size: 18px; "></div>'
+
+    tip = '&#x25BA;Select an entry by clicking an orange button<br>'
+    tip2shown = 1
+  }
+  if (tipnumber == 3 && tip3shown == 0){
+    document.getElementById('toppane').innerHTML = document.getElementById('toppane').innerHTML+ '<div id = "tip3" class = "tip" style = "background-color:orange; position: absolute; top: 8px; right: 16px; font-size: 18px; "></div>'
+
+    tip = '&#x25BA;The definition is shown in red and the translation in orange<br>&#x25BA;Click or hover over part of a translation or definition to see the different options<br>&#x25BA;You can use the mouse wheel to select a different option<br>&#x25BA;You can see tables for most words by clicking the buttons beside entries in the right-hand pane'
+    tip3shown = 1
+  }
+
+  document.getElementById('tip' + tipnumber).innerHTML = document.getElementById('tip' + tipnumber).innerHTML + tip
+  document.getElementById('tip' + tipnumber).innerHTML = document.getElementById('tip' + tipnumber).innerHTML.replace(/undefined/g,'')
+  window.setTimeout(function(){
+    document.getElementById('tip' + tipnumber).innerHTML = ''},20000);
+
+}
