@@ -687,6 +687,7 @@ document.getElementsByTagName("wline")[k].getAttribute('word')=='eum'||
 document.getElementsByTagName("wline")[k].getAttribute('word')=='eam'||
 document.getElementsByTagName("wline")[k].getAttribute('word')=='eius'||
 document.getElementsByTagName("wline")[k].getAttribute('word')=='ei'||
+document.getElementsByTagName("wline")[k].getAttribute('word')=='ii'||
 document.getElementsByTagName("wline")[k].getAttribute('word')=='eo'||
 document.getElementsByTagName("wline")[k].getAttribute('word')=='eae'||
 document.getElementsByTagName("wline")[k].getAttribute('word')=='eos'||
