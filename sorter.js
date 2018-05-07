@@ -6187,8 +6187,14 @@ document.getElementById('selectorbox').innerHTML = document.getElementById('sele
 document.getElementById('selectorbox').innerHTML = document.getElementById('selectorbox').innerHTML.replace(/\<textarea[^\>]*\>/g,'<textarea id="unknownword2">')
 
 document.getElementById("selectorbox").addEventListener("wheel", selectorboxscroll,false);
+
+if(document.getElementById('selectorbox').getElementsByTagName('button').length == 1&&document.getElementById('selectorbox').getElementsByTagName('textarea').length == 0){
+  selectform(document.getElementById('selectorbox').getElementsByTagName('button')[0])
+}
 }
   }}, 5)}
+
+
 }
 
 function resettimers(element){
