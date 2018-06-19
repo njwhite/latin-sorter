@@ -16,7 +16,17 @@ $( window ).resize(function() {
   resizerow()
 });
 
+function initialfunction(){
+  updatetext()
+  var myVar = setInterval(myTimer, 500)
+  function myTimer(){
+updatetranslation()
+  }
+}
+
+
 function updatetext(){
+  
 try{
 var newtext = getParameterByName('text');
 if (newtext.length>0){
