@@ -247,13 +247,13 @@ if(detectmob() == false){
 document.getElementById('urlline').innerText = window.location.href.split('?')[0] + '?test='
 var testname 
 if (document.getElementById('menuname').innerText == 'OCR GCSE'){
-  document.getElementById('tips').innerHTML = 'Try these filters:<br><i>1-10<br>a-c<br>a, d, e<br>part:adverb</i>'
+  document.getElementById('tips').innerHTML = 'Try these filters:<br><i>1-10<br>a-c,f,h<br>part:adverb</i>'
   testname = 'ogcse'
 }else if (document.getElementById('menuname').innerText == 'Eduqas GCSE'){
   document.getElementById('tips').innerHTML = 'The third column gives the CLC stage.<br>Try these filters:<br><i>1-10<br>a, d, e<br>clc:01</i>'
   testname = 'egcse'
 }else if (document.getElementById('menuname').innerText == 'AS Level'){
-  document.getElementById('tips').innerHTML = 'Try these filters:<br><i>1-10<br>a-c<br>a, d, e<br>class:military</i>'
+  document.getElementById('tips').innerHTML = 'Try these filters:<br><i>1-10<br>a-c, f, h<br>class:military</i>'
   testname = 'as'
 }else if (document.getElementById('menuname').innerText == 'Additional Ovid'){
   document.getElementById('tips').innerHTML = '<span style="font-size:14px; text-align:justify;">These are common words from Ovid that are not in the AS list. They are numbered from 9 (most common) to 0 (least common). Try these filters:<br><i>common:9<br>a-c</i></span>'
@@ -263,39 +263,39 @@ if (document.getElementById('menuname').innerText == 'OCR GCSE'){
   testname = 'livy'
 }
 else if (document.getElementById('menuname').innerText == 'Chapter 1'){
-  document.getElementById('tips').innerHTML = 'Try these filters:<br><i>1-10<br>a-c<br>a, d, e<br>1-20</i>'
+  document.getElementById('tips').innerHTML = 'Try these filters:<br><i>1-10<br>a-c, f, h<br>1-20</i>'
   testname = 't1'
 }
 else if (document.getElementById('menuname').innerText == 'Chapter 2'){
-  document.getElementById('tips').innerHTML = 'Try these filters:<br><i>1-10<br>a-c<br>a, d, e<br>1-20</i>'
+  document.getElementById('tips').innerHTML = 'Try these filters:<br><i>1-10<br>a-c, f, h<br>1-20</i>'
   testname = 't2'
 }
 else if (document.getElementById('menuname').innerText == 'Chapter 3'){
-  document.getElementById('tips').innerHTML = 'Try these filters:<br><i>1-10<br>a-c<br>a, d, e<br>1-20</i>'
+  document.getElementById('tips').innerHTML = 'Try these filters:<br><i>1-10<br>a-c, f, h<br>1-20</i>'
   testname = 't3'
 }
 else if (document.getElementById('menuname').innerText == 'Chapter 4'){
-  document.getElementById('tips').innerHTML = 'Try these filters:<br><i>1-10<br>a-c<br>a, d, e<br>1-20</i>'
+  document.getElementById('tips').innerHTML = 'Try these filters:<br><i>1-10<br>a-c, f, h<br>1-20</i>'
   testname = 't4'
 }
 else if (document.getElementById('menuname').innerText == 'Chapter 5'){
-  document.getElementById('tips').innerHTML = 'Try these filters:<br><i>1-10<br>a-c<br>a, d, e<br>1-20</i>'
+  document.getElementById('tips').innerHTML = 'Try these filters:<br><i>1-10<br>a-c, f, h<br>1-20</i>'
   testname = 't5'
 }
 else if (document.getElementById('menuname').innerText == 'Chapter 6'){
-  document.getElementById('tips').innerHTML = 'Try these filters:<br><i>1-10<br>a-c<br>a, d, e<br>1-20</i>'
+  document.getElementById('tips').innerHTML = 'Try these filters:<br><i>1-10<br>a-c, f, h<br>1-20</i>'
   testname = 't6'
 }
 else if (document.getElementById('menuname').innerText == 'All Book 1'){
-  document.getElementById('tips').innerHTML = 'Try these filters:<br><i>1-10<br>a-c<br>a, d, e<br>1-20</i>'
+  document.getElementById('tips').innerHTML = 'Try these filters:<br><i>1-10<br>a-c, f, h<br>1-20</i>'
   testname = 't'
 }
 else if (document.getElementById('menuname').innerText == 'All CLC 1'){
-  document.getElementById('tips').innerHTML = 'Try these filters:<br><i>1-10<br>a-c<br>a, d, e<br>stage:01, stage:02</i>'
+  document.getElementById('tips').innerHTML = 'Try these filters:<br><i>1-10<br>a-c, f, h<br>stage:01, stage:02</i>'
   testname = 'clc1'
     
 }else if (document.getElementById('menuname').innerText == 'All CLC 2'){
-  document.getElementById('tips').innerHTML = 'Try these filters:<br><i>1-10<br>a-c<br>a, d, e<br>stage:13, stage:14</i>'
+  document.getElementById('tips').innerHTML = 'Try these filters:<br><i>1-10<br>a-c, f, h<br>stage:13, stage:14</i>'
   testname = 'clc2'
 } else {
   document.getElementById('tips').innerHTML = '<span style="font-size:20px; text-align:justify;">Try these criteria:<br><i>1-10</i></span>'
