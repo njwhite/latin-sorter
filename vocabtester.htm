@@ -1,16 +1,52 @@
+
 <html>
     <head>
-        <script src="testerscript.js">var dictionary; var vocabtest; var testlength; var fingoes; var activeel</script>
-             
+        <meta charset="ISO-8859-1">
+        <meta name="description" content="Revise vocabulary from 2019 OCR and WJEC lists and many others. Highlight problem words. Create, print, download, save and share custom lists and results. Print paper vocab tests for classes.">
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-134670977-2"></script>
+ <!--
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-134670977-2');
+</script>-->
+
+<script charset="utf-8" src="testerscript.js">var dictionary; var vocabtest; var testlength; var fingoes; var activeel</script>
+  <script src="https://apis.google.com/js/platform.js" async defer></script>           
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="popper.js"></script>
   <script src="bootstrap.min.js"></script>
   <link rel="stylesheet" href="bootstrap.min.css">
   <link rel="stylesheet" href="modal.css"> 
-    </head>
-    <title> Latin vocab tester for GCSE, A-Level, Cambridge Latin Course, with autocomplete suggestions </title>
+  <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
+
+<script>
+window.addEventListener("load", function(){
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#edeff5",
+      "text": "#838391"
+    },
+    "button": {
+      "background": "transparent",
+      "text": "#4b81e8",
+      "border": "#4b81e8"
+    }
+  },
+  "position": "bottom-left"
+})});
+</script>  
+
+  </head>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+    <title>Latin and Greek vocab tester for GCSE, A-Level, Cambridge Latin Course</title>
     <body onload="chooser()" onresize="resizefunction()">
     <div id = "runningtotal" style="position:fixed; top:10px; right:10px;"><span id = "total"></span><span id='middletext'></span><span id="outof"></span></div>
+    <div id = "runningtime" style="position:fixed; top:10px; left:10px;"><span id = "timer"></span></div>
         <table border="5"  style="width: 100%; height: 100%;">
             <tr style="height: 30%;">
                 <td  id="latinword" style="font-size:90px; text-align:center"></td>
@@ -104,11 +140,26 @@
       </li>
       <li><a  onmouseover="menuhide()" onclick = "listselect(this)" tabindex="-1" href="#">OCR GCSE</a></li>
       <li><a  onmouseover="menuhide()" onclick = "listselect(this)" tabindex="-1" href="#">Eduqas GCSE</a></li>
+      <li><a  onmouseover="menuhide()" onclick = "listselect(this)" tabindex="-1" href="#">OCR GCSE Eng-Lat</a></li>
       <li><a  onmouseover="menuhide()" onclick = "listselect(this)" tabindex="-1" href="#">AS Level</a></li>
       <li><a  onmouseover="menuhide()" onclick = "listselect(this)" tabindex="-1" href="#">Additional Ovid</a></li>
       <li><a  onmouseover="menuhide()" onclick = "listselect(this)" tabindex="-1" href="#">Additional Livy</a></li>
-      
+      <li class="dropdown-submenu" onmouseover="menuhide4()">
+        <a class="test" tabindex="-1" href="#">Greek lists &#9655;<span class="caret"></span></a>
+        <ul class="dropdown-menu" id="G1" style="position: absolute; left:50%; top:85%; width:12em; background-color: buttonface;">
+            <li><a onclick = "listselect(this)" tabindex="-1" href="#">GCSE Greek</a></li>
+            <li><a onclick = "listselect(this)" tabindex="-1" href="#">GCSE Eng-Greek</a></li>
+            <li><a onclick = "listselect(this)" tabindex="-1" href="#">AS Greek</a></li>
+        </ul>
+      </li>
+
     </ul>
+    
+    <div class="slidecontainer">
+      <h3 style="font:3em"></span>Correct responses for past errors: <span id="rememberedno">3</span></h3>
+  <input oninput="rememberedchange()" onchange="rememberedchange()" onformchange="rememberedchange()" style="border-radius:3px; width:60%; outline:3px;" type="range" min="1" max="10" value="3" class="slider" id="remembered">
+</div>
+
   </div>
     <div id="selectionform">
     <div>
